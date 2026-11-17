@@ -29,11 +29,7 @@ jobs:
         mkdir -p ~/.android
         cp debug.keystore ~/.android/debug.keystore
 
-    - name: Prepare www directory (Auto Copy)
-      run: |
-        # ساخت پوشه www و کپی فایل اصلی به آن با نام index.html
-        mkdir -p www
-        cp index68-2.html www/index.html
+    # این بخش حذف شده است چون فایل از قبل در پوشه www قرار دارد
 
     - name: Install Dependencies
       run: npm install
