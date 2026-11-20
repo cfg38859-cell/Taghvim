@@ -19,6 +19,7 @@ window.__show=show})();
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.6 Onvan,Vazirmatn,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif}
 button,input,select{font:inherit;color:inherit}
+.bk *:not(.ar):not(.sal):not(.qar):not(.qbs),.bkx *:not(.ar):not(.sal):not(.qar):not(.qbs){font-family:Onvan,Vazirmatn,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif}
 button{cursor:pointer;border:0;background:none}
 :focus-visible{outline:2px solid var(--em);outline-offset:2px}
 #app{max-width:720px;margin:0 auto;height:100%;display:flex;flex-direction:column;position:relative}
@@ -75,6 +76,24 @@ nav.tabs button[aria-selected=true]{color:var(--em);font-weight:700}
 .days button.t{background:var(--goldt);color:var(--gold)}
 .search{display:flex;gap:8px;margin:6px 0 10px}
 .search input,.fld{flex:1;min-width:0;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.fq{display:flex;gap:6px;overflow-x:auto;margin:6px 0;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.fq::-webkit-scrollbar{display:none}
+.fq button{flex:none;padding:6px 12px;border-radius:999px;background:var(--emt);color:var(--em);font-size:13px;white-space:nowrap}
+.fq button.on{background:var(--em);color:var(--on)}
+.fq.hs button{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.fq button i{font-style:normal;opacity:.75;margin-inline-start:4px;font-size:12px}
+.fsel{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 2px}
+.fsel select.fld{flex:none;width:auto;padding:6px 10px;font-size:13px}
+.res small{display:block;color:var(--mute);font-size:12px;margin-top:4px}
+.fmore{width:100%;margin:8px 0}
+.cm{display:inline-flex;align-items:center;gap:2px;padding:3px 4px 3px 10px;border-radius:999px;background:var(--emt);color:var(--em);font-size:13px}
+.cm button{padding:2px 6px;color:inherit}
+.rowe{display:flex;align-items:center;gap:8px;padding:10px 12px;margin:6px 0;border-radius:14px;background:var(--card);box-shadow:var(--sh)}
+.rowe .tx{flex:1;min-width:0;font-weight:700;font-size:14px}
+.rowe .fld{flex:none;width:112px;padding:6px 8px;font-size:13px}
+.mv{flex:none;width:34px;height:34px;border-radius:10px;background:var(--emt);color:var(--em);font-weight:800}
+.mv:disabled{opacity:.35}
+.bgh{margin:12px 4px 2px;font-weight:800;color:var(--gold);font-size:14px}
 mark{background:var(--goldt);color:var(--ink);border-radius:4px;padding:0 2px}
 .res{display:block;width:100%;text-align:start;background:var(--card);border-radius:14px;padding:11px 14px;margin:7px 0;box-shadow:var(--sh)}
 .res b{font-size:13px;color:var(--em)}.res p{margin:3px 0 0;font-size:14px}
@@ -90,7 +109,7 @@ input[type=range]{accent-color:var(--em)}
 .sheet header{display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;border-bottom:1px solid var(--line);background:var(--card)}
 .sheet header h2{flex:1;margin:0;font-size:17px;line-height:1.35}
 .sheet .body{flex:1;overflow:auto;padding:6px 18px 60px;-webkit-overflow-scrolling:touch}
-.bk{font-family:"Noto Naskh Arabic","Traditional Arabic","Amiri","Scheherazade New",Vazirmatn,serif;font-size:calc(var(--fs) + 2px);line-height:2.15;text-align:justify}
+.bk{font-family:Onvan,Vazirmatn,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;font-size:calc(var(--fs) + 2px);line-height:2.15;text-align:justify}
 .bk p{margin:.55em 0}
 .bk h3{margin:1.4em 0 .2em;font-size:1.12em;color:var(--em);font-style:italic}
 .bk h3 span{display:inline-grid;place-items:center;min-width:1.5em;height:1.5em;margin-inline-start:.4em;border-radius:.5em;background:var(--goldt);color:var(--gold);font-size:.8em;font-style:normal;font-weight:700}
@@ -103,7 +122,7 @@ input[type=range]{accent-color:var(--em)}
 .bkx h6{margin:.9em 0 0;font-size:1em;color:var(--mute);font-weight:700}.bkx img{display:block;max-width:100%;height:auto;margin:.8em auto;border-radius:.5em}.bkx .ar{font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:1.08em}.bkx .fnx{margin:.6em 0 1em;padding-top:.5em;border-top:1px solid var(--line);font-size:.82em;line-height:1.9;color:var(--mute)}.bkx .fnx p{margin:.3em 0}.bkx .fnx b{color:var(--em)}.btn:disabled{opacity:.35}
 .bk .cap{text-align:center;color:var(--mute);font-size:.85em}
 .sal{font-family:"Noto Naskh Arabic","Traditional Arabic",serif;font-size:.78em;color:var(--gold);white-space:nowrap}
-.ref{color:var(--em);font-size:.7em;font-weight:700;cursor:pointer;padding:0 .3em;margin:0 .1em;border-radius:.5em;background:var(--emt);font-family:Vazirmatn,Tahoma,sans-serif;vertical-align:super;line-height:1}
+.ref{color:var(--em);font-size:.7em;font-weight:700;cursor:pointer;padding:0 .3em;margin:0 .1em;border-radius:.5em;background:var(--emt);font-family:Onvan,Vazirmatn,Tahoma,sans-serif;vertical-align:super;line-height:1}
 .fnl p{margin:.5em 0;font-size:calc(var(--fs) - 1px);line-height:1.9}.fnl b{color:var(--em);margin-inline-end:.4em}
 #pop{position:fixed;inset-inline:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:40;max-width:696px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 16px;box-shadow:0 10px 40px rgba(0,0,0,.25);display:none;max-height:42vh;overflow:auto}
 #pop.on{display:block}#pop b{color:var(--em)}
@@ -189,7 +208,7 @@ button,select,input,[data-t],.cell{touch-action:manipulation}nav.tabs button{min
 
 
 /* فونت قدیمی برای قرآن و متن کتاب */
-#tlBody.qrx,.bkx{font-family:Vazirmatn,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif}
+#tlBody.qrx,.bkx{font-family:Onvan,Vazirmatn,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif}
 /* قرآن */
 .ql{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .qs{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:14px;background:var(--card);box-shadow:var(--sh);text-align:start;min-width:0}
@@ -203,65 +222,20 @@ button,select,input,[data-t],.cell{touch-action:manipulation}nav.tabs button{min
 .qbs{text-align:center;font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:calc(var(--qf,26px)*1.1);color:var(--em);margin:10px 0}
 .qhit{display:block;width:100%;text-align:start}
 .btn[disabled]{opacity:.4}
-/* ===== صفحه‌ی اصلی «امروز» + منوی کشویی (مرحله‌ی ۲) ===== */
-.hm .cmz{touch-action:pan-y}
-.hr{position:relative;display:block;width:min(76vw,292px);aspect-ratio:1;margin:10px auto 6px;border-radius:50%;text-align:center}
-.hr svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.hr circle{fill:none;stroke-width:3.2}
-.hr .tr{stroke:var(--line)}.hr .pg{stroke:var(--em);stroke-linecap:round;transition:stroke-dashoffset .5s ease}
-.hr .in{position:absolute;inset:11%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:var(--card);box-shadow:var(--sh)}
-.hr .wd{font-size:14px;color:var(--mute)}
-.hr .dn{font-size:76px;font-weight:800;line-height:1.05;color:var(--ink)}.hr .dn.rd{color:var(--red)}
-.hr .mn{font-size:19px;font-weight:700}
-.hr .h2{font-size:13px;color:var(--em);margin-top:5px}.hr .g2{font-size:13px;color:var(--mute)}
-.hmc{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0 4px}
-.hmc .chip{border:1px solid var(--line);background:none}.hmc .chip.red{background:var(--redt);border-color:transparent}
-.hmc button.chip{color:var(--em);border-color:var(--em);font-weight:700}
-.hm .wid{padding:10px 14px;margin:10px 0 0;border:1px solid var(--line);background:none;box-shadow:none;border-radius:16px}
-.hc{border:1px solid var(--line);border-radius:16px;margin:10px 0;overflow:hidden}
-.hc .chd{display:flex;align-items:center;gap:8px;width:100%;padding:12px 14px;text-align:start;font-weight:700;font-size:15.5px}
-.hc .chd span{flex:1}
-.hc .cnt{min-width:24px;height:22px;padding:0 7px;border-radius:99px;background:var(--emt);color:var(--em);font-size:12.5px;display:grid;place-items:center}
-.hc .chd svg{width:20px;height:20px;stroke:var(--mute);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
-.hc.on .chd svg{transform:rotate(180deg)}
-.hc .cbd{padding:0 14px 12px}.hc .cbd[hidden]{display:none}
-.evl>.ev{border-top:1px solid var(--line);width:100%}.evl>.ev:first-child{border-top:0}
-.ev .n.rd{background:var(--redt);color:var(--red)}.ev .n.pe{background:var(--emt);color:var(--em)}
-.hc .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-#drw{position:fixed;inset:0;z-index:35;display:none}#drw.on{display:block}
-#drw .bd{position:absolute;inset:0;background:rgba(0,0,0,.45);animation:drF .18s ease-out}
-#drw .pn{position:absolute;top:0;bottom:0;inset-inline-start:0;width:min(84vw,330px);background:var(--bg);overflow:auto;box-shadow:0 0 40px rgba(0,0,0,.3);padding:0 0 calc(14px + env(safe-area-inset-bottom));animation:drI .22s ease-out}
-@keyframes drF{from{opacity:0}to{opacity:1}}@keyframes drI{from{transform:translateX(44px);opacity:.3}to{transform:none;opacity:1}}
-@media(prefers-reduced-motion:reduce){#drw .bd,#drw .pn{animation:none}}
-.dtop{padding:calc(18px + env(safe-area-inset-top)) 18px 16px;background:linear-gradient(150deg,var(--em),var(--emd));color:#fff}
-.dtop b{display:block;font-size:19px}.dtop span{display:block;margin-top:6px;font-size:15px}.dtop small{display:block;opacity:.85;margin-top:2px;font-size:12.5px}
-.dg{padding:8px 10px 0}.dg+.dg{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
-.di{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:11px 10px;border-radius:14px}
-.di:active{background:var(--emt)}
-.di svg{flex:0 0 22px;width:22px;height:22px;stroke:var(--em);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.di span{flex:1;min-width:0;font-size:15px}.di small{display:block;color:var(--mute);font-size:12px;line-height:1.5}
-.dth{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 20px 4px;font-size:14px}
-.dth .seg{margin:0;min-width:170px}
-.am h3{margin:14px 0 4px;font-size:15px;color:var(--em)}
-.am .set{width:100%;text-align:start}
-.gtf{display:grid;grid-template-columns:.8fr 1.4fr 1fr;gap:6px;margin:10px 0}
-.gtb{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.ib[hidden]{display:none}
-.set .btn,.set .chip{white-space:nowrap;flex:none}
-.ev .n svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 </style>
 </head>
 <body>
 <div id="app">
-<header class="top"><button class="ib" id="bMenu" aria-label="منو"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><h1>تقویم شیعه</h1>
+<header class="top"><h1>تقویم شیعه</h1>
 <button class="ib" id="bPal" aria-label="رنگ و شخصی‌سازی"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3.5 3.5 0 0 0 3.5-3.5C20.5 7 16.8 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg></button>
 <button class="ib" id="bGear" aria-label="تنظیمات"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></header>
 <main id="main"></main>
 <nav class="tabs" id="tabs" role="tablist">
-<button data-t="home" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>امروز</button>
-<button data-t="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>تقویم</button>
+<button data-t="cal" aria-selected="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>تقویم</button>
 <button data-t="time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>اوقات</button>
+<button data-t="next"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>پیش‌رو</button>
 <button data-t="book"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7"/></svg>کتاب</button>
+<button data-t="find"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>جستجو</button>
 <button data-t="tool"><svg viewBox="0 0 24 24"><path d="M7 4v16M7 4 4 7M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3"/></svg>ابزار</button>
 </nav>
 <section class="sheet" id="sheet" aria-modal="true"><header><button class="ib" id="sBack" aria-label="بستن"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><h2 id="sTitle"></h2><button class="ib" id="sFav" aria-label="نشان" hidden><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1L3.2 9.4l6.1-.8z"/></svg></button></header><div class="body bk" id="sBody"></div><div class="fx" id="sFx" hidden></div></section>
@@ -327,11 +301,12 @@ function info(j){return{j,g:d2g(j),p:d2j(j),h:j2h(j),w:wdOf(j)}}
 const todayJ=()=>{const t=new Date();return g2d(t.getFullYear(),t.getMonth()+1,t.getDate())};
 const HOL_P={'1/1':'نوروز','1/2':'نوروز','1/3':'نوروز','1/4':'نوروز','1/12':'روز جمهوری اسلامی','1/13':'سیزده‌بدر','3/14':'رحلت امام خمینی','3/15':'قیام ۱۵ خرداد','11/22':'پیروزی انقلاب اسلامی','12/29':'ملی شدن صنعت نفت'};
 const HOL_H={'1/9':'تاسوعا','1/10':'عاشورا','2/20':'اربعین حسینی','2/28':'رحلت پیامبر و شهادت امام حسن مجتبی','2/30':'شهادت امام رضا','3/8':'شهادت امام حسن عسکری','3/17':'میلاد پیامبر و امام صادق','6/3':'شهادت حضرت فاطمه زهرا','7/13':'ولادت امام علی','7/27':'مبعث','8/15':'ولادت امام زمان','9/21':'شهادت امام علی','10/1':'عید فطر','10/2':'تعطیل عید فطر','10/25':'شهادت امام صادق','12/10':'عید قربان','12/18':'عید غدیر خم'};
-function holiday(x){if(!ST.hol)return null;let r=HOL_P[x.p.m+'/'+x.p.d]||HOL_H[x.h.m+'/'+x.h.d];
+function holiday(x){if(!ST.hol)return null;let r=HOL_H[x.h.m+'/'+x.h.d];
  if(!r&&x.h.m===2&&x.h.d===29&&hLen(x.h.y,2)===29)r=HOL_H['2/30'];return r||null}
 //ENGINE-END
+{const _h=holiday;holiday=function(x){const r=_h(x);return r&&grp(x.h.m,x.h.d)?r:null}}
 /* ===== مناسبت‌های تکمیلی (از تقویم رسمی ۱۴۰۵): شمسی، میلادی و چند مناسبت قمری که در کتاب نیست ===== */
-const XTRA_J={"1/6":["روز امید، روز شادباش نویسی","زادروز اَشو زرتشت، اَبَراِنسان بزرگ تاریخ"],"1/10":["جشن آبانگاه"],"1/17":["سروش روز،جشن سروشگان"],"1/19":["فروردین روز،جشن فروردینگان"],"1/23":["روز دندانپزشک"],"1/25":["روز بزرگداشت عطار نیشابوری"],"1/29":["روز ارتش جمهوری اسلامی ایران"],"1/30":["روز علوم آزمایشگاهی، زاد روز حکیم سید اسماعیل جرجانی"],"2/1":["روز بزرگداشت سعدی"],"2/3":["روز بزرگداشت شیخ بهایی؛ روز ملی کارآفرینی؛ روز معماری"],"2/6":["فاجعه‌ی انفجارِ بندر عباس (۱۴۰۴ خورشیدی)"],"2/9":["روز ملی روانشناس و مشاور"],"2/10":["جشن چهلم نوروز؛ روز ملی خلیج فارس"],"2/12":["روز معلم"],"2/15":["جشن میانه بهار/جشن بهاربد؛ روز شیراز"],"2/22":["زادروز مریم میرزاخانی ریاضیدان ایرانی، روز جهانی زن در ریاضیات"],"2/25":["روز بزرگداشت فردوسی"],"2/27":["روز ارتباطات و روابط عمومی"],"2/28":["روز بزرگداشت حکیم عمر خیام"],"3/1":["روز بهره وری و بهینه سازی مصرف","روز بزرگداشت ملاصدرا"],"3/2":["فروریختن ساختمان متروپل در آبادان"],"3/3":["فتح خرمشهر در عملیات بیت المقدس و روز مقاومت، ایثار و پیروزی"],"3/4":["روز دزفول، روز مقاومت و پایداری"],"3/6":["خرداد روز،جشن خردادگان"],"3/25":["روز ملی گل وگیاه"],"3/31":["سالروز زلزله رودبار و منجیل (۱۳۶۹ خورشیدی)"],"4/1":["جشن آب پاشونک، جشن آغاز تابستان"],"4/7":["انفجار دفتر حزب جمهوری اسلامی؛ روز قوه قضاییه"],"4/8":["روز مبارزه با سلاح های شیمیایی و میکروبی"],"4/10":["روز صنعت و معدن","زادروز بابک خرمدین، سپه‌سالار دلاور ایران","روز بزرگداشت صائب تبریزی"],"4/12":["شلیک به پرواز 655 ایران ایر توسط ناو وینسنس (۱۳۶۷ خورشیدی)"],"4/13":["جشن تیرگان، بزرگداشت کمان کشیدن جان‌فدای ایران، آرش کمانگیر بر فراز البرز"],"4/14":["روز قلم"],"4/15":["جشن خام خواری"],"4/22":["زادروز محمد خوارزمی، ریاضیدان و فیلسوف ایرانی و روز ملی فناوری اطلاعات"],"4/25":["روز بهزیستی و تامین اجتماعی"],"4/27":["اعلام پذیرش قطعنامه 598 شورای امنیت از سوی ایران (۱۳۶۷ خورشیدی)"],"5/7":["اَمرداد روز،جشناَمردادگان"],"5/8":["روز بزرگداشت شیخ شهاب الدین سهروردی"],"5/10":["جشن چله تابستان"],"5/14":["سالروز صدور فرمان مشروطیت"],"5/17":["روز خبرنگار"],"5/28":["سالروز وقایع ۲۸ مرداد پس از برکناری محمد مصدق‌السلطنه","سالروز فاجعه آتش زدن سینما رکس آبادان"],"6/1":["روز بزرگداشت ابوعلی سینا و روز پزشک"],"6/2":["آغاز هفته دولت"],"6/4":["زادروز کوروش بزرگ","شهریور روز،جشن شهریورگان"],"6/5":["روز بزرگداشت محمدبن زکریای رازی و روز داروساز"],"6/8":["انفجار در دفتر نخست‌وزیری جمهوری اسلامی ایران، روز مبارزه با تروریسم"],"6/11":["روز ملی صنعت چاپ"],"6/12":["سالروز شهادت رئیسعلی دلواری، سردار بزرگ میهن و فرمانده قیام جنوب علیه اشغالگران انگلیسی"],"6/13":["روز بزرگداشت ابوریحان بیرونی"],"6/21":["روز سینما"],"6/27":["روز شعر و ادب پارسی و روز بزرگداشت استاد شهریار"],"6/31":["آغاز هفته دفاع مقدس"],"7/1":["آغاز حمله مغول به ایران در پاییز 598 خورشیدی"],"7/4":["روز گرامیداشت سربازان وطن"],"7/7":["روز آتش نشانی و ایمنی","سقوط هواپیمای حامل جمعی از فرماندهان جنگ (کلاهدوز، نامجو، فلاحی، فکوری، جهان آرا) در سال 1360","روز بزرگداشت شمس تبریزی"],"7/8":["روز بزرگداشت مولوی"],"7/10":["مهر روز،جشن مهرگان"],"7/14":["روز دامپزشکی"],"7/16":["روز ملی کودک"],"7/20":["روز بزرگداشت حافظ"],"7/21":["روز پیروزی کاوه و فریدون بر ضحاک"],"7/26":["روز تربیت بدنی و ورزش"],"7/28":["زادروز ستارخان ملقب به سردار ملی و از سرداران جنبش مشروطه ایران"],"7/29":["روز ملی کوهنورد"],"8/1":["روز آمار و برنامه ریزی","روز بزرگداشت ابوالفضل بیهقی، تاریخ‌نگار و نویسنده ایرانی"],"8/7":["سالروز ورود کوروش بزرگ به بابل در سال 539 پیش از میلاد"],"8/8":["روز ملی محیط بان"],"8/10":["آبان روز، جشن آبانگان"],"8/14":["روز ملّی مازندران"],"8/15":["جشن میانه پاییز"],"8/18":["روز ملی کیفیت"],"8/24":["روز کتاب و کتابخوانی"],"9/1":["آذر جشن"],"9/5":["روز بسیج مستضعفان"],"9/7":["سالروز عملیات مروارید و روز نیروی دریایی ارتش"],"9/9":["جشن آذرگان ،آذر روز"],"9/13":["روز صنعت بیمه"],"9/15":["روز حسابدار"],"9/25":["روز پژوهش و فناوری"],"9/30":["جشن شب یلدا، شب چلّه"],"10/1":["روز میلاد خورشید؛ جشن خرم روز، نخستین جشن دیگان"],"10/3":["سالروز عملیات کربلای 4 (۱۳۶۵ خورشیدی)"],"10/5":["زمین لرزه ی بم (۱۳۸۲ خورشیدی)","سالروز شهادت اَشو زرتشت، اَبَراِنسان بزرگ تاریخ"],"10/8":["دی به آذر روز، دومین جشن دیگان","روز بزرگداشت یعقوب لیث صفاری (رادمان پورماهک) نخستین پادشاه ایرانی پس از اسلام"],"10/9":["اعدام میهن‌پرستان آذری در تبریز توسط قوای اشغالگر روس (۱۲۹۰ خورشیدی)"],"10/12":["روز حافظ"],"10/13":["شهادت سردار حاج قاسم سلیمانی (۱۳۹۸ خورشیدی)"],"10/15":["دی به مهر روز، سومین جشن دیگان"],"10/16":["غرق شدن کشتی سانچی (۱۳۹۶ خورشیدی)"],"10/18":["شلیک به پرواز 752 هواپیمایی اوکراین (۱۳۹۸ خورشیدی)"],"10/19":["درگذشت اکبر هاشمی رفسنجانی (۱۳۹۵ خورشیدی)"],"10/20":["قتل امیرکبیر به دستور ناصرالدین شاه قاجار (۱۲۳۰ خورشیدی)"],"10/23":["دی به دین روز، چهارمین جشن دیگان"],"10/30":["آتش‌سوزی و فروریختن ساختمان پلاسکو (۱۳۹۵ خورشیدی)"],"11/1":["زادروز فردوسی"],"11/2":["بهمن روز، جشن بهمنگان"],"11/6":["بزرگداشت صفی‌الدین اُرمَوی و روز موسیقی ایرانی"],"11/10":["جشن سده، گرامیداشتِ کشف آتش به دستِ هوشنگ شاه"],"11/12":["بازگشت امام خمینی (ره) به ایران"],"11/15":["جشن میانه زمستان"],"11/19":["روز نیروی هوایی"],"11/29":["جشن سپندارمذگان و روز عشق","فاجعه انفجار قطار نیشابور (۱۳۸۲ خورشیدی)"],"12/5":["روز بزرگداشت خواجه نصیر الدین طوسی و روز مهندس"],"12/7":["سالروز استقلال کانون وکلای دادگستری و روز وکیل مدافع"],"12/15":["روز درختکاری"],"12/25":["پایان سرایش شاهنامه","روز بزرگداشت اختر چرخ ادب، پروین اعتصامی"]},XTRA_G={"3/21":["روز جهانی نوروز"],"3/23":["روز جهانی هواشناسی"],"3/27":["روز جهانی تئاتر"],"4/7":["روز جهانی بهداشت"],"4/22":["جشن گیاه آوری؛ روز زمین"],"4/27":["روز جهانی طراحی و گرافیک"],"5/1":["روز جهانی کارگر"],"5/5":["روز جهانی ماما"],"5/8":["روز جهانی صلیب سرخ و هلال احمر"],"5/12":["روز جهانی پرستار"],"5/18":["روز جهانی موزه و میراث فرهنگی"],"5/31":["روز جهانی بدون دخانیات"],"6/5":["روز جهانی محیط زیست"],"6/10":["روز جهانی صنایع دستی"],"6/12":["روز جهانی مبارزه با کار کودکان"],"6/14":["روز جهانی اهدای خون"],"6/17":["روز جهانی بیابان زدایی"],"6/26":["روز جهانی مبارزه با مواد مخدر"],"8/1":["آغاز هفته جهانی شیردهی"],"8/13":["روز جهانی چپ‌دست‌ها"],"8/19":["روز جهانی عکاسی"],"9/10":["روز جهانی پیشگیری از خودکشی"],"9/11":["حمله به برج‌های دوقلوی مرکز تجارت جهانی"],"9/21":["روز جهانی صلح"],"9/27":["روز جهانی جهانگردی"],"9/30":["روز جهانی ناشنوایان","روز جهانی ترجمه و مترجم"],"10/1":["روز جهانی سالمندان"],"10/4":["آغاز هفته جهانی فضا"],"10/5":["روز جهانی معلم"],"10/9":["روز جهانی پست"],"10/10":["روز جهانی مبارزه با حکم اعدام"],"10/11":["روز جهانی دختر"],"10/14":["روز جهانی استاندارد"],"10/15":["روز جهانی عصای سفید"],"10/16":["روز جهانی غذا"],"10/17":["روز جهانی ریشه کنی فقر"],"11/14":["روز جهانی دیابت"],"11/17":["روز جهانی دانش آموز"],"11/19":["روز جهانی آقایان"],"11/20":["روز جهانی کودک"],"11/25":["روز جهانی مبارزه با خشونت علیه زنان"],"12/1":["روز جهانی ایدز"],"12/3":["روز جهانی معلولان (کم‌توانان)"],"12/10":["روز جهانی حقوق بشر"],"12/11":["روز جهانی کوهستان"],"12/25":["جشن کریسمس","روز بزرگداشت دوستی"],"1/1":["جشن آغاز سال نو میلادی"],"2/11":["حمله به سفارت روسیه و قتل گریبایدوف سفیر روسیه تزاری در ایران"],"2/14":["جشن ولنتاین"],"3/8":["روز جهانی زنان"],"3/14":["روز جهانی عدد π (پی)"],"3/20":["روز جهانی شادی"]},XTRA_H={"11/1":["روز دختران"],"11/30":["شهادت امام محمد تقی (ع)"],"2/30":["شهادت امام رضا (ع)"],"12/20":["ولادت امام موسی کاظم (ع)"],"3/12":["میلاد رسول اکرم (ص) به روایت اهل سنت"],"5/5":["روز پرستار و بهورز"],"6/20":["روز مادر"],"7/13":["روز پدر"],"8/3":["روز پاسدار"],"8/4":["روز جانباز"],"8/11":["روز جوان"],"9/18":["شب قدر"],"9/20":["شب قدر"],"9/22":["شب قدر"]};
+const XTRA_J={},XTRA_G={},XTRA_H={};
 function extras(x){let r=[];const a=XTRA_J[x.p.m+'/'+x.p.d],b=XTRA_G[x.g.m+'/'+x.g.d],c=XTRA_H[x.h.m+'/'+x.h.d];
  if(a)r=r.concat(a);if(c)r=r.concat(c);if(b)r=r.concat(b);
  if(x.h.d===29&&hLen(x.h.y,x.h.m)===29){const d=XTRA_H[x.h.m+'/30'];if(d)r=r.concat(d)}
@@ -351,7 +326,7 @@ function load(){try{const s=JSON.parse(localStorage.getItem('tsh2')||'{}');Objec
 function save(){try{localStorage.setItem('tsh2',JSON.stringify(ST))}catch(e){}}
 function applyUI(){const r=document.documentElement;if(ST.theme==='auto')r.removeAttribute('data-theme');else r.dataset.theme=ST.theme;r.style.setProperty('--fs',ST.fs+'px')}
 /* ===== وضعیت ===== */
-let tab='home',mode='p',view={y:0,m:0},selJ=todayJ();
+let tab='cal',mode='p',view={y:0,m:0},selJ=todayJ();
 function setView(j){const x=info(j);view=mode==='p'?{y:x.p.y,m:x.p.m}:mode==='h'?{y:x.h.y,m:x.h.m}:{y:x.g.y,m:x.g.m}}
 function mFirst(){return mode==='p'?j2d(view.y,view.m,1):mode==='h'?h2j(view.y,view.m,1):g2d(view.y,view.m,1)}
 function mLen(){return mode==='p'?jLen(view.y,view.m):mode==='h'?hLen(view.y,view.m):gLen(view.y,view.m)}
@@ -392,9 +367,49 @@ function drawNext(){const t=todayJ();let h='<div class="card"><h3>مناسبت�
 const LIB=[{id:'tsh',t:'تقویم الشیعه (بندانی نیشابوری)',s:'مقدمه، دوازده ماه قمری و پی‌نوشت‌ها',f:()=>drawBookTsh()}];
 let bookSel=null;
 const bookBar=b=>'<div class="bar"><button class="ib" data-a="lib" aria-label="بازگشت به فهرست کتاب‌ها"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>'+esc(b.t)+'</b></div><span style="width:38px"></span></div>';
+const BF={q:'',cat:'all',edit:false},BSORT=[['def','پیش‌فرض'],['az','الفبایی (الف تا ی)'],['za','الفبایی (ی تا الف)'],['rd','آخرین مطالعه'],['big','بیشترین صفحه'],['small','کمترین صفحه'],['new','تازه‌ترین افزوده'],['cat','دسته‌بندی'],['man','دستی (با فلش‌ها)']];
+const cats=()=>ST.cats||(ST.cats=['درسی','تاریخی','دعا و زیارت','اخلاقی','قرآنی']),bcOf=id=>(ST.bc&&ST.bc[id])||'';
+function manList(){const o=(ST.bo||[]).filter(id=>LIB.some(b=>b.id===id));LIB.forEach(b=>{if(o.indexOf(b.id)<0)o.push(b.id)});return o}
+function bookList(so,filt){let A=LIB.map((b,i)=>({b,i}));
+ if(filt){const q=nz((BF.q||'').trim());if(q)A=A.filter(x=>nz(x.b.t+' '+(x.b.s||'')).includes(q));
+  if(BF.cat==='_')A=A.filter(x=>!bcOf(x.b.id));else if(BF.cat!=='all')A=A.filter(x=>bcOf(x.b.id)===cats()[+BF.cat])}
+ const pg=b=>b.id==='tsh'?(Object.keys(NOTES).length+MN.reduce((a,m)=>a+m.groups.length,0)):gbOf(b.id).pages.length,rt=b=>(ST.rt&&ST.rt[b.id])||0,cmp=(a,b)=>a.b.t.localeCompare(b.b.t,'fa',{numeric:true}),m={};
+ if(so==='big'||so==='small'){A.forEach(x=>m[x.b.id]=pg(x.b))}
+ if(so==='az')A.sort(cmp);else if(so==='za')A.sort((a,b)=>cmp(b,a));else if(so==='rd')A.sort((a,b)=>rt(b.b)-rt(a.b)||a.i-b.i);else if(so==='big')A.sort((a,b)=>m[b.b.id]-m[a.b.id]||a.i-b.i);else if(so==='small')A.sort((a,b)=>m[a.b.id]-m[b.b.id]||a.i-b.i);else if(so==='new')A.sort((a,b)=>b.i-a.i);
+ else if(so==='man'){const o=manList();A.sort((a,b)=>o.indexOf(a.b.id)-o.indexOf(b.b.id))}
+ else if(so==='cat'){const C=cats(),ci=b=>{const k=C.indexOf(bcOf(b.id));return k<0?999:k};A.sort((a,b)=>ci(a.b)-ci(b.b)||a.i-b.i)}
+ A.m=m;return A}
+function bookRows(){const so=ST.bs||'def',edit=BF.edit,C=cats(),A=bookList(so,true),m=A.m;let h='';
+ const cnt={all:LIB.length,_:0};C.forEach((c,i)=>cnt[i]=0);LIB.forEach(b=>{const k=C.indexOf(bcOf(b.id));if(k<0)cnt._++;else cnt[k]++});
+ h+='<div class="fq"><button data-bcat="all" class="'+(BF.cat==='all'?'on':'')+'">همه<i>'+fa(cnt.all)+'</i></button>'+C.map((c,i)=>'<button data-bcat="'+i+'" class="'+(BF.cat===String(i)?'on':'')+'">'+esc(c)+'<i>'+fa(cnt[i])+'</i></button>').join('')+(cnt._&&cnt._<cnt.all?'<button data-bcat="_" class="'+(BF.cat==='_'?'on':'')+'">بدون دسته<i>'+fa(cnt._)+'</i></button>':'')+'</div>';
+ if(edit)h+='<div class="card"><h3>دسته‌ها</h3><div class="muted">برای هر کتاب از فهرست زیر دسته را انتخاب کنید. با فلش‌ها ترتیب را دستی تغییر دهید.</div><div class="days">'+C.map((c,i)=>'<span class="cm">'+esc(c)+'<button data-bcr="'+i+'" aria-label="تغییر نام">✎</button><button data-bcd="'+i+'" aria-label="حذف">✕</button></span>').join('')+'</div><button class="btn ghost" data-bca>+ دسته‌ی جدید</button></div>';
+ if(!A.length)return h+'<div class="empty">کتابی پیدا نشد.</div>';
+ h+='<div class="list">';let last=null;
+ A.forEach((x,k)=>{const b=x.b,id=b.id,c=bcOf(id);
+  if(so==='cat'&&c!==last){last=c;h+='<div class="bgh">'+esc(c||'بدون دسته')+'</div>'}
+  if(edit){h+='<div class="rowe"><span class="tx">'+esc(b.t)+'</span><select class="fld" data-bcs="'+id+'" aria-label="دسته"><option value="">بدون دسته</option>'+C.map((n,i)=>'<option value="'+i+'"'+(c===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select><button class="mv" data-bmv="'+id+'|-1"'+(k?'':' disabled')+' aria-label="بالا">▲</button><button class="mv" data-bmv="'+id+'|1"'+(k<A.length-1?'':' disabled')+' aria-label="پایین">▼</button></div>';return}
+  const rp=ST.rp&&ST.rp[id],ex=[];if(c)ex.push(c);if((so==='big'||so==='small')&&id!=='tsh')ex.push(fa(m[id])+' صفحه');if(rp!=null&&id!=='tsh')ex.push('ادامه از صفحه‌ی '+fa(rp+1));
+  h+='<button class="row" data-k="lib:'+id+'"><span class="num"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7"/></svg></span><span class="tx"><b>'+esc(b.t)+'</b><small>'+esc(b.s)+(ex.length?(b.s?' · ':'')+ex.join(' · '):'')+'</small></span></button>'});
+ return h+'</div>'}
+function fillBooks(){const e=$('#bl');if(e)e.innerHTML=bookRows()}
 function drawBook(){const b=LIB.find(x=>x.id===bookSel);if(b)return b.f();
-  main.innerHTML='<div class="card"><h3>کتاب‌ها</h3><div class="muted">یکی از کتاب‌ها را باز کنید.</div><button class="btn" data-ba="open" style="margin-top:10px;width:100%">+ افزودن کتاب</button></div><div class="list">'+LIB.map(b=>'<button class="row" data-k="lib:'+b.id+'"><span class="num"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7"/></svg></span><span class="tx"><b>'+esc(b.t)+'</b><small>'+esc(b.s)+'</small></span></button>').join('')+'</div>'}
-function drawBookTsh(){let h=bookBar(LIB[0])+'<div class="list"><button class="row" data-k="front"><span class="num">م</span><span class="tx"><b>مقدمه‌ی کتاب</b><small>پیشگفتار، دوازده ماه در قرآن، روش تنظیم</small></span></button>';
+ main.innerHTML='<div class="card"><h3>کتاب‌ها</h3><div class="muted">یکی از کتاب‌ها را باز کنید.</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" data-ba="open" style="flex:1">+ افزودن کتاب</button><button class="btn ghost" data-bed style="flex:1">'+(BF.edit?'پایان ویرایش':'دسته‌بندی و ترتیب دستی')+'</button></div></div><div class="search"><input id="bq" class="fld" type="search" placeholder="جستجو در نام کتاب‌ها…" autocomplete="off" value="'+esc(BF.q||'')+'"><select id="bso" class="fld" style="flex:none;width:auto" aria-label="مرتب‌سازی">'+BSORT.map(o=>'<option value="'+o[0]+'"'+((ST.bs||'def')===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select></div><div id="bl"></div>';fillBooks()}
+main.addEventListener('input',e=>{if(e.target.id==='bq'){BF.q=e.target.value;fillBooks()}});
+main.addEventListener('change',e=>{const t=e.target;
+ if(t.id==='bso'){ST.bs=t.value;save();fillBooks();return}
+ if(t.dataset&&t.dataset.bcs!==undefined){const id=t.dataset.bcs;ST.bc=ST.bc||{};if(t.value==='')delete ST.bc[id];else ST.bc[id]=cats()[+t.value];save();fillBooks()}});
+main.addEventListener('click',e=>{if(tab!=='book'||bookSel)return;let x;
+ if(e.target.closest('[data-bed]')){BF.edit=!BF.edit;drawBook();return}
+ if(x=e.target.closest('[data-bcat]')){BF.cat=x.dataset.bcat;fillBooks();return}
+ if(e.target.closest('[data-bca]')){const n=(prompt('نام دسته‌ی جدید:')||'').trim();if(n&&cats().indexOf(n)<0){cats().push(n);save();fillBooks()}return}
+ if(x=e.target.closest('[data-bcr]')){const i=+x.dataset.bcr,o=cats()[i],n=(prompt('نام تازه برای دسته:',o)||'').trim();if(n&&n!==o&&cats().indexOf(n)<0){cats()[i]=n;for(const k in (ST.bc||{}))if(ST.bc[k]===o)ST.bc[k]=n;save();fillBooks()}return}
+ if(x=e.target.closest('[data-bcd]')){const i=+x.dataset.bcd,o=cats()[i];if(!confirm('دسته‌ی «'+o+'» حذف شود؟ کتاب‌های آن بدون دسته می‌شوند.'))return;cats().splice(i,1);for(const k in (ST.bc||{}))if(ST.bc[k]===o)delete ST.bc[k];if(BF.cat!=='all'&&BF.cat!=='_')BF.cat='all';save();fillBooks();return}
+ if(x=e.target.closest('[data-bmv]')){const[id,d]=x.dataset.bmv.split('|');
+  if(ST.bs!=='man'){ST.bo=bookList(ST.bs||'def',false).map(y=>y.b.id);ST.bs='man';const sel=$('#bso');if(sel)sel.value='man'}
+  const o=manList(),vis=bookList('man',true).map(y=>y.b.id),k=vis.indexOf(id),n=vis[k+ +d];if(n==null)return;
+  const a1=o.indexOf(id),b1=o.indexOf(n);o[a1]=n;o[b1]=id;ST.bo=o;save();fillBooks()}});
+const fgoRow=id=>'<button class="row" data-fgo="'+id+'"><span class="num"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span class="tx"><b>جستجو در این کتاب</b></span></button>';
+function drawBookTsh(){let h=bookBar(LIB[0])+'<div class="list">'+fgoRow('tsh')+'<button class="row" data-k="front"><span class="num">م</span><span class="tx"><b>مقدمه‌ی کتاب</b><small>پیشگفتار، دوازده ماه در قرآن، روش تنظیم</small></span></button>';
  if(ST.fav.length)h+='<div class="card"><h3>نشان‌شده‌ها</h3><div class="days">'+ST.fav.map(f=>{const[m,d]=f.split(':');return'<button data-k="d:'+m+':'+d+'">'+fa(d)+' '+HM[m-1]+'</button>'}).join('')+'</div></div>';
  MN.forEach((mo,i)=>{const nd=mo.groups.filter(g=>g.k==='day').length;h+='<button class="row" data-k="m:'+(i+1)+'"><span class="num">'+fa(i+1)+'</span><span class="tx"><b>'+HM[i]+'</b><small>'+fa(nd)+' روز دارای رویداد'+(tails(i+1).length?' · بخش‌های بدون روز':'')+'</small></span></button>'});
  main.innerHTML=h+'<button class="row" data-k="notes"><span class="num">پ</span><span class="tx"><b>پی‌نوشت‌ها</b><small>'+fa(Object.keys(NOTES).length)+' منبع</small></span></button></div>'}
@@ -405,15 +420,15 @@ function gtree(b){if(b._t)return b._t;const root={ch:[]},st=[{l:-1,n:root}];b.to
 const IC_L='<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',IC_P='<svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6"/></svg>';
 function drawGen(id){const L=LIB.find(x=>x.id===id),b=gbOf(id),root=gtree(b);let node=root;bkPath.forEach(i=>{node=node.ch[i]});const top=node===root;
  let h='<div class="bar"><button class="ib" data-a="gup" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>'+esc(top?L.t:node.t)+'</b>'+(top?'':'<small>'+esc(L.t)+'</small>')+'</div><span style="width:38px"></span></div><div class="list">';
- const rp=ST.rp&&ST.rp[id];
+ const rp=ST.rp&&ST.rp[id];if(top)h+=fgoRow(id);
  if(top&&rp!=null)h+='<button class="row" data-k="gr:'+rp+'"><span class="num">'+IC_P+'</span><span class="tx"><b>ادامه‌ی مطالعه</b><small>صفحه‌ی '+fa(rp+1)+' از '+fa(b.pages.length)+'</small></span></button>';
  if(!top)h+='<button class="row" data-k="gr:'+node.p+'"><span class="num">'+IC_P+'</span><span class="tx"><b>خواندن همین بخش</b></span></button>';
  node.ch.forEach((c,i)=>{h+='<button class="row" data-k="'+(c.ch.length?'gd:'+i:'gr:'+c.p)+'"><span class="num">'+(c.ch.length?IC_L:IC_P)+'</span><span class="tx"><b>'+esc(c.t)+'</b>'+(c.ch.length?'<small>'+fa(c.ch.length)+' بخش</small>':'')+'</span></button>'});
  main.innerHTML=h+'</div>'}
 function readGen(id,start){const L=LIB.find(x=>x.id===id),b=gbOf(id),N=b.pages.length;start=Math.max(0,Math.min(N-1,start));const end=Math.min(N,start+GW);
- ST.rp=ST.rp||{};ST.rp[id]=start;save();
+ ST.rp=ST.rp||{};ST.rp[id]=start;(ST.rt=ST.rt||{})[id]=Date.now();save();
  openSheet(L.t,'<div class="bkx">'+b.pages.slice(start,end).join('')+'</div>','<button class="btn ghost" data-a="bp"'+(start?'':' disabled')+'>قبلی</button><span class="muted" style="align-self:center">'+fa(start+1)+'–'+fa(end)+' از '+fa(N)+'</span><button class="btn ghost" data-a="bn"'+(end<N?'':' disabled')+'>بعدی</button>');
- $('#sheet')._j=null;$('#sheet')._g=[id,start];$('#sBody').scrollTop=0}
+ $('#sheet')._j=null;$('#sheet')._g=[id,start];$('#sBody').scrollTop=0;if(RH)hlSheet(true)}
 function drawMonth(m){const mo=MN[m-1];let h='<div class="bar"><button class="ib" data-a="bk" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>'+HM[m-1]+'</b><small>'+mo.name+'</small></div><span style="width:38px"></span></div><div class="card"><button class="btn" data-k="mall:'+m+'">خواندن همه‌ی متن ماه</button><h3 style="margin-top:14px">روزهای دارای رویداد</h3><div class="days">'+
  mo.groups.filter(g=>g.k==='day').map(g=>'<button data-k="d:'+m+':'+g.key+'">'+fa(g.key)+'</button>').join('')+'</div>'+
  (tails(m).length?'<h3>بخش‌های ویژه</h3><div class="days">'+tails(m).map((g,i)=>'<button class="t" data-k="t:'+m+':'+i+'">'+esc(g.key)+'</button>').join('')+'</div>':'')+'</div>';
@@ -423,15 +438,54 @@ const nz=s=>s.replace(/[\u064B-\u065F\u0670\u0640\u200c\u200f]/g,'').replace(/[�
 function buildIdx(){sidx=[];MN.forEach((mo,mi)=>mo.groups.forEach((g,gi)=>g.items.forEach((it,ii)=>{const t=it[it.length-1];sidx.push({k:'g',mi,gi,ii,t:nz(t)})})));
  Object.entries(NOTES).forEach(([n,t])=>sidx.push({k:'n',n,t:nz(t)}));BOOK.front.forEach((it,ii)=>sidx.push({k:'f',ii,t:nz(it[1])}));
   LIB.forEach((L,li)=>{if(L.id==='tsh')return;gbOf(L.id).pages.forEach((p,pi)=>{const t=nz(p.replace(/<img[^>]*>/g,' ').replace(/<[^>]+>/g,' '));if(t.trim().length>1)sidx.push({k:'b',li,pi,t})})})}
-function doSearch(q){const out=$('#out');q=nz(q.trim());if(q.length<2){out.innerHTML='<div class="empty">دست‌کم دو حرف بنویسید.</div>';return}
- if(!sidx)buildIdx();const ws=q.split(' ').filter(Boolean),res=[];
- for(const e of sidx){if(ws.every(w=>e.t.includes(w))){res.push(e);if(res.length>=120)break}}
- const hl=(t)=>{const p=t.indexOf(ws[0]),a=Math.max(0,p-50),b=Math.min(t.length,p+110);let s=esc(t.slice(a,b));ws.forEach(w=>{s=s.split(esc(w)).join('<mark>'+esc(w)+'</mark>')});return(a?'… ':'')+s+(b<t.length?' …':'')};
- out.innerHTML=res.length?'<div class="muted" style="margin:4px 2px">'+fa(res.length)+(res.length>=120?'+':'')+' نتیجه</div>'+res.map((e,i)=>{let w;
+let RH=null;
+const FS={q:'',mode:'all',scope:'all',sort:'rel',lim:40,re:null,hre:null,res:[],cnt:{all:0},ws:[]};
+const sk=e=>e.k==='b'?LIB[e.li].id:'tsh',scLab=t=>t.replace(/\s*[(（].*$/,''),escRe=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function mkRe(ws,ph){const V={'ی':'[یيىئ]','ک':'[کك]','ا':'[اأإآٱ]','ه':'[هة]'},D='[\\u064B-\\u065F\\u0670\\u0640\\u200c]*',one=w=>[...w].map(c=>(/\d/.test(c)?'['+c+FA[c]+']':V[c]||escRe(c))+D).join('');
+ return new RegExp(ph?ws.map(one).join('[\\s\\u200c]+'):ws.map(one).join('|'),'g')}
+function hlSheet(sc){const bd=$('#sBody');if(!RH||!bd)return;const w=document.createTreeWalker(bd,NodeFilter.SHOW_TEXT),T=[];let n,first=null;while(n=w.nextNode())T.push(n);
+ for(const t of T){const v=t.nodeValue;RH.lastIndex=0;if(!RH.test(v))continue;RH.lastIndex=0;const f=document.createDocumentFragment();let p=0,m;
+  while((m=RH.exec(v))){if(!m[0]){RH.lastIndex++;continue}f.appendChild(document.createTextNode(v.slice(p,m.index)));const k=document.createElement('mark');k.textContent=m[0];f.appendChild(k);if(!first)first=k;p=m.index+m[0].length}
+  f.appendChild(document.createTextNode(v.slice(p)));t.parentNode.replaceChild(f,t)}
+ if(sc&&first)first.scrollIntoView({block:'center'})}
+function addHist(q){q=(q||'').trim();if(q.length<2)return;ST.sh=(ST.sh||[]).filter(x=>x!==q);ST.sh.unshift(q);ST.sh=ST.sh.slice(0,8);save()}
+function histHtml(){const h=ST.sh||[];return h.length?'<div class="fsel"><span class="muted">جستجوهای اخیر</span><button data-fhc style="color:var(--em);font-size:13px">پاک‌کردن</button></div><div class="fq hs">'+h.map((x,i)=>'<button data-fh="'+i+'">'+esc(x)+'</button>').join('')+'</div>':''}
+function modeBar(){const e=$('#fmode');if(e)e.innerHTML=[['all','همه‌ی کلمات'],['any','هر کلمه'],['ph','عبارت دقیق']].map(o=>'<button data-fm="'+o[0]+'" class="'+(FS.mode===o[0]?'on':'')+'">'+o[1]+'</button>').join('')}
+function scopeBar(){const e=$('#fsc');if(!e)return;const q=FS.re!==null,A=[['all','همه',FS.cnt.all]].concat([['tsh',scLab(LIB[0].t),FS.cnt.tsh||0]],LIB.slice(1).map(b=>[b.id,scLab(b.t),FS.cnt[b.id]||0]));
+ e.innerHTML=A.filter(x=>!q||x[0]==='all'||x[2]>0||x[0]===FS.scope).map(x=>'<button data-fsc="'+x[0]+'" class="'+(FS.scope===x[0]?'on':'')+'">'+esc(x[1])+(q?'<i>'+fa(x[2])+'</i>':'')+'</button>').join('')}
+function runSearch(){const out=$('#out'),nq=nz(FS.q.trim());FS.cnt={all:0};FS.res=[];
+ const toks=nq.split(' ').filter(Boolean),neg=toks.filter(w=>w[0]==='-'&&w.length>1).map(w=>w.slice(1)),ws=toks.filter(w=>!(w[0]==='-'&&w.length>1));
+ if(nq.replace(/-/g,'').length<2||!ws.length){FS.re=null;FS.hre=null;out._r=[];scopeBar();$('#fsum').innerHTML='';out.innerHTML=histHtml()+'<div class="empty">کلمه یا عبارتی از کتاب‌ها را بنویسید.<br><span class="muted">برای حذف یک کلمه از نتایج، قبل از آن «-» بگذارید.</span></div>';return}
+ if(!sidx)buildIdx();const ph=ws.join(' '),R=[];
+ for(const e of sidx){const t=e.t;if(neg.length&&neg.some(w=>t.includes(w)))continue;let sc=0;
+  if(FS.mode==='ph'){let i=0;while((i=t.indexOf(ph,i))>=0){sc++;i+=ph.length}}
+  else{let all=true,any=0;for(const w of ws){let c=0,i=0;while(c<30&&(i=t.indexOf(w,i))>=0){c++;i+=w.length}if(c){any++;sc+=c}else all=false}
+   if(FS.mode==='all'?!all:!any)continue;sc+=any*3;if(ws.length>1&&t.includes(ph))sc+=8}
+  if(!sc)continue;const k=sk(e);FS.cnt.all++;FS.cnt[k]=(FS.cnt[k]||0)+1;if(FS.scope==='all'||FS.scope===k)R.push({e,sc:sc/(1+t.length/3000),i:R.length})}
+ if(FS.sort==='rel')R.sort((a,b)=>b.sc-a.sc||a.i-b.i);
+ FS.res=R.map(x=>x.e);FS.ws=ws;FS.ph=ph;FS.re=mkRe(ws,FS.mode==='ph');
+ const parts=(FS.mode==='ph'?[ph]:ws.slice().sort((a,b)=>b.length-a.length)).map(w=>escRe(esc(w)));FS.hre=new RegExp(parts.join('|'),'g');
+ scopeBar();renderRes()}
+function renderRes(){const out=$('#out');if(FS.re===null)return;const R=FS.res,ws=FS.ws,show=R.slice(0,FS.lim);out._r=R;
+ const snip=t=>{let p=-1;for(const w of(FS.mode==='ph'?[FS.ph]:ws)){const i=t.indexOf(w);if(i>=0&&(p<0||i<p))p=i}if(p<0)p=0;const a=Math.max(0,p-60),b=Math.min(t.length,p+140),s=esc(t.slice(a,b)).replace(FS.hre,m=>'<mark>'+m+'</mark>');return(a?'… ':'')+s+(b<t.length?' …':'')};
+ $('#fsum').innerHTML='<span class="muted">'+fa(R.length)+' نتیجه'+(FS.scope==='all'?'':' در این کتاب')+'</span><select id="fso" class="fld" aria-label="مرتب‌سازی نتایج"><option value="rel"'+(FS.sort==='rel'?' selected':'')+'>مرتبط‌ترین</option><option value="ord"'+(FS.sort==='ord'?' selected':'')+'>ترتیب کتاب</option></select>';
+ out.innerHTML=R.length?show.map((e,i)=>{let w;
   if(e.k==='g'){const g=MN[e.mi].groups[e.gi];w=HM[e.mi]+' · '+(g.k==='day'?fa(g.key)+' '+HM[e.mi]:g.k==='intro'?'خلاصه‌ی ماه':g.key)}else if(e.k==='n')w='پی‌نوشت '+fa(e.n);else if(e.k==='b')w=LIB[e.li].t+' · صفحه‌ی '+fa(e.pi+1);else w='مقدمه';
-  return'<button class="res" data-s="'+i+'"><b>'+w+'</b><p>'+hl(e.t)+'</p></button>'}).join(''):'<div class="empty">نتیجه‌ای پیدا نشد.</div>';out._r=res}
-function drawFind(){main.innerHTML='<div class="search"><input id="q" class="fld" type="search" placeholder="جستجو در متن همه‌ی کتاب‌ها…" autocomplete="off"></div><div id="out"><div class="empty">کلمه یا عبارتی از کتاب‌ها را بنویسید.</div></div>';
- let t;$('#q').addEventListener('input',e=>{clearTimeout(t);t=setTimeout(()=>doSearch(e.target.value),200)})}
+  return'<button class="res" data-s="'+i+'"><b>'+esc(w)+'</b><p>'+snip(e.t)+'</p></button>'}).join('')+(R.length>show.length?'<button class="btn ghost fmore" data-fmore>نمایش بیشتر ('+fa(R.length-show.length)+' نتیجه‌ی دیگر)</button>':''):'<div class="empty">نتیجه‌ای پیدا نشد.<br><span class="muted">حالت «هر کلمه» را امتحان کنید یا دامنه را روی «همه» بگذارید.</span></div>'}
+function doSearch(q){FS.q=q;FS.lim=40;runSearch()}
+function drawFind(){main.innerHTML='<div class="search"><input id="q" class="fld" type="search" placeholder="جستجو در متن همه‌ی کتاب‌ها…" autocomplete="off" enterkeyhint="search" value="'+esc(FS.q)+'"></div><div class="fq" id="fmode"></div><div class="fq" id="fsc"></div><div class="fsel" id="fsum"></div><div id="out"></div>';
+ modeBar();scopeBar();runSearch();
+ let t;const q=$('#q');q.addEventListener('input',e=>{clearTimeout(t);t=setTimeout(()=>doSearch(e.target.value),250)});
+ q.addEventListener('keydown',e=>{if(e.key==='Enter'){clearTimeout(t);doSearch(q.value);addHist(q.value);q.blur()}})}
+main.addEventListener('click',e=>{let x;
+ if(x=e.target.closest('[data-fgo]')){FS.scope=x.dataset.fgo;FS.q='';FS.re=null;tab='find';draw();setTimeout(()=>{const q=$('#q');q&&q.focus()},60);return}
+ if(tab!=='find')return;
+ if(x=e.target.closest('[data-fm]')){FS.mode=x.dataset.fm;modeBar();doSearch(FS.q);return}
+ if(x=e.target.closest('[data-fsc]')){FS.scope=x.dataset.fsc;scopeBar();doSearch(FS.q);return}
+ if(e.target.closest('[data-fmore]')){FS.lim+=60;renderRes();return}
+ if(x=e.target.closest('[data-fh]')){const q=(ST.sh||[])[+x.dataset.fh];if(q){$('#q').value=q;doSearch(q)}return}
+ if(e.target.closest('[data-fhc]')){ST.sh=[];save();runSearch()}});
+main.addEventListener('change',e=>{if(e.target.id==='fso'){FS.sort=e.target.value;FS.lim=40;runSearch()}});
 function convRow(k,lab,x){const n=NM[k];return'<div class="conv" data-k="'+k+'"><label>'+lab+'</label><input class="fld" type="number" inputmode="numeric" data-f="d" value="'+x.d+'"><select class="fld" data-f="m">'+n.map((a,i)=>'<option value="'+(i+1)+'"'+(x.m===i+1?' selected':'')+'>'+a+'</option>').join('')+'</select><input class="fld" type="number" inputmode="numeric" data-f="y" value="'+x.y+'"></div>'}
 function drawTool(){const x=info(selJ);
  main.innerHTML='<div class="card"><h3>تبدیل تاریخ</h3><div class="muted">هر یک از سه تاریخ را تغییر دهید؛ دو تاریخ دیگر خودکار محاسبه می‌شود.</div>'+convRow('p','شمسی',x.p)+convRow('h','قمری',x.h)+convRow('g','میلادی',x.g)+'<div id="cw" class="chip" style="margin-top:6px">'+WD[x.w]+'</div> <button class="btn ghost" data-a="goj" style="margin-inline-start:6px">نمایش در تقویم</button></div>'+
@@ -444,11 +498,11 @@ function convChange(row){const k=row.dataset.k,v=f=>+row.querySelector('[data-f=
  try{j=k==='p'?j2d(y,m,d):k==='g'?g2d(y,m,d):h2j(y,m,d)}catch(e){$('#cw').textContent='تاریخ نامعتبر';return}
  const x=info(j);selJ=j;[['p',x.p],['h',x.h],['g',x.g]].forEach(([kk,a])=>{if(kk===k)return;const r=document.querySelector('.conv[data-k='+kk+']');r.querySelector('[data-f=d]').value=a.d;r.querySelector('[data-f=m]').value=a.m;r.querySelector('[data-f=y]').value=a.y});$('#cw').textContent=WD[x.w]}
 function drawSet(){const body=$('#sBody');
- body.innerHTML='<div class="card" style="font-family:Vazirmatn,Tahoma,sans-serif"><div class="set"><span>پوسته</span><span class="seg" style="margin:0;min-width:190px">'+[['auto','خودکار'],['light','روشن'],['dark','تیره']].map(a=>'<button data-th="'+a[0]+'" aria-pressed="'+(ST.theme===a[0])+'">'+a[1]+'</button>').join('')+'</span></div>'+
+ body.innerHTML='<div class="card" style="font-family:Onvan,Vazirmatn,Tahoma,sans-serif"><div class="set"><span>پوسته</span><span class="seg" style="margin:0;min-width:190px">'+[['auto','خودکار'],['light','روشن'],['dark','تیره']].map(a=>'<button data-th="'+a[0]+'" aria-pressed="'+(ST.theme===a[0])+'">'+a[1]+'</button>').join('')+'</span></div>'+
  '<div class="set"><span>اندازه‌ی متن کتاب</span><input type="range" id="fsz" min="14" max="26" step="1" value="'+ST.fs+'"></div>'+
  '<div class="set"><span>اختلاف روز قمری با ام‌القری<br><small class="muted">برای هماهنگی با تقویم رسمی ایران (معمولاً ۰ یا ۱−)</small></span><select class="fld" id="off" style="flex:0 0 90px">'+[-2,-1,0,1,2].map(v=>'<option value="'+v+'"'+(ST.off===v?' selected':'')+'>'+(v<0?'−'+fa(-v):fa(v))+'</option>').join('')+'</select></div>'+
  '<div class="set"><span>نمایش تعطیلات رسمی<br><small class="muted">بر پایه‌ی فهرست مرسوم؛ با تقویم رسمی سال تطبیق دهید</small></span><input type="checkbox" id="hol"'+(ST.hol?' checked':'')+'></div></div>'+
- '<div class="muted" style="padding:6px 8px;font-family:Vazirmatn,Tahoma,sans-serif">متن رویدادها، عنوان‌ها و پی‌نوشت‌ها از کتاب «تقویم شیعه» نوشته‌ی عبدالحسین نیشابوری است. تاریخ شمسی با الگوریتم دقیق ۳۳ ساله و قمری با ام‌القری محاسبه می‌شود.<br>نسخه‌ی ساخت: ۱۱۱۷-۸</div>'}
+ '<div class="muted" style="padding:6px 8px;font-family:Onvan,Vazirmatn,Tahoma,sans-serif">متن رویدادها، عنوان‌ها و پی‌نوشت‌ها از کتاب «تقویم شیعه» نوشته‌ی عبدالحسین نیشابوری است. تاریخ شمسی با الگوریتم دقیق ۳۳ ساله و قمری با ام‌القری محاسبه می‌شود.<br>نسخه‌ی ساخت: ۱۱۱۷-۸</div>'}
 /* ===== خواننده ===== */
 function itemsHTML(g,gi,tag){return g.items.map((it,i)=>{const id=' id="'+tag+'-'+gi+'-'+i+'"';
  if(it[0]==='t')return'<h3'+id+'><span>'+fa(it[1])+'</span>'+R(it[2])+'</h3>';if(it[0]==='h')return'<h4'+id+'>'+R(it[1])+'</h4>';if(it[0]==='s')return'<div class="sec"'+id+'>'+R(it[1])+'</div>';return'<p'+id+'>'+RR(it[1])+'</p>'}).join('')}
@@ -470,11 +524,11 @@ function openMonthAll(m,focus){const mo=MN[m-1];openGroups(HM[m-1],m,mo.groups.m
 function openFront(focus){let h=BOOK.front.map((it,i)=>it[0]==='h'?'<h2 class="mh" id="f-'+i+'">'+RR(it[1])+'</h2>':'<p id="f-'+i+'">'+RR(it[1])+'</p>').join('');openSheet('مقدمه‌ی کتاب',h,'');if(focus){const e=document.getElementById(focus);if(e){e.scrollIntoView({block:'center'});e.style.background='var(--goldt)'}}}
 function openNotes(focus){openSheet('پی‌نوشت‌ها',Object.entries(NOTES).map(([n,t])=>'<p id="n-'+n+'"><b>'+fa(n)+'</b>'+R(t)+'</p>').join(''),'');$('#sBody').classList.add('fnl');if(focus){const e=document.getElementById(focus);if(e){e.scrollIntoView({block:'center'});e.style.background='var(--goldt)'}}}
 let dirty=false;
-function closeSheet(){$('#sheet').classList.remove('on');$('#sBody').classList.remove('fnl');rd=null;if(dirty){dirty=false;setView(selJ);draw()}}
+function closeSheet(){RH=null;$('#sheet').classList.remove('on');$('#sBody').classList.remove('fnl');rd=null;if(dirty){dirty=false;setView(selJ);draw()}}
 function stepDay(k){let j=$('#sheet')._j;if(j==null)return;for(let i=0;i<400;i++){j+=k;const x=info(j);if(grp(x.h.m,x.h.d)||extras(x).length){selJ=j;setView(j);openDay(j);return}}}
 /* ===== رویدادها ===== */
 function draw(){document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===tab));
- ({home:drawHome,conv:drawConv,cal:drawCal,time:drawTime,next:drawNext,book:drawBook,find:drawFind,tool:drawTool})[tab]()}
+ ({cal:drawCal,time:drawTime,next:drawNext,book:drawBook,find:drawFind,tool:drawTool})[tab]()}
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;if(tab==='book'){bookSel=null;bkPath=[]}draw();main.scrollTop=0});
 $('#bGear').onclick=()=>{openSheet('تنظیمات','','');drawSet()};
 $('#sBack').onclick=closeSheet;
@@ -495,12 +549,12 @@ main.addEventListener('click',e=>{
   else if(v==='ovs'){const m=+$('#ovm').value,y=+$('#ovy').value,s=$('#ovd').value;if(!s)return;const[Y,M,D]=s.split('-').map(Number);ST.ov[y+'-'+m]=g2d(Y,M,D);save();ovShow()}
   else if(v==='ovc'){const m=+$('#ovm').value,y=+$('#ovy').value;delete ST.ov[y+'-'+m];save();ovShow()}return}
  const k=e.target.closest('[data-k]');if(k&&!k.classList.contains('conv')){const v=k.dataset.k.split(':');
-  if(v[0]==='lib'){bookSel=v[1];bkPath=[];drawBook();main.scrollTop=0}else if(v[0]==='gd'){bkPath.push(+v[1]);drawBook();main.scrollTop=0}else if(v[0]==='gr')readGen(bookSel,+v[1]);else if(v[0]==='front')openFront();else if(v[0]==='notes')openNotes();else if(v[0]==='m')drawMonth(+v[1]);
+  if(v[0]==='lib'){bookSel=v[1];bkPath=[];drawBook();main.scrollTop=0}else if(v[0]==='gd'){bkPath.push(+v[1]);drawBook();main.scrollTop=0}else if(v[0]==='gr'){RH=null;readGen(bookSel,+v[1])}else if(v[0]==='front')openFront();else if(v[0]==='notes')openNotes();else if(v[0]==='m')drawMonth(+v[1]);
   else if(v[0]==='mall')openMonthAll(+v[1]);
   else if(v[0]==='d'){const m=+v[1],d=+v[2],mo=MN[m-1],gi=mo.groups.findIndex(g=>g.k==='day'&&g.key===d);openGroups(dayTitle(m,d,mo.groups[gi]),m,[{g:mo.groups[gi],gi}]);rd=m+':'+d;$('#sFav').hidden=false;favState()}
   else if(v[0]==='t'){const m=+v[1],g=tails(m)[+v[2]],gi=MN[m-1].groups.indexOf(g);openGroups(g.key,m,[{g,gi}])}}
- const s=e.target.closest('[data-s]');if(s){const x=$('#out')._r[+s.dataset.s];
-  if(x.k==='g')openMonthAll(x.mi+1,'r-'+x.gi+'-'+x.ii);else if(x.k==='n')openNotes('n-'+x.n);else if(x.k==='b')readGen(LIB[x.li].id,x.pi);else openFront('f-'+x.ii)}});
+ const s=e.target.closest('[data-s]');if(s){const x=$('#out')._r[+s.dataset.s];RH=FS.re;addHist(FS.q);
+  if(x.k==='g')openMonthAll(x.mi+1,'r-'+x.gi+'-'+x.ii);else if(x.k==='n')openNotes('n-'+x.n);else if(x.k==='b')readGen(LIB[x.li].id,x.pi);else openFront('f-'+x.ii);if(x.k!=='b')hlSheet(false)}});
 main.addEventListener('input',e=>{const row=e.target.closest('.conv[data-k]');if(row)convChange(row);if(e.target.id==='ovy')ovShow()});
 main.addEventListener('change',e=>{const row=e.target.closest('.conv[data-k]');if(row)convChange(row);if(e.target.id==='ovm')ovShow()});
 
@@ -522,7 +576,7 @@ const hm=h=>{const m=Math.round(((h%24)+24)%24*60);return fa(String(Math.floor(m
 const at=(j,h)=>{const g=d2g(j);return new Date(g.y,g.m-1,g.d).getTime()+h*36e5};
 const dur=ms=>{const m=Math.max(0,Math.floor(ms/6e4)),h=Math.floor(m/60);return(h?fa(h)+' ساعت و ':'')+fa(m%60)+' دقیقه'};
 function nextP(){const now=Date.now(),j=todayJ();for(let d=0;d<2;d++){const T=pt(j+d);for(let i=0;i<6;i++){const t=at(j+d,T[i]);if(t>now)return{i,t,j:j+d}}}return null}
-function nxHTML(){const n=nextP();return n?'<b>'+PN[n.i]+'</b> · <bdi>'+hm(pt(n.j)[n.i])+'</bdi> · <bdi class="cd" data-t="'+n.t+'"></bdi>':''}
+function nxHTML(){const n=nextP();return n?'<b>'+PN[n.i]+'</b> · '+hm(pt(n.j)[n.i])+' · <span class="cd" data-t="'+n.t+'"></span>':''}
 const wid=()=>'<button class="card wid" data-z="tab"><span class="muted">وقت بعدی · '+city().n+'</span><div>'+nxHTML()+'</div></button>';
 function drawTime(){const T=pt(todayJ());
  main.innerHTML='<div class="card"><h3>اوقات شرعی امروز</h3><div class="muted">'+city().n+' · روش جعفری (ژئوفیزیک تهران)</div><div style="margin:8px 0">'+nxHTML()+'</div>'+T.map((h,i)=>'<div class="set"><span>'+PN[i]+'</span><b>'+hm(h)+'</b></div>').join('')+'</div>'+
@@ -595,15 +649,16 @@ const NAT=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePla
 const px=s=>s.replace(/[\ue000-\ue004]/g,c=>' '+SAL[c.charCodeAt(0)-0xe000]);
 const curCol=()=>getComputedStyle(document.documentElement).getPropertyValue('--em').trim()||'#0E6B57';
 function nData(j){const x=info(j),T=pt(j),n=ST.ns||'a',hol=holiday(x),ts=titlesOf(grp(x.h.m,x.h.d));
- let b=fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+' ، '+fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y);
+ let b=fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+' قمری  ✦  '+fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+' میلادی';
  if(n==='b'){const e=hol||(ts[0]&&px(ts[0][1]))||extras(x)[0];if(e)b+='\n'+e}
  if(n==='c')b+='\nصبح '+hm(T[0])+' · ظهر '+hm(T[2])+' · مغرب '+hm(T[4]);
- return{t:WD[x.w]+' '+fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y),b}}
+ return{t:fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y)+' شمسی · '+WD[x.w],b}}
 const rr=(g,x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()};
 function badge(d,kind,z){const c=document.createElement('canvas');c.width=c.height=z;const g=c.getContext('2d'),sp=ST.nb||'p',R=z/2,cs=getComputedStyle(document.documentElement),col=curCol(),on=cs.getPropertyValue('--on').trim()||'#fff',L=kind==='L';
  const shape=(i)=>{if(sp==='c'){g.beginPath();g.arc(R,R,R-i,0,7);g.closePath()}else rr(g,i,i,z-2*i,z-2*i,sp==='p'?z*.1:z*.3)};
  g.fillStyle=L?col:'#fff';shape(z*.02);g.fill();
  if(L&&sp==='p'){g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=z*.03;shape(z*.07);g.stroke()}
+ if(L){g.fillStyle='rgba(255,255,255,.8)';[[.5,.15],[.5,.85],[.15,.5],[.85,.5]].forEach(function(p){const X=z*p[0],Y=z*p[1],d=z*.045;g.beginPath();g.moveTo(X,Y-d);g.lineTo(X+d,Y);g.lineTo(X,Y+d);g.lineTo(X-d,Y);g.closePath();g.fill()})}
  g.font='800 '+z*.56+'px Vazirmatn,"Noto Sans Arabic",sans-serif';g.textAlign='center';g.textBaseline='middle';
  if(L)g.fillStyle=on==='#06130F'?'#06130F':'#fff';else g.globalCompositeOperation='destination-out';
  g.fillText(fa(d),R,R*1.06);return c.toDataURL('image/png').split(',')[1]}
@@ -663,8 +718,7 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
  /* برنامه‌های پیش‌رو (زمان رویداد از تاریخ شمسی) */
  function plansUp(S){var n=Date.now();return(S.plans||[]).filter(function(p){return!p.done&&p.date&&p.time}).map(function(p){var a=p.date.split('/').map(Number),g=d2g(j2d(a[0],a[1],a[2])),t=p.time.split(':');return{p:p,a:a,t:new Date(g.y,g.m-1,g.d,+t[0],+t[1]).getTime()}}).filter(function(x){return x.t>=n}).sort(function(a,b){return a.t-b.t})}
  var upRow=function(x){return'<button class="set" data-df="plan" style="width:100%;text-align:start"><span>'+esc(x.p.title)+'</span><small class="muted">'+fa(x.a[2])+' '+JM[x.a[1]-1]+' · '+fa(x.p.time)+'</small></button>'};
- window.__tsPlans=function(){try{return plansUp(data()||{})}catch(e){return[]}};
-  /* نشانگرهای روزهای تقویم */
+ /* نشانگرهای روزهای تقویم */
  function markCells(){main.querySelectorAll('.cell[data-j]').forEach(function(c){c.querySelectorAll('.wk,.pl').forEach(function(n){n.remove()});if(window.__tsEv&&__tsEv(+c.dataset.j).length)c.insertAdjacentHTML('beforeend','<span class="pl"></span>')})}
  function refresh(){if(tab==='cal')markCells()}
  var _dc=drawCal;drawCal=function(){_dc();markCells()};
@@ -874,8 +928,7 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
 {id:'n45',g:"نمازهای مستحبی و میت",t:"نماز میت",x:"(دارای پنج تکبیر و بهتر است بعد از نیت بگوید:)\nاَللهُ اَکْبَرُ اَشْهَدُ اَنْ لا اِلهَ اللهُ وَحْدَهُ لاشَریکَ لَهُ وَ اَشْهَدُ اَنَّ مُحَمَّداً عَبْدُهُ وَ رَسُولُهُ اَرْسَلَهُ بِالْحَقِّ بَشیراً وَ نَذیراً بَیْنَ یَدَی السّاعَةِ.\n(پس بگوید:)\nاللهُ اَکْبَرُ اَللّهُمَّ صَلِّ عَلی مُحَمَّدٍ وَ آلِ مُحَمَّدٍ وَ بارِکْ عَلی مُحَمَّدٍ وَآلِ مُحَمَّدٍ وَارْحَمْ مُحَمَّداً وَ آلَ مُحَمَّدٍ کَاَفْضَلِ ما صَلَّیْتَ وَ بارَکْتَ وَ تَرَحَّمْتَ عَلی اِبْرهیمَ وَ آلِ اِبْرهیمَ اِنَّکَ حَمیدٌ مَجیدٌ وَ صَلِّ عَلی جَمیعِ الأنْبِیآءِ وَالْمُرْسَلینَ.\n(پس بگوید:)\nاَللهُ اَکْبَرُ اَللّهُمَّ اغْفِرْ لِلْمُؤْمِنینَ وَالْمُؤْمِناتِ وَالْمُسْلِمینَ وَالْمُسْلِماتِ الأحْیآءِ مِنْهُمْ وَالأمْواتِ تابِعْ بَیْنَنا وَ بَیْنَهُمْ بِالْخَیْراتِ اِنَّکَ مُجیبُ الدَّعَواتِ اِنَّکَ عَلی کُلِّ شَیْئٍ قَدیرٌ.\n(اگر مردبود پس بگوید:)\nاللهُ اَکْبَرُ اَللّهُمَّ اِنَّ هذا عَبْدُکَ وَ ابْنُ عَبْدِکَ وَ ابْنُ اَمَتِکَ نَزَلَ بِکَ وَ اَنْتَ خَیْرُ مَنْزُولٍ بِهِ اَللّهُمَّ اِنّا لا نَعْلَمُ مِنْهُ اِلاّ خَیْراً وَ اَنْتَ اَعْلَمُ بِهِ مِنّا اَللّهُمَّ اِنْ کانَ مُحْسِناً فَزِدْ فی اِحْسانِهِ وَ اِنْ کانَ مُسیئاً فَتَجاوَزْ عَنْهُ وَ اغْفِرِ لَهُ اَللّهُمَّ اجْعَلْهُ عِنْدَکَ فی اَعْلا عِلِّیّینَ وَاخْلُفْ عَلی اَهْلِهِ فی الْغابِرینَ وَارْحَمْهُ بِرَحْمَتِکَ یا اَرْحَمَ الرّاحِمینَ.\n(اگر زن بود پس بگوید:)\nاللهُ اَکْبَرُ اَللّهُمَّ اِنَّ هذِهِ اَمَتُکَ وَابْنَةُ عَبْدِکَ نَزَلَتْ بِکَ وَ اَنْتَ خَیْرُ مَنْزوُلٍ بِهِ اَللّهُمَّ اِنّا لا نَعْلَمُ مِنْها اِلاّ خَیْراً وَ اَنْتَ اَعْلَمُ بِهامِنّا اَللّهُمَّ اِنْ کانَتْ مُحْسِنَةً فَزِدْ فی اِحْسانِها وَ اِنْ کانَتْ مُسیئةً فَتَجاوَزْ عَنْها وَاغْفِرْ لَها اَللّهُمَّ اجْعَلْها عِنْدَکَ فی اَعْلا عِلِّییّنَ وَاخْلُفْ عَلی اَهْلِها فی الْغابِرینَ وَارْحَمْها بِرَحْمَتِکَ یا اَرْحَمَ الّراحِمینَ."},
 {id:'n46',g:"نمازهای مستحبی و میت",t:"تلقین میت",x:"اِسْمَعْ اِفْهَمْ یا ...........\n(نام او و پدرش را بگوید:)\nهَلْ اَنْتَ عَلَی الْعَهْدِ الَّذی فارَقْتَنا عَلَیْهِ مِنْ شَهادَةِ اَنْ لا اِلهَ اِلاَّ اللهُ وَحْدَهُ لا شَریکَ لَهُ وَاَنَّ مُحَمَّداً صَلَّی اللهُ عَلَیْهِ وَآلِهِ عَبْدُهُ وَرسُولُهُ وَسَیِّدُ النَبِّییّنَ وَخاتَمُ الْمُرْسَلینَ وَاَنَّ عَلِیّاً اَمیرُ الْمُؤْمِنینَ وَسَیّدُ الْوَصِیّینَ وَاِمامٌ افْتَرَضَ اللهُ طاعَتَهُ عَلَی الْعالَمینَ وَاَنَّ الْحَسَنَ وَالْحُسَیْنَ وَعَلِیَّ بْنَ الْحُسَیْنِ وَمُحَمَّدَبْنَ عَلِیٍّ وَجَعْفَرَبْنَ مُحَمَّدٍ وَمُوسَی بْنَ جَعْفَرٍ وَعَلِیَّ بْنَ مُوسی وَمُحَمَّدَبْنَ عَلِیٍّ وَعَلِیَّ بْنَ مُحَمَّدٍ وَالْحَسَنَ‌بْنَ عَلِیٍّ وَالقآئِمَ الْحُجَّةَ الْمَهْدِیَّ صَلَواتُ اللهِ عَلَیْهِمْ اَئِمَّةُ الْمُؤْمِنینَ وَحُجَجُ اللهِ عَلَی الْخَلْقِ اَجْمَعینَ وَاَئِمَّتُکَ اَئِمَّةُ هُدَیً اَبْرارٌ یا فُلانَ بْنَ فُلانٍ اِذا اَتاکَ الْمَلَکانِ الْمُقَرَّبانِ رَسُولَیْنِ مِنْ عِنْدِاللهِ تَبارَکَ وَ تعالی وَ سَئَلاکَ عَنْ رَبِّکَ وَعَنْ نَبِیِّکَ وَ عَنْ دینِکَ وَ عَنْ کِتابِکَ وَ عَنْ قِبْلَتِکَ وَعَنْ اَئِمَّتِکَ فَلا تَخَفْ وَ قُلْ فی جَوابِهِما اَللهُ جَلَّ جَلالُهُ رَبّی وَمُحَمَّدٌ صَلَّی اللهُ عَلَیْهِ وَ آلِهِ نَبِیّی وَالاءِسْلامُ دینی وَالْقُرْآنُ کِتابی وَالْکَعْبَهُ قِبْلَتی وَ اَمیرُالْمُؤْمِنینَ عَلِیُّ بْنُ اَبیطالِبٍ اِمامی وَ الْحَسَنُ بْنُ عَلِیٍّ الْمُجْتَبی اِمامی وَالْحُسَیْنُ بْنُ عَلِیٍّ الشَّهیدُ بِکَرْبَلاءَ اِمامی وَ عَلِیٌّ زَیْنُ الْعابِدینَ اِمامی وَ مُحَمَّدٌ باقِرُ عِلْمِ النَّبِیّینَ اِمامی وَ جَعْفَرٌ الصّادِقُ اِمامی وَ مُوسَی الْکاظِمُ اِمامی وَ عَلیٌّ الرِّضا اِمامی وَ مُحَمَّدٌ الْجَوادُ اِمامی وَ عَلِیٌّ الْهادی اِمامی وَ الْحَسَنُ الْعَسْکَریُّ اِمامی وَالْحُجَّةُ الْمُنْتَظَرُ اِمامی هؤُلاءِ صَلَواتُ اللهِ عَلَیْهِمْ اَجْمَعینَ اَئِمَّتی وَ سادَتی وَقادَتی وَ شُفَعآئی بِهِمْ اَتَوَلّی وَ مِنْ اَعْدآئِهِمْ اَتَبَرَّءُ فِی الدُّنْیا وَالآخِرَةِ ثُمَّ اعْلَمْ یا فُلانَ بْنَ فُلانٍ اَنَّ اللهَ تَبارَکَ وَ تَعالی نِعْمَ الرَّبُّ وَاَنَّ مُحَمَّداً صَلَّی الله عَلَیْهِ وَآلِهِ نِعْمَ الرَّسُولُ وَاَنَّ اَمیرَالْمُؤْمِنینَ عَلِیَّ‌بْنَ اَبی طالِبٍ وَ اَوْلادَهُ الأئِمَّةَ الأحَدَ عَشَرَ نِعْمَ الأئِمَّةُ وَاَنَّ ما جآءَ بِهِ مُحَمَّدٌ صَلَّی اللهُ عَلَیْهِ وَ آلِهِ حَقٌّ وَ اَنَّ الْمَوْتَ حَقٌّ وَ سُؤالَ مُنْکَرٍ وَ نَکیرٍ فی الْقَبْرِ حَقٌّ وَالْبَعْثَ حَقٌّ وَالنُّشُورَ حَقٌّ وَالصِّراطَ حَقٌّ وَالْمیزانَ حَقٌّ وَتَطائُرَ الْکُتُبِ حَقٌّ وَالْجَنَّةَ حَقٌّ وَالنّارَ حَقٌّ وَ اَنَّ السّاعَةَ آتِیَةٌ لارَیْبَ فیها وَ اَنَّ اللهَ یَبْعَثُ مَنْ فِی الْقُبُورِ.\n(پس بگوید:)\nاَفَهِمْتَ یا .....\n(نام میت:)\nثَبَّتَکَ اللهُ بِالْقَوْلِ‌الثّابِتِ هَداکَ اللهُ اِلی صِراطٍ مُسْتَقیمٍ عَرَّفَ اللهُ بَیْنَکَ وَ بَیْنَ اَوْلِیائِکَ فی مُسْتَقرٍّ مِنْ رَحْمَتِهِ اَللّهُمَّ جافِ الأرْضَ عَنْ جَنْبَیْهِ وَاصْعَدْ بِرُوحِهِ اِلَیْکَ وَلَقِّهِ مِنْکَ بُرْهاناً اَللّهُمَّ عَفْوَکَ عَفْوَکَ."},
 {id:'n47',g:"نمازهای مستحبی و میت",t:"نماز شب اول دفن",x:"(دو رکعت است در رکعت اوّل حمد و آیهْ الکرسی و در رکعت دویّم حمد و ده مرتبه اِنّا اَنْزَلْناهُ فی لَیْلَةِ الْقَدْرِ و چون سلام دهد بگوید:)\nاَللّهُمَّ صَلِّ عَلی مُحَمَّدٍ وَآلِ مُحَمَّدٍ وَابْعَثْ ثَوابَها اِلی قَبْرِ......\n(نام میت:)"}];
- window.__DU=DU;
-  function doa(){var fs=TS.dz||26;
+ function doa(){var fs=TS.dz||26;
   function nt(){return'<div class="muted" style="text-align:center;padding:24px 0">متن کامل این مورد هنوز به برنامه اضافه نشده است.</div>'}
   function fill(q){q=(q||'').trim();var pg='',h='';DU.forEach(function(d){if(q&&d.t.indexOf(q)<0)return;var g=d.g||'ادعیه و زیارت‌های اصلی';if(g!==pg){h+='<h3 style="margin:14px 0 4px">'+g+'</h3>';pg=g}h+='<button class="set" style="width:100%;text-align:start" data-k="o:'+d.id+'"><span>'+d.t+(d.s?'<br><small class="muted">'+d.s+'</small>':'')+'</span><b>‹</b></button>'});document.getElementById('dl').innerHTML=h||'<div class="muted" style="padding:12px 0">موردی پیدا نشد.</div>'}
   function list(){B.innerHTML='<div class="card"><input class="fld tx" id="dq" placeholder="جستجو در ادعیه…"><div id="dl"></div></div>';fill('')}
@@ -970,7 +1023,70 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
  function sendApp(){sendUI('app')}
  function sendFile(){sendUI('file')}
 
+ function planner(){
+  var K=String(selJ),P=TS.pl=TS.pl||{set:{w:5,s:7},d:{}},D=P.d[K]=P.d[K]||[],ed=null;
+  function setDay(j){selJ=j;K=String(j);D=P.d[K]=P.d[K]||[];ed=null;ids()}
+  function ids(){D.forEach(function(k,i){k.i=k.i||('t'+Date.now().toString(36)+i)})}
+  var LV=['','اهم و مهم','مهم','عادی'],CO=['','var(--red)','var(--gold)','var(--em)'],DU=[15,30,45,60,90,120,180,240,300,360];
+  function dl(m){var h=Math.floor(m/60),r=m%60;return(h?fa2(h)+' ساعت':'')+(h&&r?' و ':'')+(r?fa2(r)+' دقیقه':'')}
+  function tm(m){m=((m%1440)+1440)%1440;return fa2(P2(Math.floor(m/60))+':'+P2(m%60))}
+  function draw(){
+   var S=P.set,x=info(selJ),L=D.slice().sort(function(a,b){return a.l-b.l}),used=0,dn=0,dm=0;
+   L.forEach(function(k){used+=k.m;if(k.d){dn++;dm+=k.m}});
+   var sl=S.s*60,free=1440-sl-used,t=S.w*60,rows=[];
+   L.forEach(function(k){rows.push({n:k.t,a:t,b:t+k.m,c:CO[k.l],k:k});t+=k.m});
+   var rem=Math.max(0,free);
+   [['استراحت',.3,'#6aa0c7'],['تفریح',.3,'#c78f4a'],['وقت آزاد',.4,'#8aa66a']].forEach(function(p){var m=Math.round(rem*p[1]);rows.push({n:p[0],a:t,b:t+m,c:p[2]});t+=m});
+   rows.push({n:'خواب',a:t,b:S.w*60+1440,c:'#7a6fb0'});
+   var h='<div class="card"><div class="hd"><button class="ib" data-a="nd" aria-label="روز بعد"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><h3 style="flex:1;text-align:center;margin:0">'+WD[x.w]+' '+fa2(x.p.d)+' '+JM[x.p.m-1]+(selJ===todayJ()?' · امروز':'')+'</h3><button class="ib" data-a="pd" aria-label="روز قبل"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button></div><div class="muted">برنامه‌ی ۲۴ ساعته (کار، استراحت، تفریح، وقت آزاد و خواب)</div>'
+   +'<div style="display:flex;height:14px;border-radius:99px;overflow:hidden;margin:10px 0">'+rows.map(function(r){return'<i style="width:'+Math.max(0,(r.b-r.a)/14.4)+'%;background:'+r.c+'"></i>'}).join('')+'</div>'
+   +'<div class="muted">انجام‌شده: '+fa2(dn)+' از '+fa2(D.length)+' کار'+(dm?' · '+dl(dm):'')+'</div>'
+   +(free<0?'<div class="neg" style="margin-top:6px">کارها از ظرفیت ۲۴ ساعت بیشتر است؛ زمان یا خواب را کم کنید.</div>':free<60&&D.length?'<div class="muted" style="margin-top:6px">وقت آزاد خیلی کم است.</div>':'')+'</div>';
+   h+='<div class="card"><h3>افزودن کار</h3><input class="fld tx" id="pt" placeholder="عنوان کار"><div class="fr"><select class="fld" id="pl">'+[1,2,3].map(function(i){return'<option value="'+i+'">'+LV[i]+'</option>'}).join('')+'</select><select class="fld" id="pm">'+DU.map(function(m){return'<option value="'+m+'"'+(m===60?' selected':'')+'>'+dl(m)+'</option>'}).join('')+'</select></div><button class="btn" data-a="add">افزودن</button></div>';
+   h+='<div class="card"><h3>کارهای ثبت‌شده ('+fa2(D.length)+')</h3>'+(L.length?L.map(function(k){if(ed===k.i)return'<div class="set" style="display:block"><input class="fld tx" id="et" value="'+esc(k.t).replace(/"/g,'&quot;')+'"><div class="fr"><select class="fld" id="el">'+[1,2,3].map(function(i){return'<option value="'+i+'"'+(k.l===i?' selected':'')+'>'+LV[i]+'</option>'}).join('')+'</select><select class="fld" id="em">'+DU.concat(DU.indexOf(k.m)<0?[k.m]:[]).sort(function(a,b){return a-b}).map(function(m){return'<option value="'+m+'"'+(m===k.m?' selected':'')+'>'+dl(m)+'</option>'}).join('')+'</select></div><button class="btn" data-a="sv" data-i="'+k.i+'">ذخیره</button> <button class="btn ghost" data-a="cn">لغو</button></div>';return'<div class="set" style="'+(k.d?'opacity:.55':'')+'"><span style="flex:1"><b style="'+(k.d?'text-decoration:line-through':'')+'">'+esc(k.t)+'</b><br><small class="muted">'+LV[k.l]+' · '+dl(k.m)+(k.d?' · انجام شد':'')+'</small></span><button class="btn ghost" data-a="ed" data-i="'+k.i+'">ویرایش</button></div>'}).join(''):'<div class="empty">هنوز کاری برای این روز ثبت نشده است</div>')+'</div>';
+   h+='<div class="card"><h3>جدول امروز</h3>'+rows.map(function(r,i){var k=r.k;return'<div class="set" style="'+(k&&k.d?'opacity:.55':'')+'"><span style="border-inline-start:4px solid '+r.c+';padding-inline-start:8px;flex:1"><b style="'+(k&&k.d?'text-decoration:line-through':'')+'">'+esc(r.n)+'</b><br><small class="muted">'+tm(r.a)+' تا '+tm(r.b)+' · '+dl(r.b-r.a)+(k?' · '+LV[k.l]:'')+'</small></span>'+(k?'<button class="btn ghost" data-a="dn" data-i="'+k.i+'">'+(k.d?'برگشت':'انجام شد')+'</button><button class="ib" data-a="rm" data-i="'+k.i+'" aria-label="حذف"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>':'')+'</div>'}).join('')+'</div>';
+   h+='<div class="card"><h3>تنظیم</h3><div class="set"><span>ساعت بیدارشدن</span><select class="fld" id="pw" style="flex:0 0 90px">'+[3,4,5,6,7,8,9].map(function(v){return'<option value="'+v+'"'+(S.w===v?' selected':'')+'>'+fa2(P2(v))+':۰۰</option>'}).join('')+'</select></div><div class="set"><span>ساعت خواب</span><select class="fld" id="ps" style="flex:0 0 90px">'+[5,6,7,8,9,10].map(function(v){return'<option value="'+v+'"'+(S.s===v?' selected':'')+'>'+fa2(v)+'</option>'}).join('')+'</select></div></div>';
+   B.innerHTML=h}
+  ids();
+  B.onclick=function(e){var b=e.target.closest('[data-a]');if(!b)return;var a=b.dataset.a,i=b.dataset.i;
+   if(a==='add'){var t=document.getElementById('pt').value.trim();if(!t)return;D.push({i:'t'+Date.now().toString(36),t:t,l:+document.getElementById('pl').value,m:+document.getElementById('pm').value,d:0})}
+   if(a==='pd')return setDay(selJ-1),sv(),draw();if(a==='nd')return setDay(selJ+1),sv(),draw();
+   if(a==='ed'){ed=i;return draw()}if(a==='cn'){ed=null;return draw()}
+   if(a==='sv'){var t2=document.getElementById('et').value.trim();if(!t2)return;D.forEach(function(k){if(k.i===i){k.t=t2;k.l=+document.getElementById('el').value;k.m=+document.getElementById('em').value}});ed=null}
+   if(a==='dn')D.forEach(function(k){if(k.i===i)k.d=k.d?0:1});
+   if(a==='rm')P.d[K]=D=D.filter(function(k){return k.i!==i});
+   sv();draw()};
+  B.onchange=function(e){if(e.target.id==='pw')P.set.w=+e.target.value;if(e.target.id==='ps')P.set.s=+e.target.value;sv();draw()};
+  draw()}
+ function kids(){
+  var EM=['🌙','⭐','🕌','📖','🌹','🕋','🤲','☀️'],Q=[["آن کیست که در ابتدا چهار پا دارد سپس دو پا و در نهایت سه پا","انسان؛ در کودکی چهار دست و پا راه می رود، در جوانی با دوپا و در پیری با عصا راه می رود."],["چه اختراعی به شما اجازه می دهد آن طرف دیوار را نگاه کنید؟","پنجره"],["همراه چای است و همرنگ برف، هم طعم عسل است و هم بوی آب!","قند"],["کدام کلید است که هیچ دری را باز نمی کند؟","کلید برق"],["کدلم خانه بیشترین کتاب ها را دارد؟","کتاب خانه"],["دارا آن را ندارد و ندار آن را دارد؟","نقطه"],["آن چیست که در فرانسه، کره جنوبی، کره شمالی، عربستان، عراق و ترکمنستان دوم شده است اما در روسیه اول؟","حرف \"ر\""],["چیزی است که هم در آشپزخانه وجود دارد هم اتومبیل!","گاز"],["در گوش و چشم هست ولی در دهان نیست؟","حرف ش"],["یک چشم دارد اما نمی بیند!","سوزن"],["با وجود داشتن چهار پا، اما نمی تواند حرکت کند! آن چیست؟","چهارپایه"],["آن چیست که سه چشم و یک پا دارد؟","چراغ راهنمایی"],["آن چیست که همه آن را دارند!","نام"],["کدام حیوان درنده را اگر وارونه کنید بر روی مردان می روید؟","شیر"],["کدام جانور است که سرگرگ و کمر مار و دم آهو را دارد؟","گاو"],["بدون شک پاییز با آن به اتمام می رسد و زمستان با آن آغاز می شود.","حرف \" ز \""],["آن چیست که اتاق داره، هال نداره، دیوار داره، در نداره؟","نقطه"],["آن چیست که پر و خالی اش یک وزن دارد؟","نوار کاست"],["منظور از خروس بیوه چیست؟","خرس"],["می نویسد، اما نمی تواند بخواند!","مداد و خودکار"],["کدام حیوانی است که وارونه اش در حمام وجود دارد؟","فیل"],["پرنده ای است که حتی اگر وارونه اش هم کنید باز پرنده است.","زاغ"],["ورزشکاران برای شکستنش جایزه می گیرند!","رکورد"],["آن کدام کشور است که منبع ویتامین ث می شد؟","پرتغال"],["کدام شهر ایران است، که خوردن نیمه اولش کشنده ولی نیمه دومش را هر روز می خورند؟","سمنان"],["اون چیه که سفیده، برف نیست، ریشه داره، درخت نیست؟","دندان"],["نام کدام جزیره است که اگر وارونه اش کنیم، بچه ها می نویسند؟","قشم"],["آن چیست که هم بچه دارد و هم تفنگ؟","قنداق"],["آن چه کشوری است که در چشم ماست؟","کره"],["آن چه چیزی است که هر چه با آن بنویسند تمام نمی شود؟","دست"],["آن چیست تا سرش را نبرند حرف نمی زند؟","نامه درون پاکت"],["آن چیست که صدا دارد اما جثه ندارد؟","باد"],["آن چیست که هم آن را می خوریم و هم آن را می گردانیم؟","چرخ"],["آن چیست که گوشتش در رو قرار گرفته است و پوستش در زیر؟","سنگدان"],["آن چیست که شیرین است و طعم ندارد، سنگین است و وزن ندارد؟","خواب"],["وقتی از قطب، دشت کویر و لب ساحل برمیگردم او می ماند.","جای پا"],["آن چیست که یک لایش نمی رسد ولی دولایش می رسد؟","دست (دستی که راست است به دهان نمیرسد ولی پس از خم شدن به دهان می رسد)"],["درختی می باشد که تا به حال کاشته نشده است.","شجره خانوادگی"],["آن چیست که چهار در دارد و هر درش سه در و هر یک از این درها سی در؟","فصل و ماه و روز"],["آن چیست که شیرین است و طعم ندارد، سنگین است و وزن ندارد.","خواب"],["رفتنش کار دارد، آمدنش بار دارد.","قاشق غذا خوری"],["می دانیم کجاست، ولی نمی دانیم چیست.","بچه در شکم مادر"],["بچه ایست که به مادرش شیر میدهد!","رودخانه ای که وارد دریا می شود!"],["آن چیست که در دنیاست، دنیا هم در او قرار دارد؟","چشم"],["من یکی دارم، تو دو تا داری، شاه سه تا و پسر شاه شش تا!","نقطه"],["دو برادر هستند که همیشه خاک بر سر هم می کنند.","بیل و کلنگ"],["پای کوه نشسته است و عمامه به سر دارد!","قارچ"],["روزها می دود ولی شب ها، جلوی درب خانه نگهبان است!","کفش"],["عضوی از بدن که می توانید آن را به کسی که دوست دارید بدهید. اما شکسته شدن آن دردناک است و جبران ناپذیر. آن چیست؟","قلب"],["می توانم سریع رشد کنم و منبع خوشبختی یا منبع غم و اندوه شما باشم، می توانم آرام از بین بروم یا به سرانجام برسم. من چی هستم؟","رابطه"],["یک شئ براق، زیبا و درخشان وهوس انگیز و گران قیمت است و همسر شما می خواهد آن را به شما هدیه بدهد. چه چیزی است؟","جواهر"],["این خوراکی می‌تواند گرم، شیرین و تلخ باشد. هدیه داده می‌شود و گاهی اوقات به شکل یک بلوک، یک میله، یک تراشه یا آبنما قرار می گیرد که می توانید در آن غوطه ور شوید. آن چیست؟","شکلات"],["بخشی از یک ظرف که هیچ وقت داخل‌اش جا نمی‌شود. آن چیست؟","درب ظرف"],["آن چیست که وقتی باران می‌بارد، اشک آن نیز روان می‌شود؟‌","ناودان"],["گل ریا کار؟","آفتاب گردان"],["دوست دارم صورتم را از روی هیجان روی پنجره بچسبانم و صدا دربیارم من می توانم حرف هایت را بفهمم و دستوراتت را اجرا کنم و تورا از تنهایی در بیاورم. من چی هستم؟","سگ"],["یک موجود ماورایی که شکار آن ناممکن است و با یک شاخ شناخته شده است. آن چیست؟","اسب تک شاخ"],["بال دارد اما نمی تواند پرواز کند، بزرگ، بلند و قدرتمند است، چشمان درشتی دارد و سریع می دود .آن چیست؟","شتر مرغ"],["نقش‌های سیاه و سفید، راه راه، این آرایش من است و در طبیعت زندگی می‌کنم. من چی هستم؟","گورخر"],["اهی پلاستیکی، گاهی چینی، گاهی پسر، گاهی دختر و شما می توانید هر بازی را که می خواهید با آن انجام دهید زیرا فقط یک وسیله بازی است. آن چیست؟","عروسک"],["آن‌ها می توانند شنا کنند اما ماهی نیستند، کند هستند اما لاک پشت نیستند، آن‌ها روی درخت زندگی می کنند و از آن آویزان می شوند اما میمون نیستند. آنها چه هستند؟","تنبل ها(نوعی حیوان)"],["زندگی آن‌ها بیش از زندگی های دیگر جذاب وشگفت انگیز است و شما آن‌ها را در خانه های زیادی به عنوان حیوان خانگی می بینید. جذاب، مستقل، زیبا و خزدار، گاهی فعال، گاهی تنبل. آن چیست؟","گربه"],["از درخت به درختی دیگر می پرد و تاب می‌خورد، این موجود کوچک پشمالو، آجیل ها و دانه ها را دوست دارد.","سنجاب"],["ویزویز کردن و سر و صدا کردن تنها کاری است که انجام می‌دهیم، ما از یک گیاه به گیاه دیگر پرواز می‌کنیم و پر سر و صدا‌ ایم، اما ما مشغول تهیه خوراکی ای بسیار شیرین هستیم .","زنبور"],["ممکن است که یک گریزلی به نظر برسم اما در واقع نرم و پشمالو و آرام هستم. ممکن است بزرگ یا کوچک باشم، اما در هر حال آماده برای یک بغل گرم هستم. من چی هستم؟","خرس عروسکی"],["می توانم پرواز کنم اما پرنده نیستم، رنگارنگ هستم اما رنگین کمان نیستم، زیبا و میان مردم هستم اما آدم نیستم. من چی هستم؟","پروانه"],["آن چیست که دو نفر را به هم متصل می کند اما فقط یک نفر را لمس می کند؟","حلقه ازدواج"],["پایان همه چیزهایی است که شروع می شود؟","مرگ"],["شما می توانید مرا در زمین، زحل و زهره پیدا کنید اما در مریخ نیست.","حرف \"ز\""],["تو برادر من هستی اما من برادر تو نیستم. من کی هستم؟","خواهر تو!"],["چه چیزی گردن دارد اما سر ندارد؟","بطری"],["دو چیز را هرگز نمی توانید برای صبحانه بخورید؟","نهار و شام"],["شما می توانید مرا در آب ببینید، اما من هرگز خیس نمی شوم. من چی هستم؟","بازتاب شما"],["بدون بال پرواز می کنم، بدون چشم گریه می کنم. من چی هستم؟","ابر"],["چه حیوانی بالاتر از یک ساختمان می پرد؟","همه حیوانات می توانند بالاتر از یک ساختمان بپرند. ساختمان ها نمی پرند!"],["چه چیزی همیشه هنگام باران بالا می رود؟","چترها"],["برای جدا کردن آنها یک کلمه لازم است، در غیر این صورت آنها جدایی ناپذیر هستند. آنها چه هستند؟","لب"],["بیرون را دور می اندازید و داخلش را می پزید. بعد بیرون را می خورید و داخلش را دور می ریزید. چه چیزی خوردین؟","ذرت"],["چه چیزی را می توان لمس کرد اما دیده نمی شود؟","قلب انسان"],["چه چیزی به اندازه شما بزرگ است و در عین حال وزنی ندارد؟","سایه"],["من بال ندارم اما پرواز می کنم، دندان ندارم اما گاز می گیرم. من چی هستم؟","گلوله"],["مردم مرا می خرند تا بخورند، اما هرگز مرا نمی خورند. من چی هستم؟","بشقاب و کارد و چنگال"],["انسان چهار تا دارد، سگ سه تا، پلنگ دو تا و گربه یکی!","دندانه"],["سرش را ببری زنده می شود!","خزنده"],["واژه ای است که همه افراد باسواد آن را غلط می خوانند!","واژه غلط"],["پایش در سر است و رویش در پا!","پارو"],["در بالای سر مردان است و اگر وارونه شود فلز می گردد!","زلف"],["اگر ساعت خورشیدی کمترین جزء متحرک را میان انواع ساعت ها داشته باشد، بیشترین جزء متحرک را کدام ساعت دارد؟","ساعت شنی"],["کدام کلمه پنج حرفی با اضافه کردن دو حرف کوتاه تر می شود؟","کوتاه"],["دو پا دارد و دو پاي ديگر هم قرض مي کند و مي رود و کسي هم به گردش نخواهد رسید؟","دوچرخه"],["تصور بر این است که ما او را مي خوريم اما در حقيقت او ما را مي خورد؟","غصه!"],["از یک سوراخ وارد می شوید و همزمان از دو سوراخ بیرون می آیید؟","پوشیدن شلوار"],["دارچین چه زمانی درست می شود؟","زمانی که یک چینی را دار می زنند."],["سه دکان تو در تو اولی چرم فروش دومی پرده فروش سومی یاقوت فروش؟","انار"],["کشوری در پیشانی و کشور دیگری در چشم ما وجود دارد!","چین و کره!"],["عدد هفت با بقیه اعداد بین یک تا ده چه تفاوتی دارد؟","عدد Seven دو هجایی می باشد اما سایر اعداد یک هجایی هستند."],["گرچه کارش لباس دوختن برای همه آدم هاست اما همیشه خودش عریان و بی لباس است!","سوزن"],["قبل از کشف قله‌ی اورست، کدام قله بلندترین قله‌ی روی زمین بود؟","قله اورست!"],["نام کشوریست که اگر حرف اولش را بردارید نام یک بیماری می شود!","کوبا"],["در زمستان زندگی می‌کند و ریشه‌هایش در بالایش است، و نهایتاً در تابستان می‌میرد؟","قندیل"],["با غذا زنده می ماند و با آب می میرد!","آتش"],["زمانی که نمی‌دانی چه هستم، چیزی هستم؛ اما آن وقت که می‌دانی چه هستم، چیزی نیستم. من چیستم؟","معما"],["در هنگام صبحانه انگشترت داخل فنجان قهوه می‌افتد، چگونه انگشتر خشک می‌ماند؟","منظور از قهوه دانه‌ها یا پودر قهوه است."],["پر دارد و پرواز نمی کند!!","پرگار"],["اگر آن را نگه نداری به راحتی می شکند!","قول"],["صبح سرش را از دست می دهد اما شب آن را پس می گیرد!","بالشت"],["چهار پا دارد اما نمی تواند حرکت کند","چهارپایه"],["چیستان ریه ندارم ولی به هوا احتیاج دارم","آتش"],["من همچون پَر سبک هستم، با این وجود قوی ترین فرد نمی تواند پنج دقیقه مرا نگه دارد. من چی هستم؟","نفس"],["آن چیست که همه چیز از آن درست میشود؟","آب"],["اون چیه که مقابل خورشید عبور میکنه ولی سایه نداره","نور"],["سه دختر گفتند کـه بیل برادر آنهاست. بیل می گوید کـه برادری ندارد. بیل واقعا چند برادر دارد؟","هیچ کدام. او سه خواهر دارد."],["آن چیست که وقتی پر است راه می رود وقتی خالی است می ایستد؟","کفش"],["آن چیست که حرف دارد اما صحبت نمی کند؟","کتاب"],["چه چیزی می تواند ماشین را نگه دارد؟","چرخ های ماشین"],["چیستان کدام یک از ماه ها بیست و نه روز دارد؟","هر 12 ماه 29 روز را دارند!"],["آن چیست که پر از کلید های مختلف است؟","پیانو"],["خیلی راحت می توانی آن را بگیری و به دیگران بدهد ولی نمی توانی پرتابش کنی","سرماخوردگی"],["گربه ای در یک اتاق شش گوشه خوابیده است این گربه چند زاویه می بیند؟","هیچ. چون خوابیده است."],["کدام پرنده پر دارد اما پرواز نمی کند؟","شترمرغ"],["چه چیزی باید قبل از استفاده شکسته شود؟","تخم مرغ"],["من وقتی جوان هستم قد بلندی دارم و وقتی پیر هستم قد کوتاه دارم. من چی هستم؟","شمع"],["کدام ماه از سال 28 روز دارد؟","همه ماه ها 28 روز را دارند!"],["به چه سوالی هرگز نمی توانید پاسخ مثبت دهید؟","آیا هنوز خوابی؟"],["آن چیست که همیشه در مقابل شماست، اما دیده نمی شود؟","آینده"],["سوراخ های زیادی دارد ولی همچنان آب را در خود نگه می دارد؟","اسفنج"],["یک خانه یک طبقه ایی وجود دارد که همه چیز (مثلاً دیوارها، درها، پنجره ها، مبلمان) در آن زرد است، پله های این خانه چه رنگی هستند؟","وجود ندارد. چون خانه یک طبقه دارد."],["آن چیست که هر گز آن را لمس نکرده اید ولی می توانید آن را بشکنید؟","قول"],["آن چیست که بالا می رود ولی هرگز پایین نمی آید؟","سن"],["آن مرد که در زیر باران بدون چتر و کلاه راه می رفت، حتی یک تار موی سرش خیس نشد. چرا؟","کچل بود"],["آن چیست که هنگام خشک کردن مرطوب می شود؟","یک حوله"],["من هر روز اصلاح می کنم، اما ریش من تغییر نمی کند. من چی هستم؟","آرایشگر مردانه"],["چرا در آن قایقی که مملو از جمعیت است، هیچ فرد تنهایی جود ندارد؟","همه افراد قایق ازدواج کرده اند."],["آن چیست که نمی تواند صحبت کند اما وقتی با او صحبت می شود پاسخ می دهد؟","پژواک"],["آن چیست که هر چه بیشتر باشد، کمتر می بینید؟","تاریکی"],["آن چیست که بال ندارد ولی پرواز می کند و چشم ندارد ولی گریه می کند؟","اَبر"],["آن چیست که خیلی تیغ دارد، ولی ساقه، برگ و ریشه ندارد؟","جوجه تیغی"],["آن چیست که پا دارد، اما راه نمی رود؟","میز و صندلی"],["آن چیست که هر وعده غذایی تو سفره هست؛ اما ما آن ها را نمی خوریم؟","قاشق و چنگال"],["آن چیست که به هر چیزی مزه می دهد، اما گریه تو را درمیارد؟","پیاز"],["کدام یک از حبوبات را واروونه کنیم نام یکی از وعده های غذایی می شود؟","ماش"],["میوه ای که دو حرف اولش یک عدد دو رقمی است!","سیب"],["از میان آب می گذرد ولی هیچگاه خیس نمی شود؟","نور"],["آن چیست که اول سرش را می بری بعد برایش گریه می کنی؟","پیاز"],["در شب های مهتابی و روزهای آفتابی هر چه تعقیبش می کنی نمی توانی بگیریش!","سایه خودت"],["خواهر دایی است اما خاله نیست! او کیست؟","او مادر است"],["دو چیز را هرگز نمی توانید در هنگام صبحانه بخورید!","ناهار و شام"],["دو کلاه به سرِ فرنگیِ خوردنی!!","توت فرنگی و گوجه فرنگی"],["پیوسته می آید، اما هرگز نمی‌رسد.","فردا"],["هر چی از آن بیشتر بردارید، بزرگ تر می شود؟!","چاه"],["آن چیست که به شکل مکعب هست و با طنز و نمایش سرگرمت می‌کند و می‌توانی به دیوار نصبش کنی؟!","تلویزیون"],["گرد است بالا و پائین می‌پرد. می‌توانی به راحتی آن را بگیری و پرتاپش کنی. اما نباید به شیشه‌ها بکوبی‌اش؟","توپ"],["شیر و پلنگ اگر با هم ازدواج کنند بچه شان چی می شود؟","شیلنگ"],["اگر داخل دهان گربه یک زنبور برود، گربه چه صدایی در می‌آورد؟","میوز، میوز"],["اگر قورباغه و لک لک با هم دیگر ازدواج کنند بچه شان چی می‌شود؟","قلک"],["آن چیست که در هوا می‌پرد، اما نه دم دارد نه بال و پا؟","بادکنک"],["آن چیست سخت است ولی سنگ نیست تخم می گذارد و مرغ نیست چهارپا دارد و سگ نیست!","لاک پشت"],["آن کیست که در ابتدا چهار پا دارد، سپس دو پا و در نهایت سه پا؟","آدمی (در دوران نوزادی با دست و پا حرکت می کند و در دوران پیر با عصا)"],["آن کیست که پسر مادربزرگ و پدربزرگ شما می باشد اما عموی شما نیست؟!","پدر شما"],["آن چیست که جز حضرت آدم همه آن را خورده اند؟","شیر مادر"],["حیوان درنده ای است که برعکسش را مردان دارند!","شیر"],["آن چیست که در گوش و چشم هست ولی در دهان آن را نمی بینید؟","حرف \"ش\""],["آن چیست که قبل از استفاده باید آن را بشکنید؟","تخم مرغ"],["پدر و مادر علی سه پسر دارند: مهدی، اشکان و (.....) نام پسر سوم را شما بگویید.","علی"],["من همیشه شما را دنبال می کنم و تمام حرکاتتان را تقلید می کنم، اما شما نمی توانید مرا لمس کنید یا مرا بگیرید من چی هستم؟","سایه شما"],["کلیدهای زیادی دارد ولی نمی تواند حتی یک قفل را هم باز کند؟","پیانو"],["آن چیست که وقتی تمیز است سیاه می شود و وقتی کثیف است سفید؟","تخته سیاه"],["آن چیست که وقتی بیشتر از آن برداشته شود، بزرگتر می شود؟","یک سوراخ"],["در چه جایی امروز را قبل از دیروز تعریف کرده اند؟","فرهنگ لغت"],["چه اختراعی به شما اجازه می دهد که آن طرف دیوار را نگاه کنید؟","یک پنجره"],["چه چیزی را نمی توان در قابلمه گذاشت؟","درب آن"],["چه چیزی بالا و پایین می شود اما حرکت نمی کند؟","راه پله"],["اگر در مسابقه دو، از نفر دوم عبور کردید، در چه مقامی قرار می گیرید؟","مقام دوم"],["آن چیست که متعلق به شماست، اما بیشمار افراد دیگر از آن استفاده می كنند؟","نام شما"],["آن چیست که در هوا می پرد ولی دم، بال و پا ندارد؟","بادکنک"],["آن چیست وقتی بیدار می شویم و چشم ها را باز می کنیم دیگر نمی توانیم آن را ببینیم؟","خواب"],["آن چیست که دو تا چشم دارد و دوتا دست. همیشه هم با دستهایش گوش هایمان را می گیرد؟","عینک"],["آن چیست که یک عالمه دندان دارد ولی جایی را گاز نمی گیرد؟","شانه یا برس"],["آن کدام کلید است که در همه ی خانه ها هست، ولی هیچ دری را نمی تواند باز کند.","کلید برق"],["اگر 2 سیب از 3 سیب بردارین چند سیب دارید؟","دو سیب"],["شهر آن سرخ است اما مردمش سیاه. آن چیست؟","هندوانه برای دیدن چیستان های بیشتر و به روز برای «کودکان» به لینک زیر مراجعه کنید: انواع چیستان جذاب برای کودکان"],["شروع زندگی همه آدم ها با چیست؟","حرف \"ز\""],["چه چیزی را می‌توانید بگیرید، اما پرتاب نکنید؟","سرماخوردگی"],["آن چیست قبای زرد در بر دارد/ اندام ظریف چون صنوبر دارد/ زرد است، به مشام تلخ است/ ولی طعمی چون شکر دارد؟","لیموشیرین"],["رنگ سفید سنگها میان سفره ها/ هرکس نداند نامه او/ مزه ندارد کام او.","نمک"],["کدام حیوان را اگر آویزان کنید سرخ می شود؟","خرس"],["خروس بیوه ای که نه بچه اش جوجه می شود و نه همسرش مرغ؟!","خروس بیوه یعنی خروس بدون حرف ؛و؛ یعنی خرس"],["آن چیست که خون سیاه را می خورد اما راه سفید میرود؟","قلم نی"],["آن چیست که همه جا می رود ولی از خانه اش بیرون نمی آید؟","لاک پشت"],["بچه ایست که به محضی به مادرش می رسد ناپدید می شود!","رودخانه"],["آن چیست که به زمینش می‌گذاری، ساکت می‌شود و وقتی آن را بر میداری، فریاد می‌زند؟","زنگوله"],["بدون آن که از واژه های شنبه، یکشنبه، دوشنبه، سه شنبه، چهارشنبه، پنج شنبه و جمعه استفاده کنید، پشت سر هم سه روز را نام ببرید.","دیروز، امروز، فردا"],["گرچه به آسانی بلندش می کنی، اما به سختی می‌توانی پرتاب اش کنی!","پَر"],["کدام اتاق نشیمنی است که حرکت می کند؟","اتاق ماشین"],["مردی زیر دوش است اما حتی یک تار مویش هم خیس نشده است!","آب قطع است"],["آن چیست که به راحتی پایین می آید اما بالا نمی رود؟","باران"],["اگر لحظه ای آن را بخوری، باید روزها بخوابی!","سرما"],["نام جزیره ای در ایران که اگر سر و ته اش را جا به جا کنید تکلیف دانش آموزان می شود.","قشم"],["شهری است که با یک خواننده شروع می شود و با یک ماده معطر تمام می شود.","اندیمشک (اندی + مشک)"],["خیلی خطرناک و وحشی است اما اگر وارونه اش کنید آرام و رام می شود.","مار"],["آن چيست كه من يكي دارم تو دو تا داري شاه سه تا و پسر پادشاه نه تا؟","نقطه"],["آن چيست كه بسيارش كم است و آن چيست كه كمش بسيار است؟","دوست و دشمن"],["آن كدام هشت است كه نه نمي شود؟","هشت پا"],["آن كدام ده است كه يازده نمي شود؟","انگشتان دست"],["اين مصراع را بخوانيد.( پيشلطيفطلعتشقيمتمنشكستهشد.)","پيش لطيف طلعتش ، قيمت من شكسته شد."],["چهار انگشت و یک شست دارد اما نه استخوان دارد و نه مغز!","دستکش"],["افراد دور را به هم می رساند ولی هیچ کس نمی تواند سوار آن شود. در نهایت قبل از حرکت صدایش را می توانید بشنوید.","تلفن"],["در داخل یخچال هم همچنان می سوزاند!","فلفل تند"],["بی صدا زنگ می زند!","آهن"],["چه چیزی صبح سرش را از دست می دهد اما شب آن را پس می گیرد؟","بالشت"],["گلی است که اگر حرف اولش را حذف کنید روی آب شناورمی شود.","شقایق"],["آن چیست که باگریستن آسمان اشک آن روان می شود.","ناودان"],["من از هوا سبک ترم اما صدها مرد هم نمی توانند مرا بلند کنند، من چیستم؟","حباب"],["چه چیزی هر چقدر هم که باران بر آن ببارد خیس تر نمی شود؟","آب حوض"],["در کجا دوشنبه قبل از شنبه آمده است؟","فرهنگ لغت"],["برای باز کردن درش هیچ کلیدی وجود ندارد؟","تخم مرغ"],["دندان های زیادی دارد اما نمی تواند گاز بگیرد؟","شانه"],["چگونه می توانید به طور فیزیکی پشت پدرتان بایستید در حالی که او پشت سر شما ایستاده است؟","پشت به پشت بایستید"],["هر که آن را بسازد، آن را فاش نمی کند. هر که آن را بگیرد، آن را نمی داند. و هر که آن را می داند، آن را نمی خواهد. چیست؟","پول تقلبی"],["برق کار و لوله کشی با یکدیگر مشغول کار در یک ساختمان بودند. یکی از آن دو پدر پسر دیگری بود. چطور امکان دارد؟","این دو زن و شوهر هستند"],["من تنها عضوی هستم که اسم خودم را گذاشتم. من چی هستم؟","مغز"],["بدون آن هرگز پیروز نخواهید شد، اما اگر بیش از حد آن را داشته باشید مطمئناً شکست خواهید خورد.","اعتماد به نفس"],["یک خانه سبز وجود دارد. در داخل خانه سبز یک خانه سفید، در داخل کاخ سفید یک خانه قرمز و در داخل خانه قرمز تعداد زیادی نوزاد سیاه و سفید زندگی می کنند. من چی هستم؟","یک هندوانه.  سبز = پوسته بیرونی،  سفید = لایه بعدی،  قرمز = داخل و  بچه = دانه های هندوانه"],["دو نفر در یک لحظه به دنیا می آیند، اما پزشکان می گویند این ها دو قلو نیستند. چگونه می تواند اینطور باشد؟","هر کدام در یک لحظه از دو شکم مختلف به دنیا آمده اند"],["چه چیزی را می توانید بگیرید اما پرتاب نکنید؟","سرماخوردگی"],["یک کلمه هشت حرفی حاوی هزاران حرف!","صندوق پستی"],["شما روی قرمز می روید، اما روی سبز متوقف می شوید. من چی هستم؟","هندوانه! شما قسمت قرمز را می خورید و در قسمت سبز از خوردن دست می کشید."],["پرنده ای است که اگر برعکسش کنید پرنده دیگری می شود!","غاز"],["آن چیست سخت است اما سنگ نیست، تخم می گذارد و مرغ نیست چهار پا دارد لیکن سگ نیست؟","لاک پشت"],["بعضی حیوانات آن را در دهان دارند و بعضی دیگر در دم؟","نیش"],["میوه ایی است که از هر طرف که آن را بخوانی باز میوه است؟","توت"],["کدام کشور است که اگر نام اولش را بردارید یک بیماری می شود؟","کوبا"],["آن چیست که اگر باشد کور است و اگر نباشد کر است؟","حرف \"و\""],["آن چیست که خودش آب است و دشمنش آب؟","یخ"],["آن چیست که در کل ۳ بار به هر فردی داده می‌شود. بار اول و دوم رایگان است و بار سوم باید در ازای دریافتِ آن، پول پرداخت کنید؟","دندان"],["چه چیزی می تواند روی سه پا بایستد ولی در هنگام راه رفتن روی یک پا باشد.","فرغون"],["یک چشم دارد، اما نمی تواند ببیند؟","سوزن"],["آن چیست که دست دارد، ولی نمی تواند کف بزند؟","ساعت"],["آن را می توانید بگیرید، اما نمی توانید پرتاب کنید.","سرماخوردگی"],["چه نوع باندی هرگز موسیقی پخش نمی کند؟","باند دزدی"],["آن چیست که انگشت شصت و چهار انگشت را دارد، اما دست نیست؟","یک دستکش"],["آن چیست که پشت و رو دارد اما بدن ندارد؟","سکه"],["در کدام قسمت خانه یک دیوار با دیوار دیگر، روبرو می شود؟","گوشه های خانه"],["کدام خانه بیشترین کتاب را دارد؟","کتابخانه"],["چه کلمه ای در زبان فارسی نادرست تلفظ می‌شود؟","نادرست"],["دو مادر و دو دختر به سینما رفتند اما فقط سه بلیط خریدند و همگی وارد سالن شدند، چگونه ممکن است؟","آن‌ها دختر، مادر و مادربزرگ بودند."],["آن چه چیزی است که می‌تواند به تمام دنیا سفر کند در حالی که یک گوشه نشسته است؟","تمبر"],["جایی که کوچه و خیابان و شهرها هستند اما هیچ آدمی در آن دیده نمی‌شود.","نقشه"],["در کدام جنگ، اسب‌ها می توانند پرواز کنند؟‌","شطرنج"],["این فرد کیست که هر کس نزدش برود باید فوراً کلاهش را در مقابل او دربیارد؟ حتی بالاترین مقام یک کشور!","سلمانی/ آرایشگرمو"],["بدون شک در هنگام خشک شدن مرطوب می‌شود","حوله"],["آن چیست که شبیه چتر است و با آن می توان سوپ درست کرد؟","قارچ"],["آن چیست که شکلش خیلی شبیه تو است، ولی گاهی وقت ها از تو بلندتر و یا کوتاه تر می شود؟","سایه"],["دو حیوان است که هر جا می روند خانه خودشان را هم با خود می برند.","حلزون و لاک پشت"],["آن چیست که مالک از داشتن آن بی نصیب ولی مستاجر دارا است؟","نقطه"],["آن چیست که شهر دارد، اما خانه ندارد/ کوه دارد، اما درخت ندارد/ آب دارد اما ماهی ندارد.","نقشه"],["آسمانی سبز، شهری قرمز و آدم های سیاه دارد؟","هندوانه"],["جانوری خطرناک هستم که اگر وارونه ام کنید واحد اندازه گیری می شوم!","رتیل"],["هم در ورزشگاه هست و هم در میدان!؟","توپ"],["در آسمان فقط یکی از آن هست اما در زمین بسیار زیاد!","مشتری"],["در روز از آن یکی را می بینی ولی در شب چهار تا!؟","نقطه"],["آن چیست که سرگرمی زمستان است؟","کلاه"],["آقای اسمیت دو فرزند دارد. اگر فرزند بزرگتر پسر باشد، احتمال اینکه فرزند دیگر نیز پسر باشد چقدر است؟","50 -50"],["یک نفر می تواند با 4 ته سیگاری که از روی زمین برمیدارد یک سیگار درست کند و بکشد. اگر 16 ته سیگاری پیدا کند، چند نخ سیگار می تواند بکشد؟","5 نخ سیگار می تواد بکشد. پس از ساختن 4 نخ سیگار از 16 ته سیگار و کشیدن آنها، 4 نخ دیگر باقی می ماند که می تواند از آنها برای ایجاد یک سیگار دیگر استفاده کند."],["وقتی همه اعداد روی صفحه شماره تلفن را ضرب می کنید چه عددی به دست می آید؟","عدد 0 بدست می آِید. هر چیزی که در 0 ضرب شود برابر 0 خواهد بود."],["به تازگی یک برف سنگین باریده است، علی بیرون می رود و متوجه می شود که در باغ او دو برابر همسایه اش برف باریده است، اما جف تعجب نمی کند. چرا؟","حیاط او دو برابر بزرگتر است"],["اعداد 1 الی 9 را بدون این که ترتیب شان به هم بخورد به 100 تبدیل کنید. می توانید از جمع، تفریق، ضرب و تقسیم استفاده کنید. به یاد داشته باشید، آنها باید به همان ترتیب باقی بمانند.","7+6+5+4+3+2+1+(8x9)=100"],["دختری در آخرین تولدش ده ساله بود و در روز تولد بعدی دوازده ساله خواهد شد. چه طور ممکنه؟","همین امروز تولد یازده سالگی اوست"],["محسن تمام اعداد از 300 تا 400 را روی یک کاغذ نوشت. او رقم 3 را چند بار نوشت؟","120 بار"],["پسر بچه ای 12 گوجه فرنگی خریداری می کند. در راه بازگشت به خانه ، همه گوجه ها بجز 9 تا خراب می شوند. چند تا گوجه فرنگی باقیمانده در شرایط خوب باقی مانده است؟","9 عدد گوجه فرنگی"],["جواب 30 تقسیم بر نیم و به اضافه 10 چند می شود؟","پاسخ عدد 70 می شود، اکثر پاسخگویان عدد 30 را بر 2 تقسیم و با 10 جمع می کنند که می شود 25  که این پاسخ اشتباه می باشد.  اما در واقعیت 30 تقسیم بر نیم، دو برابر می شود:30 * 2 + 10"],["تصور کنید که دو تا حوضچه آب دارید که دمای آب در حوضچه اول 25 درجه سانتیگراد و در حوضچه دوم 25 درجه فارنهایت است. اگر داخل هر یک از حوضچه ها همزمان از یک ارتفاع یک سکه بیاندازیم کدام یک از سکه ها ابتدا به پایین می رسد؟","در حوضچه اول. چرا که آب در دمای 25 درجه سانتیگراد مایع و در 25 درجه فارنهایت به یخ تبدیل می شود."],["ثابت کنید که عدد 4 می‌تواند نیمی ‌از عدد 5 باشد.","اگر بدانید که IV، یک عدد رومی ‌برای چهار می باشد بنابراین می توان گفت، IV نصف (دو حرف) کلمه FIVE می باشد."],["کدام سه عدد را در همدیگر جمع و یا ضرب کنیم، نتیجه یکسانی دارند؟","یک ، دو و سه"],["ماری چهار دختر دارد و هر یک از دخترانش یک برادر دارد. ماری چند فرزند دارد؟","پنج فرزند، هر دختر یک برادر دارد."],["کدام سنگین تر است: یک تن آجر یا یک تن پر؟","هیچکدام، وزن هر دو، یک تن است."],["سه پزشک گفتند که بیل برادر آنها بود. بیل می گوید برادر ندارد. واقعاً بیل چند برادر دارد؟","هیچ کدام او سه خواهر دارد."],["چطور می شود که دو پدر و دو پسر در اتومبیل باشند، ولی فقط سه نفر در ماشین باشند.","آنها پدربزرگ، پدر و پسر هستند."],["یک دختر کوچک به فروشگاه می رود و دو شانه تخم مرغ می خرد. همانطور که او به خانه می برمیگردد، به جز سه عدد همه را می شکند. چند تخم مرغ شکسته نشده باقی مانده است؟","سه تا"],["مردی دخترانش را توصیف می کند و می گوید: \"همه آنها بور هستند، به جز دو نفر، همه شون سبزه هستند به جز دو نفر و همه موهای سرخ دارند به جزء دو نفر\". چند دختر دارد؟","سه دختر: بلوند ، سبزه و مو قرمز"],["وقتی محسن هشت ساله بود، خواهرش 13 ساله بود. اکنون، سن وی دقیقاً ¾ سن خواهرش است. از هشت سالگی محسن کمتر از 10 سال اما بیش از چهار سال می گذرد. الان وی چند ساله است؟ فرض کنید سن هردوی آنها عدد کامل باشد. خواهر وی بین چهار تا 10 سال بزرگتر از آنچه آنها در گذشته بوده اند، هستند.","محسن 15 ساله و خواهرش 20 ساله است. ¾ از 20 سالگی 15 است."],["اگر بخواهید یک کیک را تنها با 3 برش، برش دهید، چند قطعه کیک خواهید داشت؟","8 قطعه؛ دو روش را به روش مورب برش دهید و سپس، از وسط کیک را به صورت افقی برش دهید."],["با عدد 100 شروع کنید. بر دو تقسیم کنید، سپس 25 را به آن اضافه کنید. آن عدد را در سه ضرب کنید. چه رقمی در جای پاسخ قرار خواهد گرفت؟","جواب 225 است"],["یک فنجان لیموناد یک ششم یک پارچ است. اگر چهار پارچ لیموناد دارید، چند فنجان می توانید درست کنید؟ فرض کنید هیچ یخی به فنجان ها اضافه نشده و اندازه تمامی فنجان ها یکسان است.","می توانید برای هر پارچ شش فنجان لیموناد درست کنید، بنابراین با سه پارچ می توانید 24 فنجان لیموناد درست کنید."],["مردی سگ خود را از آن طرف رودخانه صدا می زند. سگ می تواند بدون استفاده از پل یا قایق از رودخانه عبور کند و خیس نشود. چطور امکان دارد؟","رودخانه یخ زده است."],["چه چیزی می تواند یک اتاق را پر کند اما فضایی را اشغال نمی کند؟","روشنایی"],["اگر مرا رها کنی، مطمئناً تو ترک خواهم کرد، و اگر به من لبخند بزنی، من هم به تو لبخند می زنم. من چی هستم؟","آینه"],["مردم مرا می سازند، مرا ذخیره می کنند، من را تغییر می دهند، مرا بزرگ می کنند. من چی هستم؟","پول"],["آن چیست که از شهرها و زمینه ها عبور می کند، اما هرگز حرکت نمی کند؟","جاده"],["شخصی که آن را درست می کند، دیگر نیازی به آن ندارد. شخصی که آن را خریداری کرده است هیچ فایده ای برای آن ندارد. شخصی که از آن استفاده می کند نه می تواند آن را ببیند و نه احساس کند. آن چیست؟","تابوت"],["مردی به یک نقاشی در یک موزه نگاه می کند و می گوید: \"خواهران و برادران من هیچ کس را ندارم، اما پدر آن مرد پسر پدر من است.\"چه کسی در نقاشی است؟","پسر آن مرد"],["من دریاچه هایی بدون آب، کوههای بدون سنگ و شهرهایی بدون ساختمان دارم. من چی هستم؟","یک نقشه"],["یک شب دختر بچه ایی در یک خانه ایی تاریک نشسته بود که نه نور داشت، نه لامپ و نه شمع و در این حالت کتاب می خواند. چطور امکان دارد؟","دختربچه نابینا بود"],["سارا خانه ی ساخته که هر 4 دیوار آن به سمت جنوب پنجره دارد، یک شب که تنها بود، خرس بزرگی به خانه اش نزدیک می شود. رنگ خرس را حدس بزنید!","سفید است چون هر خانه ی که 4 دیوار آن به سمت جنوب باشد حتما در نوک قطب جنوب می باشد."],["ظاهرش مثل چرم فروشی می باشد جلوتر که می روید مثل پرده فروشی هاست و در نهایت مثل یاقوت فروشی ها می باشد.","میوه انار"],["این شی از چوب ساخته شده است ولی به هیچ وجه اره نمی شود.","خاک اره"],["اگر من را همیشه داشته باشید، می خواهید من را به اشتراک بگذارید. اما اگر روزی من را به اشتراک گذاشتید دیگر من را نخواهید داشت. من چه چیزی هستم؟","راز"],["یک روز صبح در هنگام صبحانه خوردن ناگهان انگشترتان داخل یک فنجان قهوه می‌افتد. انگشتر چگونه خشک می‌ماند؟","در داخل فنجان، پودر یا دانه های قهوه می باشد"],["کدام یک از ماه های سال 29 روز دارد؟","تمام ماه های سال"],["آن چیست که همیشه پیش روی شماست ولی با هیچ عینک و یا ذره بینی نمی توانید آن را ببینید؟","آینده"],["آن چیست که وقتی هوا گرم می شود لباس می پوشد، وقتی هوا سرد می شود لباسش را بیرون می آورد؟","درخت"],["آن چیست که هم ماه دارد و هم نان داردو هم داروخانه؟","قرص"],["آن چیست که پر دارد اما نمی پرد، دو پا دارد ولی همیشه با یک پا راه می رود؟","پرگار چیستن 20- آن چیست که تولد دارد ولی مرگ به هیچ عنوان ندارد؟"],["آن چیست که هر چه آن را بیشتر بکشیم بلندتر می شود؟","خط"],["آن چیست که پس از جیر جیرک کردن بسیار، تخمی درشت و پنبه ای می گذارد؟","دوک نخ ریسی"],["آن چیست که رو به بالا و پایین، راست و چپ می رود اما هرگز حرکت نمی کند؟","جاده"],["آن چیست اولش عبادت است و آخرش آشامیدنی؟","حجاب"],["آن چیست که وقتی پر است راه می رود اما وقتی خالی است می ایستد؟","کفش"],["آن چیست که نه چشم دارد نه دست و پا اما خبر می دهد از همه جا؟","رادیو"],["آن چیست که به شیشه می خورد ولی آن را نمی شکند ولی به دیوار که می خورد خودش می شکند؟","نور"],["عجایب صنعتی دیدم در این دشت، درخت پر گلی بی سایه می گشت!","آسمان پر ستاره"],["آن چیست که نه در دارد نه دروازه، درونش خون است و پر از ستاره؟","هندوانه"],["کدام اسب است که تا به حال زین بر پشت خود ندیده است؟","اسب شطرنج"],["آن چیست که در تهران پنج تا از آن وجود دارد و در قم دو تا؟","حروف"],["آن چیست چشم ندارد ولی گریه می کند؟","ابر"],["آن چیست که در دل خاک نهفته و ارزش زیادی دارد ولی وای به روزی که وارونه شود؟","گنج"],["آن چیست که سر ندارد ولی کلاه دارد؟","قارچ"],["آن کیست که هر چی اصلاح می کند باز نامرتب است؟","آرایشگر"],["می توانید آن را اندازه گیری کنید ولی قابل مشاهده نیست!","زمان"],["یک واژه بگوید که همه حروف در آن باشد!","الفبا"],["یک کلمه پنج حرفی بگویید که در صورتی که به آن دو حرف اضافه کنید، کوتاه‌ تر شود.","کوتاه"],["بالای آن جای حساب است/ پایین آن بازی تاب است؟","ساعت پاندول دار"],["گیاهی که نصفش لنگ است و نصف دیگرش غصه؟","شلغم"],["آن چیست كه خود ریسد و خود بافد جامه/ پوست در پوست گرد یكدیگر؟","عنکبوت"],["کلمه ایی که همه می توانند آن را درست بنویسند!","درست"],["چه سوالی را هرگز نمی توان بلی پاسخ داد؟","هنوز خوابی؟"],["چه چیزی نمی تواند صحبت کند اما وقتی با او صحبت می شود پاسخ می دهد؟","پژواک صدا"],["وقتی مشکی می شود تمیز است و وقتی کثیف است سفید! آن چیست؟","تخته سیاه"],["من مثل یک پر سبک هستم، اما قوی ترین فرد نمی تواند پنج دقیقه مرا نگه دارد. من چی هستم؟","نفس"],["یک فرد چگونه می تواند 90 روز نخوابد ولی همچنان سرحال باشد؟","او شب ها می خوابد"],["آن چیست که دست دارد اما نمی تواند دست بزند!","ساعت مچی"],["آن چیست که حول حیاط خلوت می چرخد​​، اما هرگز حرکت نمی کند؟","حصار"],["آن چیست که 13 قلب دارد، اما هیچ اندام دیگری ندارد؟","یک دسته کارت پاستور"],["وقتی دو حرف به آن اضافه کنید، کدام کلمه پنج حرفی کوتاهتر می شود؟","کوتاه"],["آن چیست که دو پا دارد و دو پای دیگر هم قرض می کند و می رود!","دوچرخه"],["مردم مرا می سازند، نجاتم می دهند، مرا تغییر می دهند، بزرگ می کنم. من چی هستم؟","پول"],["کدامیک از این ها بزرگترین هستند: مثلث، دایره، مربع یا مستطیل؟","مستطیل. چون بیشترین حروف را دارد"],["من می توانم ناراحت باشم، می توانم خوشحال باشم، می توانم عصبانی شوم و گریه کنم، با چهره های متعدد و گاهی اوقات با اندازه های مختلف می آیم. من قادر به انتقال چیزهایی هستم که کلمات اغلب نمی توانند و می توانم با سرعت نور از جایی به مکان دیگر حرکت کنم. من چی هستم؟","ایموجی ها"],["کدام حیوان را اگر برعکس کنید قرمز می شود؟","خرس"],["آن چیست که مدام راه می رود و مدام سرش به سنگ می خورد؟","آب در رودخانه"],["آن کدام شبه فلزی است که اگر وارونه اش کنید نوعی سبزیجات خواهد شد؟","جیوه"],["سه برادر که جان ندارند، اما حرکت می کنند، آن سه برادر کدامند؟","آب، باد و ابر"],["بدون هیچ علم و دانشی، همه چیز را همانگونه که هست آشکار می سازد؟","آینه"],["نوعی غذای فرنگی که هم خوردنش در ایران رواج دارد و هم در وسطش رود ایرانی قرار گرفته است!","ماکارونی"],["دیده و چشیده نمی شود و با دستان هم لمس نمی گردد اما همه جا هست و همه به او نیاز دارند!","هوا"],["آن چیست که بدنش زرد است و لباسش سبز و موهایش سفید؟","چشم ها"],["آن چیست که از ته پر می شود و از بالا خالی؟","تفنگ"],["وارونه صدای کدام حیوان پرنده زیبایست؟","سگ / وارونه صدای سگ که وق وق است، پرنده زیبای \"قو\" می شود"],["آن چیست که همه آن را می بینند ولی خدا آن را نمی بیند؟","خواب"],["کدام حیوان است که از هر سوی که نگاهش کنید آدم را می درد؟","گرگ"],["من زنده نیستم اما رشد می کنم. من ریه ندارم اما به هوا احتیاج دارم. من چی هستم؟","آتش"],["آن چیست كه ارغوان قبایی دارد/ مانند دم موش پایی دارد/ گرد است و مدور است و تاجش بر سر/ صد پاره تنش/ ولی ز یك پایه نگون؟","چغندر"],["دهانی ندارم که صحبت کنم و گوشی هم ندارم که بشنوم. بدنی هم ندارم اما با باد زنده ام. من چه چیزی هستم؟","پژواک صدا"],["از آنجایی که از یک معدن آمده‌ام، همیشه با چوب محاصره ام کرده اند. همه از من استفاده می‌کنند. من چه چیزی هستم؟","مغزی مداد"],["چند حرف در الفبا انگلیسی وجود دارد؟","8 حرف، (alphabet)"],["سه حرف بعدی در ترکیب روبرو چیست؟ OTTFFSS","E N T (هر یک از حروف بالا، اولین حرف یک رقم به شکل نوشتاری می باشد: One، Two، Three، Four و ...)."],["چه چیزی یک بار در دقیقه، دو بار در یک لحظه اتفاق می‌افتد، اما هرگز در هزار سال اتفاق نمی‌افتد؟","حرف “M” در minute و moment"],["چه چیزی آنقدر شکننده است که گفتن نامش، آن را می شکند؟","سکوت"]];
+  function menu(){stop=null;B.onclick=function(e){var b=e.target.closest('[data-g]');if(b)({m:mem,a:mth,q:qz,j:jok})[b.dataset.g]()};
+   B.innerHTML='<div class="card"><h3>بازی‌های کودکان</h3><div class="muted">یک بازی را انتخاب کنید</div></div><div class="swg"><button class="sw" data-g="m"><b>🃏</b>حافظه</button><button class="sw" data-g="a"><b>➕</b>ریاضی</button><button class="sw" data-g="q"><b>🧩</b>چیستان</button><button class="sw" data-g="j"><b>😄</b>جوک بی‌مزه</button></div>'}
+  function top(t){return'<div class="bar"><button class="ib" data-g="x" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>'+t+'</b></div></div>'}
+  function back(f){var o=B.onclick;B.onclick=function(e){if(e.target.closest('[data-g=x]'))return menu();f(e)}}
+  function mem(){var c=EM.concat(EM).sort(function(){return Math.random()-.5}),open=[],ok={},mv=0,lock=0;
+   function dr(){var done=Object.keys(ok).length===16;B.innerHTML=top('بازی حافظه')+'<div class="muted" style="text-align:center">حرکت: '+fa2(mv)+(done?' — آفرین! 🎉':'')+'</div><div class="kg" style="grid-template-columns:repeat(4,1fr);margin-top:10px">'+c.map(function(e,i){var s=ok[i]||open.indexOf(i)>=0;return'<button data-c="'+i+'" style="font-size:30px;padding:14px 0" class="'+(s?'on':'')+'">'+(s?e:'؟')+'</button>'}).join('')+'</div>'+(done?'<button class="btn" style="margin-top:12px" data-c="r">بازی دوباره</button>':'')}
+   back(function(e){var b=e.target.closest('[data-c]');if(!b||lock)return;if(b.dataset.c==='r')return mem();var i=+b.dataset.c;if(ok[i]||open.indexOf(i)>=0)return;open.push(i);if(open.length===2){mv++;if(c[open[0]]===c[open[1]]){ok[open[0]]=ok[open[1]]=1;open=[]}else{lock=1;dr();setTimeout(function(){open=[];lock=0;dr()},800);return}}dr()});dr()}
+  function mth(){var sc=0,n=0,q;
+   function nx(){var a=1+Math.floor(Math.random()*10),b=1+Math.floor(Math.random()*10),p=Math.random()<.5,r=p?a+b:Math.abs(a-b),o=[r];if(!p&&b>a){var z=a;a=b;b=z}while(o.length<3){var w=Math.max(0,r+Math.floor(Math.random()*7)-3);if(o.indexOf(w)<0)o.push(w)}o.sort(function(){return Math.random()-.5});q={t:fa2(a)+' '+(p?'+':'−')+' '+fa2(b)+' = ؟',o:o,r:r};dr()}
+   function dr(){B.innerHTML=top('ریاضی')+'<div class="muted" style="text-align:center">امتیاز: '+fa2(sc)+' از '+fa2(n)+'</div><div class="cd2" style="text-align:center">'+q.t+'</div><div class="cc" style="grid-template-columns:repeat(3,1fr)">'+q.o.map(function(v){return'<button data-v="'+v+'">'+fa2(v)+'</button>'}).join('')+'</div>'}
+   back(function(e){var b=e.target.closest('[data-v]');if(!b)return;n++;if(+b.dataset.v===q.r){sc++;vib(15)}nx()});nx()}
+  function qz(){var i=0,L=Q.slice().sort(function(){return Math.random()-.5}),sh=0;
+   function dr(){var q=L[i%L.length];B.innerHTML=top('چیستان')+'<div class="muted" style="text-align:center">چیستان '+fa2(i+1)+' از '+fa2(L.length)+'</div><div class="card"><h3 style="line-height:1.9">'+esc(q[0])+'</h3>'+(sh?'<div class="chip gold" style="display:block;border-radius:12px;padding:10px;margin-top:8px;line-height:1.8">'+esc(q[1])+'</div>':'<button class="btn ghost" style="display:block;width:100%;margin-top:8px" data-q="s">نمایش جواب</button>')+'</div><button class="btn" style="width:100%" data-q="n">چیستان بعدی</button>'}
+   back(function(e){var b=e.target.closest('[data-q]');if(!b)return;if(b.dataset.q==='s')sh=1;else{i++;sh=0}dr()});dr()}
+  var JK=[["میدونین چرا پرستوها پرواز میکنن ؟","چون اگه پیاده برن خسته میشن"],["میدونی چرا سر نمکدون سوراخ داره؟","برا که نمکا خفه نشن"],["میدونی چرا ماهی ها دست نمیدن؟","چون دستاشون خیسه"],["میدونی اگ یه فیل بره بالا درخت چی میشه؟","یه فیل از رو زمین کم میشه"],["میدونی وقتی ماهی ها غذا میخورن چی میشه؟","سفره ماهی میاد جمع میکنه"],["میدونی اگه دوتا تیر آهن دعواشون بشه چی میشه ؟","میرن پیش پیراهن تا مشکلشون حل بشه"],["میدونی وقتی یه فلش تعجب میکنه چی میگه؟","میگه واای حجمااام"],["میدونی اگ تو کاسه مسی غذا بخوری چی میشه؟","مسی ناراحت میشه"],["میدونی اگ حیوانات نادرو شکار کنیم چی میشه؟","نادر ناراحت میشه"],["میدونین مریخیا به سیب زمینی چی میگن ؟","سیب مریخی"],["میدونی اگر دوتا فیل برن رو درخت چی میشه؟","درخت میشکنه"],["میدونید اگه گوگل بمیره به بچه‌هاش چی میرسه؟","گوگل ارث."],["می‌دونین ماهی‌های خواهر همدیگه رو چی صدا می‌زنن؟","آبزی"],["میدونی اگر یک فیل بره تو دریای سرخ چی میشه؟","خیس میشه"],["می‌دونین چرا آلومینیوم‌ها زنگ نمی‌زنن؟","چون شارژ ندارن"],["میدونی چرا لاکپشت ۱۰۰ سال عمر میکنه ؟","چون سرش تو لاک خودشه"],["فرق لاک‌پشت با اینترنت خیلی کند چیه؟","لاک‌پشت بالاخره به مقصد می‌رسه!"],["می‌دونی فراتر از فراموشی چیه؟","فراگربه ای"],["‏میدونین قدیمی‌ترین حیوون چیه؟","گورخر چون سیاه سفیده"],["میدونی چه چیزهایی رو موقع صبحانه نباید خورد ؟","ناهار و شام"],["می‌دونین چرا درخت‌ها جوک نمی‌گن؟","چون از درختای بانمک چوب شور میسازن"],["میدونین موذن وقتی اذان میگه چرا دستشو میذاره دم گوشش؟","چون اگه دستشو بذاره دم دهنش خفه میشه"],["میدونین وقتی بارون میاد حضرت سلیمان چی میگه؟","میگه ای بابا تازه قالیشویی بودم"],["میدونین چرا تو جعبه میوه ها روزنامه میزارن؟","چون وقتی میوه ها تو انبارن حوصلشون سر نره"],["میدونین به کسایی که پایه گل کشیدنن چی میگن؟","گلپایگان"],["میدونین خرس‌ها هر وقت بخوان چت کنن چی میکشن؟","پول"],["میدونی کسی که ظهر بره حموم بجای شامپو به سرش چی میزنه؟","ناهار پو"],["میدونی وقتی لوازم تحریرا بیماری روحی پیدا میکنن کجا میرن؟","میرن پیش روان نویس"],["میدونی اگه یه شیرینی فروشی آتیش بگیره چی میشه؟","تر و خشک باهم میسوزن"],["می‌دونین چرا پنگوئن‌ها سواد ندارن؟","چون قطب جنوب برف میاد همیشه مدرسه ها تعطیله"],["میدونین وقتی مایع ظرفشویی ها حوصلشون سر میره چیکار میکنن ؟","کف پارتی میگیرن"],["میدونی اگر یکی آسیب نبینه چی میشه؟","آ پرتغال میبینه"],["میدونستین اگه کلاه قرمزی رو بر عکس کنیم چی میشه ؟","هیچی کلاش میفته"],["می‌دونین سیب‌زمینی‌ها وقتی از هم حلالیت می‌طلبن چی می‌گن؟","میگن داداش مارو خلال کن"],["میدونین اگه یه روز بی هوا بریم تو اتاق چی میشه ؟","خفه میشیم"],["پنج برادر یک تاکسی می‌خرند، اما بعد از یک ماه ورشکست می‌شوند؛ چرا؟","چون هر پنج‌نفر با هم می‌رفتند مسافرکشی!"],["چرا الکترون‌ها سوار چرخ‌وفلک نمی‌شوند؟","چون باردارند و چرخ‌وفلک برایشان مناسب نیست!"],["برای قطع کردن جریان برق باید چه کار کرد؟","قبض برق را پرداخت نکرد!"],["وقتی قلب کسی می‌ایستد، اول چه چیزی برایش می‌آورند؟","یک صندلی تا بنشیند!"],["چطور ممکن است چهار نفر زیر یک چتر باشند و هیچ‌کدام خیس نشوند؟","وقتی اصلاً باران نبارد!"],["به یک میوه «به» که خیس شده چه می‌گویند؟","«به‌تر»!"],["خط وسط قرص را برای چه گذاشته‌اند؟","اگر با آب پایین نرفت، با پیچ‌گوشتی بازش کنند!"],["به کسی که سه طعم مختلف را چشیده چه می‌گویند؟","سه‌طعم‌دیده؛ همان ستم‌دیده!"],["اگر ماکارونی‌ها زیاد غذا بخورند چه می‌کنند؟","نودل می‌کنند!"],["سیب‌زمینی وقتی خیلی عصبانی شود چه کار می‌کند؟","خودش را پوره می‌کند!"],["چرا ماشین آردی را با آب نمی‌شویند؟","چون اگر آرد آب بخورد، خمیر می‌شود!"],["چرا مار نمی‌تواند برای سفر با کسی خداحافظی کند؟","چون دست ندارد تکان بدهد!"],["چرا فیل‌ها از سربازی معاف می‌شوند؟","چون کف پایشان صاف است!"],["چرا لک‌لک موقع خواب یک پایش را بالا می‌گیرد؟","چون اگر هر دو پا را بالا بگیرد، می‌افتد!"],["چرا فیل نمی‌تواند از سوراخ سوزن رد شود؟","چون ته دمش گره خورده است!"],["آن نقطه آبی که روی دیوار حرکت می‌کند چیست؟","مورچه‌ای است که شلوار جین پوشیده!"],["اگر یک زنبور داخل دهان گربه برود، گربه چه صدایی درمی‌آورد؟","میوز، میوز!"],["لباس مورد علاقه دوچرخه چیست؟","رکابی!"],["چرا کلیه هیچ‌وقت وارد جزئیات نمی‌شود؟","چون نگاهش خیلی کلی است!"],["میدونی هویج چرا نارنجیه؟","چون نارنجی بهش میاد"],["میدونی چرا ماهی ها ازدواج نمیکنن؟","چون پولکی ان"],["میدونی چرا لاکپشتا نماز نمیخونن؟","چون لاک دارن"],["می‌دونی وقتی بارون میاد ماهی‌ها کجا می‌رن؟","میرن زیر پل"],["میدونی چرا سایتای اینترنتی سه تا w دارن؟","چون کار از محکم کاری عیب نمیکنه"],["میدونی وقتی سیب از درخت افتاد رو زمین، نیوتون چی گفت؟","اخجون سیب زمینی"],["میدونی وقتی قاره ها تعجب میکنن چی میگن؟!","حاجی شهرام!"],["می‌دونید وقتی دندان‌پزشک‌ها اعصابشون خرد می‌شه چیکار می‌کنن؟","میرن تو تراس یه نخ دندون روشن میکنن"],["میدونی تو آفریقا به جوراب مشکی چی میگن؟","جوراب رنگ پا"],["میدونی چرا e=mc2؟","چون e مساوی mc3 نیست"],["میدونین آرزوی پنگوئن چیه ؟","اینکه‌ ی روز عکس رنگی بگیره"],["می‌دونی به یه سطل قرمز چی می‌گن؟","میگن سطل قرمز"]];
+  function jok(){var i=0,L=JK.slice().sort(function(){return Math.random()-.5}),sh=0;
+   function dr(){var q=L[i%L.length];B.innerHTML=top('جوک بی‌مزه')+'<div class="muted" style="text-align:center">جوک '+fa2(i%L.length+1)+' از '+fa2(L.length)+'</div><div class="card"><h3 style="line-height:1.9">'+esc(q[0])+'</h3>'+(sh?'<div class="chip gold" style="display:block;border-radius:12px;padding:10px;margin-top:8px;line-height:1.8">'+esc(q[1])+'</div>':'<button class="btn ghost" style="display:block;width:100%;margin-top:8px" data-q="s">نمایش جواب</button>')+'</div><button class="btn" style="width:100%" data-q="n">جوک بعدی</button>'}
+   back(function(e){var b=e.target.closest('[data-q]');if(!b)return;if(b.dataset.q==='s')sh=1;else{i++;sh=0}dr()});dr()}
+  menu()}
+ (function(){var c=function(t){return'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><g transform="'+t+'" fill="none" stroke="#000" stroke-width="1.3" stroke-linecap="round"><path d="M2 26V12C2 6 6 2 12 2h14"/><path d="M6 26V15c0-5 4-9 9-9h11"/><path d="M10 15a3.2 3.2 0 1 1 3.2 3.2M13 8c3 0 5 2 5 5"/></g></svg>')+'")'},
+  m=[c(''),c('matrix(-1 0 0 1 28 0)'),c('matrix(1 0 0 -1 0 28)'),c('matrix(-1 0 0 -1 28 28)')],pos=['left top','right top','left bottom','right bottom'],
+  v=m.map(function(u,i){return u+' '+pos[i]+'/26px 26px no-repeat'}).join(',');
+  var s=document.createElement('style');s.textContent='.card,.hero,.mnh{position:relative}.card::before,.hero::before,.npv::before{content:"";position:absolute;inset:5px;pointer-events:none;border-radius:14px;background:var(--em);opacity:.3;-webkit-mask:'+v+';mask:'+v+'}.cal .card::before{opacity:.38}.npv{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--em),var(--emd));color:#fff;padding:16px 18px;box-shadow:var(--sh)}.npv::before{background:#fff!important;opacity:.4!important;inset:4px!important;border-radius:18px!important}.npv b{display:block;font-size:17px;line-height:1.5;color:#fff}.npv small{display:block;color:rgba(255,255,255,.88);font-size:13px;line-height:1.7}.npv img{border-radius:14px;flex:none}.cmt b::before,.cmt b::after{content:"❖";color:var(--gold);font-size:12px;margin:0 8px;vertical-align:middle;opacity:.8}.nav.tabs{border-top:1px solid var(--line)}.card{padding-block:18px}';document.head.appendChild(s)})();
+
  var TOOLS=[
+  {id:'planner',t:'برنامه‌ریزی روزانه',ic:'<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M9 15l2 2 4-4"/></svg>',f:planner},
+  {id:'kids',t:'کودکان',ic:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M9.5 8.5h.01M14.5 8.5h.01M10 11c1 1 3 1 4 0M7 20c0-3 2-5 5-5s5 2 5 5"/></svg>',f:kids},
   {id:'quran',t:'قرآن کریم',ic:'<svg viewBox=\"0 0 24 24\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M12 8l1 2 2 .3-1.5 1.5.4 2.2-1.9-1-1.9 1 .4-2.2L9 10.3l2-.3z\"/></svg>',f:quran},
   {id:'diary',t:'دفتر',ic:'<svg viewBox=\"0 0 24 24\"><path d=\"M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6zM6 3v18M10 8h5M10 12h5\"/></svg>',go:function(){tab='diary';draw()}},
   {id:'sapp',t:'ارسال برنامه',ic:'<svg viewBox=\"0 0 24 24\"><circle cx=\"18\" cy=\"5\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"2.5\"/><circle cx=\"18\" cy=\"19\" r=\"2.5\"/><path d=\"M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4\"/></svg>',f:sendApp},
@@ -1011,8 +1127,6 @@ function cmAnim(){const z=$('#cmz');if(z&&swDir)z.classList.add(swDir>0?'sn':'sp
 let inMonth=false;
 {const _dm=drawMonth;drawMonth=function(m){inMonth=true;_dm(m)};const _db=drawBook;drawBook=function(){inMonth=false;return _db.apply(this,arguments)}}
 function backAction(){
- const dw=$('#drw');if(dw&&dw.classList.contains('on')){drwClose();return true}
- const gg=$('#gto');if(gg&&gg.classList.contains('on')){gg.classList.remove('on');return true}
  const p=$('#pop');if(p.classList.contains('on')){p.classList.remove('on');return true}
  const az=$('#az');if(az.classList.contains('on')){stopA();az.classList.remove('on');return true}
  const bf=$('#bfo');if(bf&&bf.classList.contains('on')){bclose();return true}
@@ -1021,16 +1135,13 @@ function backAction(){
  if(tab==='diary'){const w=window.__dfW&&window.__dfW();if(w&&w.CUR&&w.CUR!=='home'){w.show('home');return true}}
  if(tab==='book'){if(inMonth){inMonth=false;bookSel='tsh';drawBook();main.scrollTop=0;return true}
   if(bookSel){if(bkPath.length)bkPath.pop();else bookSel=null;drawBook();main.scrollTop=0;return true}}
- {const bb=main.querySelector('.ba [data-ba="back"]');if(bb){bb.click();return true}}
- if(tab!=='home'){tab='home';draw();main.scrollTop=0;return true}
+ if(tab!=='cal'){tab='cal';draw();main.scrollTop=0;return true}
  return false}
 window.tshBack=backAction;
-{let ok=false;
- const CA=(()=>{try{if(window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App)return Capacitor.Plugins.App;if(NAT&&Capacitor.registerPlugin)return Capacitor.registerPlugin('App')}catch(e){}return null})();
- const pop=()=>{try{history.replaceState({tsh:0},'');history.pushState({tsh:1},'')}catch(e){}
-  addEventListener('popstate',()=>{if(backAction()){try{history.pushState({tsh:1},'')}catch(e){}}else history.back()})};
- try{if(CA&&CA.addListener){const r=CA.addListener('backButton',()=>{if(!backAction()){if(CA.minimizeApp)CA.minimizeApp().catch(()=>{if(CA.exitApp)CA.exitApp()});else if(CA.exitApp)CA.exitApp()}});ok=true;if(r&&r.catch)r.catch(()=>pop())}}catch(e){}
- if(!ok)pop()}
+{const CA=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;
+ if(CA&&CA.addListener)CA.addListener('backButton',()=>{if(!backAction()&&CA.exitApp)CA.exitApp()});
+ else{try{history.replaceState({tsh:0},'');history.pushState({tsh:1},'')}catch(e){}
+  addEventListener('popstate',()=>{if(backAction()){try{history.pushState({tsh:1},'')}catch(e){}}else history.back()})}}
 
 /* ===== ویجت صفحه‌ی اصلی و اعلان‌های پس‌زمینه (نیازمند افزونه‌ی بومی اندروید) ===== */
 const QUOTES=(()=>{try{return JSON.parse(document.getElementById('QUOTES').textContent)}catch(e){return[]}})();
@@ -1042,55 +1153,6 @@ async function pushAlarms(){if(!NAT||!NP||!NP.schedule)return;const out=[],j0=to
  for(let k=0;k<7;k++){const j=j0+k,T=pt(j);[0,2,4].forEach(i=>{const t=at(j,T[i]);if(t>now)out.push({id:j*10+i,time:t,title:'وقت '+PN[i],body:city().n+' · '+hm(T[i]),sound:on('snd')})})}
  try{await NP.schedule({items:out})}catch(e){}}
 {const _pN=pushN;pushN=async function(){await _pN();pushWidget();pushAlarms()}}
-/* ===== ابزارک‌های اندروید (نسخه‌ی ۲): داده‌ی ۱۴ روزه، همه‌ی شهرها، ماه‌ها، گزیده‌ی نصایح — ابزارک بدون باز شدن برنامه به‌روز می‌ماند ===== */
-const NW=NAT?(function(){try{if(typeof Capacitor.registerPlugin==='function')return Capacitor.registerPlugin('TshWidget');if(typeof Capacitor.nativePromise==='function'){const c=m=>o=>Capacitor.nativePromise('TshWidget',m,o||{});return{setData:c('setData'),info:c('info'),pin:c('pin')}}return null}catch(e){return null}})():null;
-const wgMid=j=>{const g=d2g(j);return new Date(g.y,g.m-1,g.d).getTime()};
-let _wq=null,_wqK='';
-function wgQuotes(){
- if(QUOTES.length)return QUOTES.slice(0,60);
- const L=LIB.find(x=>/نصایح|نصائح/.test(x.t));if(!L)return[];
- const k=L.id+':'+LIB.length;if(_wq&&_wqK===k)return _wq;
- const out=[];
- try{const b=gbOf(L.id),all=[];
-  for(const p of b.pages){
-   const t=String(p).replace(/<(script|style)[\s\S]*?<\/\1>/g,' ').replace(/<\/(p|div|h[1-6]|li)>|<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/[\ue000-\ue004]/g,' ').replace(/\u27e6\d+\u27e7/g,'').replace(/[ \t\u00a0]+/g,' ');
-   t.split('\n').forEach(l=>{l=l.trim();if(l.length>=45&&l.length<=230&&!/[\u064B-\u0652]{4,}/.test(l)&&(l.match(/[\u0600-\u06FF]/g)||[]).length>l.length*.6)all.push(l)})}
-  const n=Math.min(60,all.length),st=all.length/Math.max(1,n);for(let i=0;i<n;i++)out.push(all[Math.floor(i*st)])
- }catch(e){}
- _wq=out;_wqK=k;return out}
-function wgPayload(){
- const j0=todayJ(),days=[];
- for(let k=-1;k<14;k++){const j=j0+k,x=info(j),hol=holiday(x),ev=titlesOf(grp(x.h.m,x.h.d)).slice(0,3).map(t=>px(t[1]).replace(/\u27e6\d+\u27e7/g,'').replace(/\s+/g,' ').trim()).concat(extras(x)).slice(0,3);
-  days.push({ed:wgMid(j),wd:WD[x.w],p:fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y),h:fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y),g:fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y),hol:hol||'',ev,hm:x.h.m,hd:x.h.d})}
- const keep=ST.gps,CN=CITIES.map(c=>c[0]),PT=[];
- const calc=(la,lo)=>{ST.gps=[la,lo];try{return days.map((_,i)=>pt(j0-1+i).map(h=>Math.round(at(j0-1+i,h))))}finally{ST.gps=keep}};
- CITIES.forEach(c=>PT.push(calc(c[1],c[2])));
- let dc=ST.city||0;if(keep){CN.push('موقعیت من');PT.push(calc(keep[0],keep[1]));dc=CN.length-1}
- const mons=[];{const x0=info(j0).p;let y=x0.y,m=x0.m;
-  for(let q=0;q<3;q++){const f=j2d(y,m,1),L=jLen(y,m),ev=[],hl=[],hd=[];
-   for(let d=1;d<=L;d++){const x=info(f+d-1);if(grp(x.h.m,x.h.d)||extras(x).length)ev.push(d);if(holiday(x))hl.push(d);hd.push(x.h.d)}
-   mons.push({n:JM[m-1]+' '+fa(y),ed:wgMid(f),len:L,f:wdOf(f),ev,hl,hd,hs:rng('h',f,f+L-1)});m++;if(m>12){m=1;y++}}}
- const hx=info(j0).h,rj=h2j(hx.m>9?hx.y+1:hx.y,9,1);
- return{v:2,gen:Date.now(),days,cn:CN,pt:PT,dc,months:mons,ram:{ed:wgMid(rj)},q:wgQuotes()}}
-{const _pw=pushWidget;pushWidget=async function(){
-  if(NAT&&NW&&NW.setData){try{await NW.setData({json:JSON.stringify(wgPayload())})}catch(e){}}
-  try{await _pw()}catch(e){}}}
-/* تغییر شهر/موقعیت/تنظیم قمری → ابزارک‌ها هم به‌روز شوند */
-{let _wk='';const _sv=save;save=function(){_sv();if(!NAT)return;let k='';try{k=JSON.stringify([ST.city,ST.gps,ST.off,ST.ov,ST.hol])}catch(e){}if(k!==_wk){const f=_wk==='';_wk=k;if(!f)pushS()}}}
-if(NAT)setTimeout(()=>{try{pushS()}catch(e){}},2500);
-/* کارت «ابزارک‌ها» در صفحه‌ی رنگ و شخصی‌سازی / تنظیمات */
-const WG=[['اوقات شرعی و اذان بعدی','شمارش معکوس تا اذان، نوار پیشرفت، شهر قابل تنظیم'],['تاریخ سه‌گانه و ساعت','شمسی، قمری و میلادی با ساعت'],['مناسبت امروز و نصایح','مناسبت‌ها و گزیده‌ای از کتاب نصایح'],['تقویم ماه','با نقطه‌ی مناسبت‌ها'],['ویژه‌ی ماه رمضان','مانده تا افطار و سحر'],['روزی یک صفحه','قرآن، کتاب یا دعا؛ هر روز یک صفحه'],['روز زندگی من','روزهای عمر، سن دقیق و تا تولد بعدی'],['مناسبت بعدی','نزدیک‌ترین مناسبت و تعطیلی با روزشمار']];
-function wgCard(){
- if(!(NAT&&NW))return'<div class="card"><h3>ابزارک‌های صفحه‌ی اصلی</h3><div class="muted">ابزارک‌ها در اپ اندروید (APK) فعال می‌شوند: اوقات شرعی و اذان بعدی، تاریخ سه‌گانه و ساعت، مناسبت امروز و نصایح، تقویم ماه و ویژه‌ی رمضان؛ در اندازه‌های ۲×۲، ۴×۲ و ۴×۴ با تم روشن و تیره.</div></div>';
- return'<div class="card"><h3>ابزارک‌های صفحه‌ی اصلی</h3><div class="muted" id="wgi"></div>'+WG.map((w,i)=>'<div class="set"><span><b>'+w[0]+'</b><br><small class="muted">'+w[1]+'</small></span><button class="btn ghost" data-wp="'+i+'">افزودن</button></div>').join('')+'<div class="set"><span>به‌روزرسانی ابزارک‌ها</span><button class="btn ghost" data-wp="sync">اکنون</button></div><div class="muted" id="wgm" style="margin-top:6px">برای تغییر تم، شفافیت یا شهرِ هر ابزارک، روی آن در صفحه‌ی اصلی نگه دارید و گزینه‌ی تنظیم را بزنید. ابزارک‌ها بدون باز شدن برنامه به‌روز می‌مانند.</div></div>'}
-async function wgFill(){if(!(NAT&&NW&&NW.info))return;try{const r=await NW.info(),e=$('#wgi');if(e)e.textContent=r.count?fa(r.count)+' ابزارک روی صفحه‌ی اصلی فعال است.':'هنوز ابزارکی اضافه نکرده‌اید.'}catch(e){}}
-{const _es=extraSet;extraSet=function(){return _es()+wgCard()};const _d2=drawSet;drawSet=function(){_d2();wgFill()}}
-$('#sheet').addEventListener('click',async e=>{const b=e.target.closest('[data-wp]');if(!b||!NW)return;const k=b.dataset.wp,m=$('#wgm');
- try{await pushWidget();
-  if(k==='sync'){if(m)m.textContent='ابزارک‌ها به‌روز شد.';wgFill();return}
-  const r=await NW.pin({kind:+k});
-  if(m)m.textContent=r&&r.ok?'درخواست افزودن ارسال شد؛ در پنجره‌ی گوشی تأیید کنید.':'این گوشی افزودن مستقیم را پشتیبانی نمی‌کند؛ روی صفحه‌ی اصلی نگه دارید ← ابزارک‌ها ← «تقویم شیعه».'}
- catch(x){if(m)m.textContent='افزودن ممکن نشد: '+(x&&x.message||x)}});
 /* ===== تاریخ تشیع در صفحه‌ی «خواندن متن کامل» هر روز ===== */
 (function(){
  var BID='b120',HX={"1:1":[[5,[184]],[6,[195]]],"1:2":[[1,[184]]],"1:3":[[2,[184]]],"1:7":[[2,[184]]],"1:10":[[1,[184,185]]],"1:12":[[3,[201]]],"1:25":[[1,[201]]],"1:28":[[2,[273]]],"2:1":[[3,[117]]],"2:2":[[1,[192]],[2,[218]]],"2:7":[[1,[172]]],"2:9":[[2,[130]]],"2:11":[[1,[119]]],"2:12":[[1,[121,123]]],"2:14":[[1,[139]]],"2:15":[[1,[6]]],"2:25":[[1,[6]]],"2:26":[[1,[6]]],"2:28":[[1,[6]],[2,[6]],[3,[8,9]],[4,[172]]],"3:1":[[4,[15]],[5,[286]]],"3:3":[[1,[196]]],"3:8":[[1,[286]]],"3:9":[[1,[287]],[2,[45]]],"3:14":[[1,[193]]],"3:25":[[2,[167]]],"4:1":[[1,[198]],[2,[216]]],"4:8":[[2,[24]]],"4:12":[[1,[223]]],"4:13":[[1,[24]]],"4:14":[[1,[199]]],"4:25":[[1,[193]]],"5:10":[[1,[105,108]]],"5:13":[[1,[24]]],"5:29":[[1,[288]]],"6:3":[[1,[24]]],"6:4":[[1,[241]]],"6:22":[[1,[12]]],"7:3":[[1,[284]]],"7:12":[[1,[180]],[2,[110]]],"7:15":[[5,[235]]],"7:18":[[2,[24]],[3,[180]]],"7:23":[[1,[165]],[2,[243]]],"7:25":[[1,[243]]],"7:28":[[1,[180]]],"8:15":[[1,[287]],[2,[288]]],"8:18":[[1,[288]]],"9:1":[[1,[252]]],"9:3":[[1,[24]]],"9:6":[[1,[258]]],"9:10":[[1,[181]]],"9:14":[[1,[199]]],"9:15":[[2,[183]]],"9:19":[[1,[147,148]]],"9:21":[[1,[145,148]],[2,[152]],[3,[148]]],"10:5":[[1,[117]],[2,[183]]],"10:20":[[1,[242,243]]],"10:25":[[1,[235]]],"11:9":[[1,[183]]],"11:23":[[1,[266]]],"11:25":[[1,[254]]],"12:1":[[2,[116]]],"12:6":[[2,[225]]],"12:7":[[1,[216]],[2,[243]]],"12:8":[[1,[184]],[2,[183]],[3,[184]]],"12:9":[[2,[183]]],"12:10":[[3,[264]]],"12:14":[[1,[22,23]]],"12:18":[[1,[6]],[2,[74]],[3,[79]]],"12:20":[[1,[199]]],"12:27":[[2,[195]]]},HT={"6":"آخرين تدابير پيغمبر (صلّى الله عليه وآله) براى تثبيت جانشينى على (عليه السّلام)","8":"توطئۀ سقيفه","9":"بررسى و تحليل توطئۀ غصب خلافت","12":"خلافت ابوبكر","15":"چگونگى بيعت گرفتن از اميرالمؤمنين (عليه السّلام)","22":"غصب فدك","23":"بررسى و تحليل غصب فدك","24":"شهادت حضرت فاطمۀ زهرا (سلام الله عليها)","45":"ترور عمر","74":"هلاكت عثمان","79":"بيعت با اميرالمؤمنين (عليه السّلام)","105":"جنگ جمل","108":"وقوع جنگ و شكست خفّت بار پيمان شكنان","110":"تغيير مقرّ خلافت از مدينه به كوفه","116":"تلاش اميرالمؤمنين (عليه السّلام) براى كناره گيرى مسالمت آميز معاويه","117":"جنگ صفّين","119":"يوم الهرير و ليلة الهرير","121":"توقّف جنگ صفّين و تحميل حكميت به اميرالمؤمنين (عليه السّلام)","123":"تنظيم قرارداد آتش بس","130":"فتنۀ خوارج و جنگ نهروان","139":"هجوم عمروعاص به مصر","145":"شهادت اميرالمؤمنين (عليه السّلام)","147":"شب نوزدهم ماه رمضان","148":"چگونگى شهادت","152":"بيعت مردم با امام حسن (عليه السّلام)","165":"شورش در سپاه امام حسن (عليه السّلام)","167":"صلح امام حسن (عليه السّلام)","172":"شهادت امام حسن (عليه السّلام)","180":"مرگ معاويه و جانشينى يزيد","181":"اعلام آمادگى كوفيان به امام حسين (عليه السّلام) براى قيام","183":"فرستادن مسلم بن عقيل به كوفه","184":"واقعۀ كربلا","185":"دلايل قيام امام حسين (عليه السّلام)","192":"خواسته هاى امام سجّاد (عليه السّلام) از يزيد","193":"بنى اميه پس از مرگ يزيد","195":"1 - فاجعۀ حرّه","196":"2 - فاجعۀ هتك حرمت كعبه","198":"1 - نهضت توّابين","199":"2 - قيام مختار","201":"شهادت امام سجاد (عليه السّلام)","216":"شهادت امام باقر (عليه السّلام)","218":"قيام زيد بن على","223":"خلافت بنى عباس","225":"خلافت منصور","235":"شهادت امام صادق (عليه السّلام)","241":"خلافت هارون الرشيد","242":"هارون و برخورد با امام كاظم (عليه السّلام)","243":"بازداشت و شهادت امام كاظم (عليه السلام)","252":"ولايتعهدى امام رضا (عليه السّلام)","254":"بررسى مسير حركت امام","258":"بازتاب ولايتعهدى امام رضا (عليه السّلام)","264":"نماز عيد و استسقاى امام رضا (عليه السّلام)","266":"شهادت امام رضا (عليه السّلام)","273":"احضار امام (عليه السّلام) به بغداد","284":"امام هادى (عليه السّلام) در سامرا","286":"امامت امام حسن عسكرى (عليه السّلام)","287":"امامت امام زمان (عجّل الله تعالى فرجه الشريف)","288":"نواب خاص امام زمان (عجّل الله تعالى فرجه الشريف)"};
@@ -1122,206 +1184,6 @@ $('#sheet').addEventListener('click',async e=>{const b=e.target.closest('[data-w
    b.hidden=!b.hidden;return}
   var o2=e.target.closest('[data-hxo]');if(o2)readGen(BID,+o2.dataset.hxo)});
 })();
-/* ===== صفحه‌ی اصلی «امروز» (الهام از بادصبا)، منوی کشویی، برو به تاریخ، تبدیل تاریخ، ادعیه و اعمال روز — مرحله‌ی ۲ ===== */
-const hcs=()=>ST.hc||(ST.hc={});
-let hmDir=0,hmT=todayJ();
-const ICO={clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',star:'<svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8z"/></svg>',
- book:'<svg viewBox="0 0 24 24"><path d="M12 4c-2 2.5-5 3-8 3v10c3 0 6 .5 8 3 2-2.5 5-3 8-3V7c-3 0-6-.5-8-3zM12 4v16"/></svg>',
- conv:'<svg viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>',go:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M13 15h4m0 0-1.6-1.6M17 15l-1.6 1.6"/></svg>',
- pal:'<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3.5 3.5 0 0 0 3.5-3.5C20.5 7 16.8 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>',
- list:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',find:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
- diary:'<svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6zM6 3v18M10 8h5M10 12h5"/></svg>',
- qib:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',tas:'<svg viewBox="0 0 24 24"><circle cx="5.5" cy="11" r="2.2"/><circle cx="12" cy="11" r="2.2"/><circle cx="18.5" cy="11" r="2.2"/><path d="M12 13.2V20"/></svg>',
- wg:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>',
- gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>'};
-function hmEvents(j){
- const x=info(j),hol=holiday(x),g=grp(x.h.m,x.h.d),ts=titlesOf(g),ex=extras(x),tl=x.h.d>=29?tails(x.h.m).filter(t=>/^آخر/.test(t.key)):[],pe=window.__tsEv?window.__tsEv(j):[];
- let h='<div class="evl">',n=0;
- if(hol){n++;h+='<div class="ev"><span class="n rd">★</span><span><b>'+esc(hol)+'</b><br><small class="muted">تعطیل رسمی</small></span></div>'}
- else if(x.w===6)h+='<div class="ev"><span class="n rd">ج</span><span>جمعه · تعطیل هفتگی</span></div>';
- ts.forEach(t=>{n++;h+='<button class="ev" data-r="'+j+'"><span class="n">'+fa(t[0])+'</span><span>'+R(t[1])+'</span></button>'});
- ex.forEach(t=>{n++;h+='<div class="ev"><span class="n">•</span><span>'+esc(t)+'</span></div>'});
- pe.forEach(t=>{n++;h+='<div class="ev"><span class="n pe">◦</span><span>'+esc(t)+'<br><small class="muted">مناسبت شخصی</small></span></div>'});
- if(!n&&x.w!==6)h+='<div class="muted" style="padding:6px 0">برای این روز مناسبتی ثبت نشده است.</div>';
- h+='</div>';
- if(g||tl.length)h+='<div class="acts"><button class="btn ghost" data-r="'+j+'">خواندن متن کامل و اعمال</button><button class="btn ghost" data-hm="amal">ادعیه‌ی امروز</button></div>';
- return{n,h}}
-function hmRemind(j){
- const t=todayJ(),it=[];
- try{(window.__tsPlans?window.__tsPlans():[]).slice(0,4).forEach(q=>it.push({ts:q.t,df:'plan',a:esc(q.p.title),b:'<bdi>'+fa(q.a[2])+' '+JM[q.a[1]-1]+'</bdi> · <bdi>'+fa(q.p.time)+'</bdi>'}))}catch(e){}
- let dy=[];try{dy=JSON.parse(localStorage.getItem('tsh_tools')||'{}').dy||[]}catch(e){}
- dy.forEach(e=>{for(let k=0;k<400;k++){const y=info(t+k),q=e.t==='h'?y.h:y.p;if(q.m===e.m&&q.d===e.d){if(k<=60)it.push({ts:wgMid(t+k),a:esc(e.n),b:k===0?'امروز':k===1?'فردا':'<bdi>'+fa(k)+'</bdi> روز دیگر'});break}}});
- it.sort((a,b)=>a.ts-b.ts);
- let nh=null;for(let k=1;k<150&&!nh;k++){const hh=holiday(info(t+k));if(hh)nh={n:hh,k}}
- let h='<div class="evl">';
- it.slice(0,5).forEach(r=>{const ic='<span class="n pe">'+(r.df?ICO.clock:'◆')+'</span>',tx='<span><b>'+r.a+'</b><br><small class="muted">'+r.b+'</small></span>';
-  h+=r.df?'<button class="ev" data-df="'+r.df+'" style="text-align:start">'+ic+tx+'</button>':'<div class="ev">'+ic+tx+'</div>'});
- if(nh)h+='<div class="ev"><span class="n rd">★</span><span>'+esc(nh.n)+'<br><small class="muted">تعطیلی بعدی · '+(nh.k===1?'فردا':'<bdi>'+fa(nh.k)+'</bdi> روز دیگر')+'</small></span></div>';
- if(!it.length&&!nh)h+='<div class="muted" style="padding:6px 0">یادآوری‌ای ثبت نشده است.</div>';
- h+='</div><div class="acts"><button class="btn ghost" data-df="addplan:'+j+'">افزودن یادآوری</button><button class="btn ghost" data-hm="next">مناسبت‌های پیش‌رو</button></div>';
- return{n:it.length,h}}
-function hmCard(key,title,r){const o=hcs()[key]!==0;
- return'<section class="hc'+(o?' on':'')+'"><button class="chd" data-hm="cc:'+key+'" aria-expanded="'+o+'"><span>'+title+'</span>'+(r.n?'<small class="cnt">'+fa(r.n)+'</small>':'')+'<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button><div class="cbd"'+(o?'':' hidden')+'>'+r.h+'</div></section>'}
-function drawHome(){
- const j=selJ,t=todayJ(),x=info(j),hol=holiday(x),L=jLen(x.p.y,x.p.m),C=2*Math.PI*46,off=C*(1-x.p.d/L),red=!!hol||x.w===6,dir=hmDir;hmDir=0;hmT=t;
- let h='<div class="hm"><div id="hmz" class="cmz'+(dir?(dir>0?' sn':' sp'):'')+'"><button class="hr" data-r="'+j+'" aria-label="متن کامل این روز"><svg viewBox="0 0 100 100"><circle class="tr" cx="50" cy="50" r="46"/><circle class="pg" cx="50" cy="50" r="46" stroke-dasharray="'+C.toFixed(2)+'" stroke-dashoffset="'+off.toFixed(2)+'"/></svg><span class="in"><span class="wd">'+WD[x.w]+(j===t?' · امروز':'')+'</span><span class="dn'+(red?' rd':'')+'">'+fa(x.p.d)+'</span><span class="mn">'+JM[x.p.m-1]+' '+fa(x.p.y)+'</span><span class="h2">'+fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+'</span><span class="g2">'+fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+'</span></span></button>'+
-  '<div class="hmc">'+(hol?'<span class="chip red">'+esc(hol)+' · تعطیل</span>':x.w===6?'<span class="chip red">تعطیل (جمعه)</span>':'')+(j!==t?'<button class="chip" data-hm="today">برگشت به امروز</button>':'')+'</div></div>'+
-  (j===t?wid():'')+hmCard('ev','مناسبت‌های روز',hmEvents(j))+hmCard('rm','یادآوری‌ها',hmRemind(j))+'</div>';
- main.innerHTML=h;main.querySelectorAll('.cd').forEach(e=>e.textContent=dur(+e.dataset.t-Date.now())+' دیگر')}
-function drawConv(){const x=info(selJ);
- main.innerHTML='<div class="card"><h3>تبدیل تاریخ</h3><div class="muted">هر یک از سه تاریخ را تغییر دهید؛ دو تاریخ دیگر خودکار محاسبه می‌شود.</div>'+convRow('p','شمسی',x.p)+convRow('h','قمری',x.h)+convRow('g','میلادی',x.g)+'<div id="cw" class="chip" style="margin-top:6px">'+WD[x.w]+'</div><div class="gtb"><button class="btn ghost" data-a="goj">نمایش در تقویم</button><button class="btn ghost" data-hm="showhome">نمایش در صفحه‌ی اصلی</button></div></div>'}
-/* ---- رویدادهای صفحه‌ی اصلی ---- */
-main.addEventListener('click',e=>{const b=e.target.closest('[data-hm]');if(!b)return;const v=b.dataset.hm;
- if(v.startsWith('cc:')){const k=v.slice(3),sec=b.closest('.hc'),bd=sec.querySelector('.cbd'),o=bd.hidden;bd.hidden=!o;sec.classList.toggle('on',o);b.setAttribute('aria-expanded',o);hcs()[k]=o?1:0;save()}
- else if(v==='today'){selJ=todayJ();hmDir=0;draw()}
- else if(v==='amal')openAmal(selJ);
- else if(v==='next'){tab='next';draw();main.scrollTop=0}
- else if(v==='showhome'){tab='home';draw();main.scrollTop=0}});
-(function(){let x0=0,y0=0,t0=0,z=null,lk=0;
- const rs=()=>{if(z){z.style.transform='';z.style.opacity=''}};
- main.addEventListener('touchstart',e=>{z=tab==='home'&&e.touches.length===1?e.target.closest('#hmz'):null;if(!z)return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;t0=Date.now();lk=0},{passive:true});
- main.addEventListener('touchmove',e=>{if(!z)return;const dx=e.touches[0].clientX-x0,dy=e.touches[0].clientY-y0;
-  if(!lk){if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.3)lk=1;else if(Math.abs(dy)>10)lk=2}
-  if(lk===1){z.style.transition='none';z.style.transform='translateX('+dx*.35+'px)';z.style.opacity=String(1-Math.min(.5,Math.abs(dx)/400))}},{passive:true});
- main.addEventListener('touchend',e=>{if(!z)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0,v=Math.abs(dx)/Math.max(1,Date.now()-t0);
-  z.style.transition='';rs();const ok=lk===1&&Math.abs(dx)>Math.abs(dy)*1.3&&(Math.abs(dx)>60||(v>.5&&Math.abs(dx)>30));z=null;
-  if(ok){hmDir=dx>0?1:-1;selJ+=hmDir;draw()}},{passive:true});
- main.addEventListener('touchcancel',()=>{if(z){z.style.transition='';rs();z=null}},{passive:true})})();
-/* تغییر روز (نیمه‌شب) وقتی صفحه‌ی اصلی باز است */
-{const chk=()=>{if(document.hidden||tab!=='home')return;const t=todayJ();if(t!==hmT){if(selJ===hmT)selJ=t;draw()}};document.addEventListener('visibilitychange',chk);setInterval(chk,60000)}
-/* ---- منوی کشویی ---- */
-const drwEl=document.createElement('div');drwEl.id='drw';drwEl.innerHTML='<div class="bd" data-dr="close"></div><div class="pn" id="drwP" role="dialog" aria-label="منو"></div>';document.getElementById('app').appendChild(drwEl);
-function drwOpen(){const x=info(todayJ()),th=ST.theme||'auto',
-  I=(id,ic,l,s)=>'<button class="di" data-dr="'+id+'">'+ic+'<span>'+l+(s?'<small>'+s+'</small>':'')+'</span></button>';
- $('#drwP').innerHTML='<div class="dtop"><b>تقویم شیعه</b><span>'+WD[x.w]+' '+fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y)+'</span><small>'+fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+' قمری</small><small>'+fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+' میلادی</small></div>'+
-  '<div class="dg">'+I('amal',ICO.book,'ادعیه و اعمال روز','زیارت‌ها و دعاهای مناسب این روز')+I('conv',ICO.conv,'تبدیل تاریخ','شمسی، قمری، میلادی')+I('goto',ICO.go,'برو به تاریخ','پرش به هر روز دلخواه')+I('theme',ICO.pal,'تغییر پوسته','رنگ‌بندی و حالت نمایش')+'</div>'+
-  '<div class="dth"><span>حالت</span><span class="seg">'+[['auto','خودکار'],['light','روشن'],['dark','تیره']].map(a=>'<button data-dr="th:'+a[0]+'" aria-pressed="'+(th===a[0])+'">'+a[1]+'</button>').join('')+'</span></div>'+
-  '<div class="dg">'+I('next',ICO.list,'مناسبت‌های پیش‌رو','۶۰ روز آینده')+I('find',ICO.find,'جستجو در کتاب‌ها')+I('addbook',ICO.plus,'افزودن کتاب','افزودن به کتابخانه')+I('diary',ICO.diary,'دفتر من','برنامه، ساعت کاری و مالی')+I('qibla',ICO.qib,'قبله‌نما')+I('tasbih',ICO.tas,'تسبیح و ذکرشمار')+'</div>'+
-  '<div class="dg">'+I('widgets',ICO.wg,'ابزارک‌های صفحه‌ی اصلی','افزودن به صفحه‌ی اصلی گوشی')+I('settings',ICO.gear,'تنظیمات')+'</div>';
- drwEl.classList.add('on')}
-const drwClose=()=>drwEl.classList.remove('on');
-$('#bMenu').onclick=drwOpen;
-drwEl.addEventListener('click',e=>{const b=e.target.closest('[data-dr]');if(!b)return;const v=b.dataset.dr;
- if(v.startsWith('th:')){ST.theme=v.slice(3);applyUI();save();drwOpen();return}
- drwClose();
- if(v==='amal')openAmal(selJ);
- else if(v==='conv'){tab='conv';draw();main.scrollTop=0}
- else if(v==='goto')openGoto();
- else if(v==='theme')$('#bPal').onclick();
- else if(v==='next'){tab='next';draw();main.scrollTop=0}
- else if(v==='find'){tab='find';draw();main.scrollTop=0}
- else if(v==='addbook'){tab='book';draw();main.scrollTop=0;const bt=main.querySelector('[data-ba="open"]');if(bt)bt.click()}
- else if(v==='diary'||v==='qibla'||v==='tasbih'){try{window.__openTool(v)}catch(x){}}
- else if(v==='widgets'){openSheet('ابزارک‌های صفحه‌ی اصلی','<div class="pz">'+wgCard()+'</div>','');wgFill()}
- else if(v==='settings')$('#bGear').onclick()});
-/* ---- ادعیه و اعمال روز (بر پایه‌ی ادعیه‌ی موجود در برنامه و متن کتاب) ---- */
-function amalRows(j){const x=info(j),n=info(j+1),W=x.w,day=[],night=[],h=x.h;
- if(h.m===1&&h.d===10)day.push(['ash','روز عاشورا']);
- if(W===6)day.push(['nod','صبح جمعه']);
- if((h.m===10&&h.d===1)||(h.m===12&&(h.d===10||h.d===18)))day.push(['nod','عید؛ از اعیاد چهارگانه']);
- if(h.m===8&&h.d===15)day.push(['kum','نیمه‌ی شعبان']);
- if(W===5)night.push(['kum','شب جمعه']);
- if(W===3)night.push(['tav','شب چهارشنبه']);
- if(n.h.m===8&&n.h.d===15)night.push(['kum','شب نیمه‌ی شعبان']);
- return{day,night}}
-function openAmal(j){const x=info(j),r=amalRows(j),nm={ash:'زیارت عاشورا',tav:'دعای توسل',kum:'دعای کمیل',nod:'دعای ندبه',far:'دعای فرج',sal:'دعای سلامتی امام زمان (عج)'},
-  row=(id,w)=>'<button class="set" data-am="d:'+id+'"><span>'+nm[id]+'<br><small class="muted">'+w+'</small></span><b>‹</b></button>',
-  g=grp(x.h.m,x.h.d),ex=extras(x);
- let h='<div class="am"><div class="cap"><bdi>'+WD[x.w]+' '+fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y)+'</bdi> · <bdi>'+fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+'</bdi></div>';
- h+='<h3>امروز</h3>'+(r.day.length?r.day.map(a=>row(a[0],a[1])).join(''):'<div class="muted">برای این روز دعای مخصوصی در فهرست برنامه نیست.</div>');
- if(r.night.length)h+='<h3>امشب</h3>'+r.night.map(a=>row(a[0],a[1])).join('');
- if(g||ex.length)h+='<h3>اعمال و مناسبت‌های این روز در کتاب</h3><button class="set" data-am="day:'+j+'"><span>'+(titlesOf(g).map(t=>R(t[1]).replace(/<[^>]+>/g,'')).concat(ex).slice(0,2).map(esc).join(' ، ')||'متن کامل روز')+'</span><b>‹</b></button>';
- h+='<h3>همیشه</h3>'+row('ash','همه‌ی روزها')+row('far','تعجیل در ظهور')+row('sal','اللهم کن لولیک');
- h+='<h3>ذکر و ختم</h3><button class="set" data-am="t:tasbih"><span>تسبیح و ذکرشمار</span><b>‹</b></button><button class="set" data-am="t:khatm"><span>ختم قرآن</span><b>‹</b></button></div>';
- openSheet('ادعیه و اعمال روز','<div class="pz">'+h+'</div>','')}
-$('#sheet').addEventListener('click',e=>{const b=e.target.closest('[data-am]');if(!b)return;const v=b.dataset.am.split(':');
- if(v[0]==='d'){try{window.__openTool('doa');setTimeout(()=>{const q=document.querySelector('#tlBody [data-k="o:'+v[1]+'"]');if(q)q.click()},30)}catch(x){}}
- else if(v[0]==='t'){try{window.__openTool(v[1])}catch(x){}}
- else if(v[0]==='day')openDay(+v[1])});
-/* ---- برو به تاریخ ---- */
-let gt=null;
-function gtJ(){const{k,y,m,d}=gt;if(!(y>0&&m>=1&&m<=12&&d>=1))return null;const len=k==='p'?jLen(y,m):k==='h'?hLen(y,m):gLen(y,m);if(d>len)return null;return k==='p'?j2d(y,m,d):k==='h'?h2j(y,m,d):g2d(y,m,d)}
-function gtRender(msgT){const{k,y,m,d}=gt,n=NM[k];
- $('#gtc').innerHTML='<h3 style="margin:0 0 6px">برو به تاریخ</h3><span class="seg" style="margin:6px 0">'+[['p','شمسی'],['h','قمری'],['g','میلادی']].map(a=>'<button data-gt="k:'+a[0]+'" aria-pressed="'+(k===a[0])+'">'+a[1]+'</button>').join('')+'</span>'+
-  '<div class="gtf"><input class="fld" id="gtd" type="number" inputmode="numeric" value="'+d+'" aria-label="روز"><select class="fld" id="gtm" aria-label="ماه">'+n.map((a,i)=>'<option value="'+(i+1)+'"'+(m===i+1?' selected':'')+'>'+a+'</option>').join('')+'</select><input class="fld" id="gty" type="number" inputmode="numeric" value="'+y+'" aria-label="سال"></div>'+
-  '<div class="muted" id="gtn">'+(msgT||'')+'</div><div class="gtb"><button class="btn" data-gt="cal">نمایش در تقویم</button><button class="btn ghost" data-gt="home">نمایش در صفحه‌ی اصلی</button><button class="btn ghost" data-gt="today">امروز</button><button class="btn ghost" data-gt="x">بستن</button></div>'}
-function gtRead(){gt.d=+$('#gtd').value;gt.m=+$('#gtm').value;gt.y=+$('#gty').value}
-function openGoto(){let o=$('#gto');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="bfo" id="gto"><div class="bfc" id="gtc"></div></div>');o=$('#gto');
-  o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('on');return}const b=e.target.closest('[data-gt]');if(!b)return;const v=b.dataset.gt;
-   if(v==='x'){o.classList.remove('on');return}
-   if(v==='today'){selJ=todayJ();o.classList.remove('on');tab='home';draw();main.scrollTop=0;return}
-   gtRead();
-   if(v.startsWith('k:')){const j=gtJ(),nk=v.slice(2),x=info(j==null?selJ:j)[nk];gt={k:nk,d:x.d,m:x.m,y:x.y};gtRender();return}
-   const j=gtJ();if(j==null){$('#gtn').textContent='تاریخ نامعتبر است.';return}
-   selJ=j;o.classList.remove('on');
-   if(v==='cal'){mode=gt.k;setView(selJ);tab='cal'}else tab='home';
-   draw();main.scrollTop=0})}
- const x=info(selJ);gt={k:'p',d:x.p.d,m:x.p.m,y:x.p.y};gtRender();o.classList.add('on')}
-/* ===== اجرا در پس‌زمینه: مجوزهای اعلان، باتری و زنگ دقیق (مرحله‌ی ۳) ===== */
-ICO.plus='<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
-const NY=NAT?(function(){try{if(typeof Capacitor.registerPlugin==='function')return Capacitor.registerPlugin('TshSys');if(typeof Capacitor.nativePromise==='function'){const c=m=>o=>Capacitor.nativePromise('TshSys',m,o||{});return{status:c('status'),battery:c('battery'),exact:c('exact'),notif:c('notif'),appSettings:c('appSettings')}}return null}catch(e){return null}})():null;
-function bgCard(){
- if(!(NAT&&NY))return'<div class="card"><h3>اجرا در پس‌زمینه</h3><div class="muted">در اپ اندروید (APK) فعال می‌شود تا اذان، اعلان‌ها و ابزارک‌ها وقتی برنامه بسته است هم سر وقت کار کنند.</div></div>';
- return'<div class="card"><h3>اجرا در پس‌زمینه</h3><div class="muted">برای اینکه اذان، اعلان‌ها و ابزارک‌ها وقتی برنامه بسته است هم سر وقت کار کنند، این موارد را بررسی کنید.</div><div id="bgl"></div></div>'}
-async function bgFill(){const e=$('#bgl');if(!e||!NY)return;
- try{const r=await NY.status(),
-  row=(t,s,ok,k)=>'<div class="set"><span>'+t+'<br><small class="muted">'+s+'</small></span>'+(ok?'<span class="chip">فعال</span>':'<button class="btn ghost" data-bg="'+k+'">فعال‌سازی</button>')+'</div>';
-  let h=row('اعلان‌ها','اذان، یادآوری و اعلان همیشگی',r.notif,'notif')+row('بدون محدودیت باتری','تا اندروید برنامه را در پس‌زمینه نبندد',r.battery,'battery');
-  if(r.sdk>=31)h+=row('زنگ دقیق','اذان و یادآوری سر وقتِ دقیق',r.exact,'exact');
-  const mk=/xiaomi|redmi|poco|huawei|honor|oppo|realme|oneplus|vivo|samsung|asus|meizu|tecno|infinix/i.test(r.maker||'');
-  h+='<div class="set"><span>تنظیمات برنامه<br><small class="muted">'+(mk?'در گوشی '+esc(r.maker)+' «شروع خودکار» و «بدون محدودیت در پس‌زمینه» را هم روشن کنید':'مجوزها و مصرف باتری')+'</small></span><button class="btn ghost" data-bg="appSettings">باز کردن</button></div>';
-  e.innerHTML=h}catch(x){e.innerHTML='<div class="muted">وضعیت خوانده نشد.</div>'}}
-{const _e3=extraSet;extraSet=function(){return _e3()+bgCard()};const _d3=drawSet;drawSet=function(){_d3();bgFill()}}
-$('#sheet').addEventListener('click',async e=>{const b=e.target.closest('[data-bg]');if(!b||!NY)return;try{await NY[b.dataset.bg]()}catch(x){}setTimeout(bgFill,900)});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)bgFill()});
-/* ===== ابزارک‌های جدید: روزی یک صفحه، روز زندگی، مناسبت بعدی + کارت تنظیمات (مرحله‌ی ۵) ===== */
-const TRN={fa_makarem:'مکارم شیرازی',fa_ansarian:'انصاریان',fa_fooladvand:'فولادوند',fa_ghomshei:'قمشه‌ای',fa_qaraati:'قرائتی'};
-let _qd=null,_qpg=null;const _qt={};
-function wgQd(){if(_qd)return _qd;_qd=JSON.parse(document.getElementById('QR-ar').textContent);_qpg=[];_qd.a.forEach((v,i)=>{const p=v[3];if(!_qpg[p])_qpg[p]=[i,i];_qpg[p][1]=i});return _qd}
-function wgTr(k){if(!_qt[k]){try{_qt[k]=JSON.parse(document.getElementById('QR-'+k).textContent)}catch(e){_qt[k]=[]}}return _qt[k]}
-const wgPlain=h=>String(h).replace(/<(script|style)[\s\S]*?<\/\1>/gi,' ').replace(/<\/(p|div|h[1-6]|li)>|<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/[\ue000-\ue004]/g,' ').replace(/\u27e6\d+\u27e7/g,'').replace(/[ \t\u00a0]+/g,' ').replace(/\n\s*/g,'\n').trim();
-const wgCut=(t,n)=>{if(t.length<=n)return t;let c=t.slice(0,n),i=c.lastIndexOf(' ');return(i>n*.6?c.slice(0,i):c)+'…'};
-function wgExtra(d){
- const j0=todayJ(),mod=(a,n)=>((a%n)+n)%n,P=ST.pg||(ST.pg={sj:j0,q:1,b:'',u:'',tr:'fa_makarem'});if(!P.sj)P.sj=j0;
- const N=d.days.length,jOf=i=>j0-1+i,Q=[],B=[],D=[];
- let q=null;try{q=wgQd()}catch(e){}
- const bk=LIB.find(x=>x.id===P.b)||LIB[LIB.length-1];let bp=[];try{bp=gbOf(bk.id).pages||[]}catch(e){}
- const du=(window.__DU||[]).find(x=>x.id===P.u)||(window.__DU||[])[0],dch=[];
- if(du){const x=String(du.x||'').replace(/\s+/g,' ').trim();for(let i=0;i<x.length&&dch.length<120;){let e=Math.min(x.length,i+420);if(e<x.length){const sp=x.lastIndexOf(' ',e);if(sp>i+200)e=sp}dch.push(x.slice(i,e).trim());i=e}}
- for(let i=0;i<N;i++){const k=jOf(i)-P.sj;
-  if(q){const pn=mod((P.q||1)-1+k,604)+1,r=_qpg[pn];if(r){let a='',c=0;const tr=wgTr(P.tr||'fa_makarem'),fa3=[];
-    for(let x=r[0];x<=r[1];x++){const v=q.a[x],seg=v[4]+' \ufd3f'+fa(v[1])+'\ufd3e ';if(a.length+seg.length>900&&c>0){a+='…';break}a+=seg;c++;if(fa3.length<3&&tr[x])fa3.push(tr[x])}
-    const v0=q.a[r[0]];Q.push({t:'قرآن · صفحه‌ی '+fa(pn)+' از '+fa(604)+' · جزء '+fa(v0[2]),a:a.trim(),f:wgCut(fa3.join(' '),420),i:'از سوره‌ی '+q.s[v0[0]-1][0]+' آیه‌ی '+fa(v0[1])})}else Q.push(null)}else Q.push(null);
-  if(bp.length){const idx=mod(k,bp.length);B.push({t:bk.t+' · صفحه‌ی '+fa(idx+1)+' از '+fa(bp.length),a:wgCut(wgPlain(bp[idx]),700),f:'',i:''})}else B.push(null);
-  if(dch.length){const idx=mod(k,dch.length);D.push({t:du.t+' · بخش '+fa(idx+1)+' از '+fa(dch.length),a:dch[idx],f:'',i:du.s||''})}else D.push(null)}
- d.pg={q:Q,b:B,d:D};
- // روز زندگی
- if(ST.bd&&ST.bd.y){const bd=ST.bd,jb=j2d(bd.y,bd.m,bd.d);
-  d.days.forEach((x,i)=>{const j=jOf(i);if(j<jb)return;const p=info(j).p;let y=p.y-bd.y,m=p.m-bd.m,dd=p.d-bd.d;
-   if(dd<0){m--;dd+=jLen(p.m===1?p.y-1:p.y,p.m===1?12:p.m-1)}if(m<0){y--;m+=12}
-   const by=p.y+((p.m>bd.m||(p.m===bd.m&&p.d>bd.d))?1:0),nbj=j2d(by,bd.m,Math.min(bd.d,jLen(by,bd.m))),lj=j2d(by-1,bd.m,Math.min(bd.d,jLen(by-1,bd.m)));
-   x.ld=j-jb;x.ag=fa(y)+' سال و '+fa(m)+' ماه و '+fa(dd)+' روز';x.nb=nbj-j;x.ap=Math.max(0,Math.min(1000,Math.round(1000*(j-lj)/Math.max(1,nbj-lj))))})}
- // مناسبت‌ها و تعطیلی‌های پیش‌رو
- const up=[];let ne=0,nh=0;
- for(let k=0;k<400&&(ne<6||nh<3);k++){const j=j0+k,x=info(j),hol=holiday(x),g=grp(x.h.m,x.h.d),ex=extras(x);if(!(hol||g||ex.length))continue;
-  const ts=titlesOf(g),t=hol||(ts[0]?px(ts[0][1]).replace(/\u27e6\d+\u27e7/g,'').replace(/\s+/g,' ').trim():ex[0]);
-  if(!hol&&ne>=6)continue;if(hol)nh++;else ne++;
-  up.push({ed:wgMid(j),t,h:hol?1:0,p:fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y)})}
- d.up=up}
-{const _wp=wgPayload;wgPayload=function(){const d=_wp();try{wgExtra(d)}catch(e){}return d}}
-/* کارت تنظیم: تاریخ تولد و منبع «روزی یک صفحه» */
-function wgSetCard(){const P=ST.pg||{},bd=ST.bd||{},opt=(a,v)=>a.map(x=>'<option value="'+x[0]+'"'+(x[0]===v?' selected':'')+'>'+esc(x[1])+'</option>').join('');
- return'<div class="card"><h3>روز زندگی و روزی یک صفحه</h3><div class="muted">اطلاعات این بخش فقط برای ابزارک‌هاست و روی همین دستگاه می‌ماند.</div>'+
- '<b style="display:block;margin-top:10px">تاریخ تولد (شمسی)</b><div class="gtf"><input class="fld" id="wcD" type="number" inputmode="numeric" placeholder="روز" value="'+(bd.d||'')+'"><select class="fld" id="wcM"><option value="">ماه</option>'+JM.map((m,i)=>'<option value="'+(i+1)+'"'+(bd.m===i+1?' selected':'')+'>'+m+'</option>').join('')+'</select><input class="fld" id="wcY" type="number" inputmode="numeric" placeholder="سال" value="'+(bd.y||'')+'"></div>'+
- '<div class="gtb"><button class="btn ghost" data-wc="bd">ذخیره‌ی تاریخ تولد</button>'+(bd.y?'<button class="btn ghost" data-wc="bdx">حذف</button>':'')+'</div>'+
- '<b style="display:block;margin-top:14px">روزی یک صفحه</b><div class="muted">قرآن از صفحه‌ی</div><input class="fld" id="wcQ" type="number" inputmode="numeric" min="1" max="604" value="'+(P.q||1)+'"><div class="muted" style="margin-top:6px">ترجمه</div><select class="fld" id="wcT">'+opt(Object.entries(TRN),P.tr||'fa_makarem')+'</select>'+
- '<div class="muted" style="margin-top:6px">کتاب</div><select class="fld" id="wcB">'+opt(LIB.map(x=>[x.id,x.t]),P.b||LIB[LIB.length-1].id)+'</select><div class="muted" style="margin-top:6px">دعا</div><select class="fld" id="wcU">'+opt((window.__DU||[]).map(x=>[x.id,x.t]),P.u||((window.__DU||[])[0]||{}).id)+'</select>'+
- '<div class="gtb"><button class="btn ghost" data-wc="pg">ذخیره‌ی تنظیم صفحه‌ی روزانه</button></div><div class="muted" id="wcm" style="margin-top:6px"></div></div>'}
-{const _e4=extraSet;extraSet=function(){return _e4()+wgSetCard()}}
-$('#sheet').addEventListener('click',e=>{const b=e.target.closest('[data-wc]');if(!b)return;const v=b.dataset.wc,m=$('#wcm'),say=t=>{if(m)m.textContent=t};
- if(v==='bd'){const y=+$('#wcY').value,mo=+$('#wcM').value,d=+$('#wcD').value;if(!(y>1200&&y<=info(todayJ()).p.y&&mo>=1&&mo<=12&&d>=1&&d<=jLen(y,mo)))return say('تاریخ تولد معتبر نیست.');ST.bd={y,m:mo,d};save();pushWidget();say('تاریخ تولد ذخیره شد و ابزارک به‌روز می‌شود.')}
- else if(v==='bdx'){ST.bd=null;save();pushWidget();$('#wcD').value='';$('#wcY').value='';$('#wcM').value='';say('تاریخ تولد حذف شد.')}
- else if(v==='pg'){const q=Math.max(1,Math.min(604,+$('#wcQ').value||1));ST.pg={sj:todayJ(),q,b:$('#wcB').value,u:$('#wcU').value,tr:$('#wcT').value};save();pushWidget();say('ذخیره شد؛ صفحه‌ی امروز: قرآن صفحه‌ی '+fa(q)+'.')}});
 [applyTheme,load,function(){setView(selJ)},draw,tick,function(){setInterval(tick,1000)},pushS].forEach(function(f){try{f()}catch(e){__show('INIT: '+e.message+(e.stack?'\n'+String(e.stack).split('\n').slice(1,3).join('\n'):''))}});
 </script>
 <script>
@@ -1485,7 +1347,7 @@ async function dl(blob,name){const C=window.Capacitor,P=(C&&C.Plugins)||{};
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(a.href)},60000)}
 function view(){VIEW=true;const rows=LIB.slice(1).map(L=>'<div class="bl"><b>'+esc(L.t)+'</b><button data-ba="del" data-id="'+L.id+'">حذف</button></div>').join('');
  main.innerHTML='<div class="ba"><div class="bar"><button class="ib" data-ba="back" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>افزودن کتاب</b></div><span style="width:38px"></span></div>'+
- '<div class="card"><b>دانلود و نصب خودکار</b><div class="muted">کتاب‌های بیشتر از اینترنت دانلود و روی همین دستگاه نصب می‌شود (حجم زیاد؛ بهتر است با وای‌فای).</div><input type="text" id="baUrl" dir="ltr" placeholder="https://…" value="'+esc(savedUrl())+'"><button class="btn" data-ba="auto">دانلود و نصب خودکار کتاب‌ها</button></div>'+
+ '<div class="card"><b>دانلود و نصب خودکار</b><div class="muted">کتاب‌های بیشتر از اینترنت دانلود و روی همین دستگاه نصب می‌شود (حجم زیاد؛ بهتر است با وای‌فای).</div><button class="btn" data-ba="auto">دانلود و نصب خودکار کتاب‌ها</button></div>'+
  '<div class="card"><b>فایل کتاب‌ها (html / docx / txt / فایل کتاب‌ها json)</b><input type="file" id="baF" accept=".html,.htm,.docx,.txt,.json" multiple style="display:block;margin:8px 0"><label style="display:block"><input type="checkbox" id="baOne" checked> اگر چند فایل انتخاب شود، همه یک کتاب‌اند (جلدها خودکار)</label><div class="muted">فرمت قدیمی doc را در Word با «ذخیره به‌عنوان docx» تبدیل کنید.</div><div id="baMsg" class="muted"></div></div>'+
  '<div id="baBk"></div>'+
  '<div class="card"><b>خروجی</b><div class="muted">کتاب‌های افزوده‌شده روی همین دستگاه ذخیره می‌شوند و همین‌جا قابل مطالعه‌اند. برای اینکه «جزو کد برنامه» شوند و با ارسال برنامه به دیگران بروند، برنامه‌ی کامل را بسازید.</div><button class="btn" data-ba="app">ساخت برنامه‌ی کامل (با همه‌ی کتاب‌ها)</button><button class="btn ghost" data-ba="bun">دانلود فایل کتاب‌ها (json)</button></div>'+
@@ -1524,9 +1386,6 @@ async function getSource(){
  msg('خواندن خودکار فایل برنامه ممکن نشد. لطفاً همین فایل برنامه را انتخاب کنید.');
  return new Promise((res,rej)=>{const i=document.createElement('input');i.type='file';i.accept='.html,.htm';i.onchange=()=>i.files[0]?i.files[0].text().then(res,rej):rej(Error('فایلی انتخاب نشد'));i.click()})}
 const BOOKS_URL='https://cdn.imgurl.ir/uploads/n228685_.json';let AUTOBUSY=false;
-function savedUrl(){let u='';try{u=localStorage.getItem('baUrl')||''}catch(e){}return u||BOOKS_URL}
-function curUrl(){const i=document.getElementById('baUrl');let u=((i&&i.value)||'').trim();if(!u)u=savedUrl();if(!/^https:\/\//i.test(u))throw Error('لینک باید با https:// شروع شود');try{localStorage.setItem('baUrl',u)}catch(e){}return u}
-function netHint(m){return /CertPath|Trust anchor|SSL|certificate|handshake/i.test(m)?'\nگواهی امنیتی سرور این لینک روی گوشی معتبر نیست. فایل را جای دیگری با HTTPS معتبر (مثلاً GitHub Release) بگذارید و لینک را در کادر بالا وارد کنید؛ یا فایل json را دانلود کنید و با «انتخاب فایل» اضافه کنید.':''}
 function toast(t,er){let d=document.getElementById('baToast');if(!d){d=document.createElement('div');d.id='baToast';d.style.cssText='position:fixed;left:12px;right:12px;bottom:76px;z-index:99999;padding:10px 14px;border-radius:12px;background:#222;color:#fff;text-align:center;font-size:14px;box-shadow:0 2px 12px #0006';document.body.appendChild(d)}
  d.textContent=t;d.style.background=er?'#a33':'#222';d.style.display='block';clearTimeout(d._t);d._t=setTimeout(()=>{d.style.display='none'},er?9000:4500)}
 function note(t,er,keep){msg(t,er);if(!keep||er)toast(t,er);else{toast(t)}}
@@ -1539,43 +1398,20 @@ async function fetchBundle(url){const C=window.Capacitor,P=(C&&C.Plugins)||{};
   throw e}}
 async function autoInstall(){if(AUTOBUSY)return;AUTOBUSY=true;
  try{note('در حال دانلود کتاب‌ها… (ممکن است چند دقیقه طول بکشد)',0,1);
-  const j=await fetchBundle(curUrl());
+  const j=await fetchBundle(BOOKS_URL);
   if(!j||j.format!=='books-bundle'||!Array.isArray(j.books))throw Error('فایل دانلودشده «فایل کتاب‌ها»ی این برنامه نیست');
   const titles=new Set(LIB.map(x=>x.t.trim())),sel=j.books.filter(b=>!titles.has(String(b.t).trim()));
   if(!sel.length){note('همه‌ی کتاب‌ها از قبل نصب‌اند.');return}
   let bad=0,n=0;for(const b of sel){note('در حال نصب '+(++n)+' از '+sel.length+': '+b.t,0,1);bad+=await saveBooks([{t:b.t,s:b.s,data:b.data}]);await new Promise(r=>setTimeout(r,30))}
   sidx=null;if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();
   note('✓ '+sel.length+' کتاب نصب شد'+(bad?' (ذخیره‌ی دائمی '+bad+' کتاب ممکن نشد)':'.'))}
- catch(x){const m=String(x&&x.message||x);note('دانلود/نصب انجام نشد: '+m+netHint(m),1)}
+ catch(x){note('دانلود/نصب انجام نشد: '+(x&&x.message||x),1)}
  finally{AUTOBUSY=false}}
 function autoOffer(){let done=false;try{done=localStorage.getItem('baAuto')==='1'}catch(e){}
  if(done||LIB.some(x=>x.u)||navigator.onLine===false)return;
  setTimeout(()=>{let ok=false;try{ok=confirm('کتاب‌های بیشتر دانلود و نصب شوند؟\n(حجم زیاد است؛ بهتر است با وای‌فای باشید. بعداً هم از «افزودن کتاب» ممکن است.)')}catch(e){}
   try{localStorage.setItem('baAuto','1')}catch(e){}
   if(ok)autoInstall()},4000)}
-const REL_REPO='cfg38859-cell/Taghvim';let SYNC_LAST=0;
-async function relBlob(a){const C=window.Capacitor,P=(C&&C.Plugins)||{};
- try{const r=await fetch(a.url,{headers:{Accept:'application/octet-stream'}});if(!r.ok)throw Error('HTTP '+r.status);return await r.blob()}
- catch(e){if(P.Filesystem&&C&&C.convertFileSrc){const d=await P.Filesystem.downloadFile({url:a.browser_download_url,path:'dl/'+a.id+'_'+a.name.replace(/[^\w.\-]/g,'_'),directory:'CACHE',recursive:true});
-   const r2=await fetch(C.convertFileSrc(d.path||d.uri));if(!r2.ok)throw Error('HTTP '+r2.status);return await r2.blob()}throw e}}
-function relCleanup(){try{const P=(window.Capacitor&&window.Capacitor.Plugins)||{};if(P.Filesystem)P.Filesystem.rmdir({path:'dl',directory:'CACHE',recursive:true}).catch(()=>{})}catch(e){}}
-async function autoSync(){if(AUTOBUSY||navigator.onLine===false)return;AUTOBUSY=true;SYNC_LAST=Date.now();let added=0;
- try{let done={};try{done=JSON.parse(localStorage.getItem('baAssets')||'{}')}catch(e){}
-  const r=await fetch('https://api.github.com/repos/'+REL_REPO+'/releases?per_page=30',{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw Error('HTTP '+r.status);
-  const list=[];(await r.json()).forEach(rl=>(rl.assets||[]).forEach(a=>{if(/\.(json|html?|docx|txt)$/i.test(a.name))list.push(a)}));
-  for(const a of list){const key=a.id+':'+a.size;if(done[key])continue;
-   try{const blob=await relBlob(a);let ok=true;
-    if(/\.json$/i.test(a.name)){const j=JSON.parse(await blob.text());
-     if(j&&j.format==='books-bundle'&&Array.isArray(j.books)){const titles=new Set(LIB.map(x=>x.t.trim()));
-      for(const b of j.books){const t=String(b.t).trim();if(titles.has(t))continue;if(await saveBooks([{t:b.t,s:b.s,data:b.data}]))ok=false;else{added++;titles.add(t)}await new Promise(r=>setTimeout(r,30))}}}
-    else{const title=a.name.replace(/\.[^.]+$/,'');
-     if(!LIB.some(x=>x.t.trim()===title)){const raw=await parse(new File([blob],a.name)),b={title,sub:'',id:'x',info:'',parts:[{name:a.name,raw,vol:1}],fn:'auto',lang:'both',size:2500};build(b);const pg=paginate(b);
-      if(await saveBooks([{t:title,s:'',data:{title,toc:pg.T,pages:pg.P}}]))ok=false;else added++}}
-    if(ok){done[key]=1;try{localStorage.setItem('baAssets',JSON.stringify(done))}catch(e){}}
-   }catch(e){}}
- }catch(e){}
- finally{AUTOBUSY=false;relCleanup();if(added){sidx=null;try{pushWidget()}catch(e){}if(tab==='book'&&!bookSel&&!VIEW)drawBook()}}}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-SYNC_LAST>3600000)autoSync()});
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-ba]');if(!t)return;const a=t.dataset.ba;
  try{
   if(a==='open')view();
@@ -1596,7 +1432,7 @@ document.addEventListener('change',e=>{if(!VIEW)return;const t=e.target;
  renderBk()});
 document.getElementById('tabs').addEventListener('click',()=>{VIEW=false});
 window.BA={buildAppText,init};
-init().then(autoSync,autoSync);
+init().then(autoOffer,autoOffer);
 })();
 
 </script>
