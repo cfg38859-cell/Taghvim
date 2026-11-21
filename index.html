@@ -239,7 +239,6 @@ button,select,input,[data-t],.cell{touch-action:manipulation}nav.tabs button{min
 <button data-t="next"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>پیش‌رو</button>
 <button data-t="book"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7"/></svg>کتاب</button>
 <button data-t="find"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>جستجو</button>
-<button data-t="tool"><svg viewBox="0 0 24 24"><path d="M7 4v16M7 4 4 7M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3"/></svg>ابزار</button>
 </nav>
 <section class="sheet" id="sheet" aria-modal="true"><header><button class="ib" id="sBack" aria-label="بستن"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><h2 id="sTitle"></h2><button class="ib" id="sFav" aria-label="نشان" hidden><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1L3.2 9.4l6.1-.8z"/></svg></button></header><div class="body bk" id="sBody"></div><div class="fx" id="sFx" hidden></div></section>
 <div id="pop" role="dialog"></div>
@@ -652,7 +651,7 @@ const NAT=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePla
 const px=s=>s.replace(/[\ue000-\ue004]/g,c=>' '+SAL[c.charCodeAt(0)-0xe000]);
 const curCol=()=>getComputedStyle(document.documentElement).getPropertyValue('--em').trim()||'#0E6B57';
 function nData(j){const x=info(j),T=pt(j),n=ST.ns||'a',hol=holiday(x),ts=titlesOf(grp(x.h.m,x.h.d));
- let b=fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+' قمری  ✦  '+fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+' میلادی';
+ let b=fa(x.h.d)+' '+HM[x.h.m-1]+' '+fa(x.h.y)+' قمری · '+fa(x.g.d)+' '+GM[x.g.m-1]+' '+fa(x.g.y)+' میلادی';
  if(n==='b'){const e=hol||(ts[0]&&px(ts[0][1]))||extras(x)[0];if(e)b+='\n'+e}
  if(n==='c')b+='\nصبح '+hm(T[0])+' · ظهر '+hm(T[2])+' · مغرب '+hm(T[4]);
  return{t:fa(x.p.d)+' '+JM[x.p.m-1]+' '+fa(x.p.y)+' شمسی · '+WD[x.w],b}}
@@ -660,22 +659,44 @@ const rr=(g,x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);
 function badge(d,kind,z){const c=document.createElement('canvas');c.width=c.height=z;const g=c.getContext('2d'),sp=ST.nb||'p',R=z/2,cs=getComputedStyle(document.documentElement),col=curCol(),on=cs.getPropertyValue('--on').trim()||'#fff',L=kind==='L';
  const shape=(i)=>{if(sp==='c'){g.beginPath();g.arc(R,R,R-i,0,7);g.closePath()}else rr(g,i,i,z-2*i,z-2*i,sp==='p'?z*.1:z*.3)};
  g.fillStyle=L?col:'#fff';shape(z*.02);g.fill();
- if(L&&sp==='p'){g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=z*.03;shape(z*.07);g.stroke()}
- if(L){g.fillStyle='rgba(255,255,255,.8)';[[.5,.15],[.5,.85],[.15,.5],[.85,.5]].forEach(function(p){const X=z*p[0],Y=z*p[1],d=z*.045;g.beginPath();g.moveTo(X,Y-d);g.lineTo(X+d,Y);g.lineTo(X,Y+d);g.lineTo(X-d,Y);g.closePath();g.fill()})}
- g.font='800 '+z*.56+'px Vazirmatn,"Noto Sans Arabic",sans-serif';g.textAlign='center';g.textBaseline='middle';
+  g.font='700 '+z*.6+'px Onvan,Vazirmatn,sans-serif';g.textAlign='center';g.textBaseline='middle';
  if(L)g.fillStyle=on==='#06130F'?'#06130F':'#fff';else g.globalCompositeOperation='destination-out';
  g.fillText(fa(d),R,R*1.06);return c.toDataURL('image/png').split(',')[1]}
-let pq,pre=0;const pushS=()=>{clearTimeout(pq);pq=setTimeout(pushN,500)};
+let pq,pre=0;const pushS=()=>{clearTimeout(pq);pq=setTimeout(async()=>{await pushN();await pushR()},500)};
 async function pushN(){if(!NAT||!NP||ST.pn===false)return;try{if(!pre){pre=1;await NP.requestPermissions()}}catch(e){}
+ try{await document.fonts.load('700 40px Onvan','۰۱۲۳۴۵۶۷۸۹')}catch(e){}
  const j0=todayJ(),days=[];for(let k=0;k<14;k++){const j=j0+k,d=nData(j),dn=info(j).p.d;days.push({key:iso(j),title:d.t,body:d.b,large:badge(dn,'L',192),small:badge(dn,'S',96)})}
  try{await NP.show({days,color:curCol()})}catch(e){}}
+const JOKES=[["چه چیزی هرچه بیشتر از آن برداری، بزرگ‌تر می‌شود؟", "چاله"], ["چه چیزی پا ندارد ولی راه می‌رود؟", "ساعت"], ["چه چیزی دندان دارد ولی گاز نمی‌گیرد؟", "شانه"], ["چه چیزی پر از سوراخ است ولی آب نگه می‌دارد؟", "اسفنج"], ["چه چیزی سر دارد ولی مغز ندارد؟", "کبریت"], ["چه چیزی را هرچه بیشتر بشویی، کثیف‌تر می‌شود؟", "آب"], ["چه چیزی شهر دارد ولی خانه ندارد، رودخانه دارد ولی آب ندارد؟", "نقشه"], ["چه چیزی هرچه خشک‌تر شود، خیس‌تر می‌شود؟", "حوله"], ["چرا کامپیوتر سرما نمی‌خورد؟", "چون ویندوزهایش همیشه بسته است!"], ["چرا مرغ از خیابان رد شد؟", "تا برود آن طرف خیابان!"], ["چرا ماهی‌ها از اینترنت می‌ترسند؟", "چون می‌ترسند توی «تور» بیفتند!"], ["کدام ماه در آب زندگی نمی‌کند؟", "ماهِ آسمان!"], ["چه چیزی بالا می‌رود ولی هرگز پایین نمی‌آید؟", "سن"], ["چه چیزی را می‌شود شکست بی‌آنکه به آن دست زد؟", "قول"], ["چه چیزی همیشه جلوی شماست ولی دیده نمی‌شود؟", "آینده"], ["چه چیزی با یک بار گفتن از بین می‌رود؟", "سکوت"], ["اگر شنبه تا پنج‌شنبه کار کنی، جمعه چه می‌کنی؟", "استراحت!"], ["چه کسی همیشه حرف می‌زند ولی هیچ‌وقت جواب نمی‌دهد؟", "پژواک (اکو)"]];
+let _rv=null;
+function ravList(){if(_rv)return _rv;_rv=[];try{const L=LIB.find(x=>/روایت\s*کوتاه/.test(x.t));if(!L)return _rv;const b=gbOf(L.id);(b.pages||[]).forEach(p=>{const h=typeof p==='string'?p:(p&&(p.h||p.html||p.t))||'';h.replace(/<\/(p|div|li)>|<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,' ').split('\n').forEach(s=>{s=s.replace(/\s+/g,' ').trim();if(s.length>=25&&s.length<=450)_rv.push(s)})})}catch(e){}return _rv}
+function tshModal(ti,h,fn){let o=document.getElementById('tshM');if(!o){o=document.createElement('div');o.id='tshM';o.className='bfo';o.innerHTML='<div class="bfc"><h3 id="tshT" style="margin:0 0 8px"></h3><div id="tshB" style="line-height:1.9;white-space:pre-wrap"></div><button class="btn" id="tshX" style="margin-top:12px">بستن</button></div>';document.body.appendChild(o);o.addEventListener('click',e=>{if(e.target===o||e.target.id==='tshX')o.classList.remove('on')})}document.getElementById('tshT').textContent=ti;document.getElementById('tshB').innerHTML=h;o.classList.add('on');if(fn)fn()}
+function showItem(v){v=String(v||'');const m=v.split(':'),i=+m[1];
+ if(m[0]==='joke'&&JOKES[i])tshModal('چیستان / جوک','<div>'+esc(JOKES[i][0])+'</div><div style="margin-top:12px"><button class="btn ghost" id="tshA">نمایش پاسخ</button><div id="tshAn" style="display:none;margin-top:8px;font-weight:700"></div></div>',()=>{document.getElementById('tshA').onclick=()=>{const a=document.getElementById('tshAn');a.textContent=JOKES[i][1];a.style.display='block'}});
+ else if(m[0]==='rav'){const r=ravList()[i];if(r)tshModal('روایت کوتاه',esc(r))}}
+window.__tshOpen=showItem;
+function initLaunch(){if(!NAT||!NP)return;try{NP.addListener('tshOpen',e=>showItem(e&&e.open))}catch(e){}try{NP.getLaunch().then(r=>{if(r&&r.open)showItem(r.open)}).catch(()=>{})}catch(e){}}
+setTimeout(initLaunch,1500);
+/* اعلان‌های زمان‌دار: ذکر روزانه (و بعداً چیستان و روایت) — ۱۴ روز آینده به بخش بومی داده می‌شود */
+async function pushR(){if(!NAT||!NP)return;
+ try{if(!pre){pre=1;await NP.requestPermissions()}}catch(e){}
+ const it=[],now=Date.now();
+ if(ST.dq!==false){const hm=String(ST.dqt||'08:00').split(':'),H=+hm[0]||0,M=+hm[1]||0,j0=todayJ();
+  for(let k=0;k<14;k++){const g=info(j0+k).g,at=new Date(g.y,g.m-1,g.d,H,M,0,0).getTime();if(at>now+5000)it.push({id:'dua'+k,kind:'dua',at:at,title:'اللهم عجل لولیک الفرج',body:'',open:'dua'})}}
+
+ const at0=(g,H,M)=>new Date(g.y,g.m-1,g.d,H,M,0,0).getTime();
+ if(ST.jk!==false){let a=ST.jk0;if(!a){a=ST.jk0=Math.ceil((now+36e5)/6e4)*6e4;save()}const S=5*36e5;let n=Math.max(0,Math.ceil((now+5000-a)/S));
+  for(;;n++){const at=a+n*S;if(at>now+14*864e5)break;const h=new Date(at).getHours();if(h<7||h>=23)continue;const q=n%JOKES.length;it.push({id:'joke'+n,kind:'joke',at:at,title:'چیستان',body:JOKES[q][0],open:'joke:'+q})}}
+ if(ST.rv!==false){const R=ravList();if(R.length){const j0=todayJ();for(let k=0;k<14;k++){const g=info(j0+k).g;[9,21].forEach((H,s)=>{const at=at0(g,H,0);if(at>now+5000){const q=((j0+k)*2+s)%R.length;it.push({id:'rav'+k+'_'+s,kind:'rav',at:at,title:'روایت کوتاه',body:R[q],open:'rav:'+q})}})}}}
+ try{await NP.setSchedule({items:it})}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)pushS()});
 const nPrev=()=>{const j=todayJ(),d=nData(j);return'<div class="npv"><img alt="" width="56" height="56" src="data:image/png;base64,'+badge(info(j).p.d,'L',192)+'"><div><b>'+esc(d.t)+'</b><small>'+esc(d.b).replace(/\n/g,'<br>')+'</small></div></div>'};
 function extraSet(){
  const sw=TH.map((t,i)=>{const P=t[1]||(t[2]?tcPal():null);return'<button class="sw" data-tp="'+i+'" aria-pressed="'+(i===ti)+'"'+(P?' style="background:'+P[0]+';color:'+P[2]+'"':'')+'><i style="background:'+(P?P[5]:'linear-gradient(90deg,#0E6B57 50%,#0C1411 50%)')+'"></i>'+t[0]+'</button>'}).join('');
  const sg=(a,k,cur)=>'<span class="seg" style="margin:0;min-width:200px">'+a.map(([v,l])=>'<button data-'+k+'="'+v+'" aria-pressed="'+(cur===v)+'">'+l+'</button>').join('')+'</span>';
  return'<div class="card"><h3>رنگ‌بندی</h3><div class="swg">'+sw+'</div>'+(TH[ti]&&TH[ti][2]?'<div class="set"><span>رنگ اصلی</span><input type="color" id="cua" value="'+CU.a+'"></div><div class="set"><span>رنگ تأکید (طلایی)</span><input type="color" id="cub" value="'+CU.b+'"></div><div class="set"><span>زمینه</span>'+sg([['l','روشن'],['d','تیره']],'cm',CU.m)+'</div>':'')+'</div>'+
- '<div class="card"><h3>اعلان دائمی تاریخ</h3>'+nPrev()+'<div class="set"><span>نمایش دائمی در نوار اعلان</span><input type="checkbox" id="pn"'+(ST.pn!==false?' checked':'')+'></div><div class="set"><span>سبک متن</span>'+sg([['a','ساده'],['b','با مناسبت'],['c','با اوقات']],'ns',ST.ns||'a')+'</div><div class="set"><span>شکل نشان</span>'+sg([['p','پلاک'],['c','دایره'],['r','گرد']],'nb',ST.nb||'p')+'</div><div class="muted">'+(NAT?'در اپ نصب‌شده فعال است و رنگ آن از رنگ‌بندی بالا می‌آید.':'این‌جا فقط پیش‌نمایش است؛ اعلان دائمی فقط در اپ اندروید ساخته‌شده فعال می‌شود.')+'</div></div>'}
+ '<div class="card nf"><h3>اعلان دائمی تاریخ</h3>'+nPrev()+'<div class="set"><span>نمایش دائمی در نوار اعلان</span><input type="checkbox" id="pn"'+(ST.pn!==false?' checked':'')+'></div><div class="set"><span>سبک متن</span>'+sg([['a','ساده'],['b','با مناسبت'],['c','با اوقات']],'ns',ST.ns||'a')+'</div><div class="set"><span>شکل نشان</span>'+sg([['p','پلاک'],['c','دایره'],['r','گرد']],'nb',ST.nb||'p')+'</div><div class="muted">'+(NAT?'در اپ نصب‌شده فعال است و رنگ آن از رنگ‌بندی بالا می‌آید.':'این‌جا فقط پیش‌نمایش است؛ اعلان دائمی فقط در اپ اندروید ساخته‌شده فعال می‌شود.')+'</div></div>'+
+ '<div class="card nf"><h3>یادآوری روزانه</h3><div class="set"><span>اللهم عجل لولیک الفرج</span><input type="checkbox" id="dq"'+(ST.dq!==false?' checked':'')+'></div><div class="set"><span>ساعت یادآوری</span><input type="time" id="dqt" value="'+(ST.dqt||'08:00')+'"></div><div class="set"><span>چیستان یا جوک هر ۵ ساعت (پاسخ داخل برنامه)</span><input type="checkbox" id="jk"'+(ST.jk!==false?' checked':'')+'></div><div class="set"><span>روایت کوتاه هر ۱۲ ساعت (۹ صبح و ۹ شب)</span><input type="checkbox" id="rv"'+(ST.rv!==false?' checked':'')+'></div><div class="muted">فقط در اپ اندروید. چیستان‌ها از ۷ صبح تا ۱۱ شب می‌آیند. روایت‌ها از کتابی با نام «روایت کوتاه» برداشته می‌شوند.</div></div>'}
 const _ds=drawSet;drawSet=function(){_ds();$('#sBody').insertAdjacentHTML('afterbegin','<div class="pz">'+extraSet()+'</div>')};
 $('#bPal').onclick=()=>{openSheet('رنگ و شخصی‌سازی','','');drawSet()};
 {const sh=$('#sheet');
@@ -683,7 +704,11 @@ $('#bPal').onclick=()=>{openSheet('رنگ و شخصی‌سازی','','');drawSet
   if(d.tp!=null){ti=+d.tp;try{localStorage.setItem('tsh_ti',ti)}catch(_){}}if(d.cm){CU.m=d.cm;tcSave()}if(d.ns){ST.ns=d.ns;save()}if(d.nb){ST.nb=d.nb;save()}
   applyTheme();drawSet();pushS()});
  sh.addEventListener('input',e=>{const i=e.target.id;if(i==='cua'||i==='cub'){CU[i==='cua'?'a':'b']=e.target.value;tcSave();applyTheme();pushS()}});
- sh.addEventListener('change',e=>{if(e.target.id==='pn'){ST.pn=e.target.checked;save();if(NAT&&NP&&!ST.pn)NP.hide().catch(()=>{});pushS()}})}
+ sh.addEventListener('change',e=>{if(e.target.id==='pn'){ST.pn=e.target.checked;save();if(NAT&&NP&&!ST.pn)NP.hide().catch(()=>{});pushS()}
+  if(e.target.id==='dq'){ST.dq=e.target.checked;save();pushS()}
+  if(e.target.id==='dqt'&&e.target.value){ST.dqt=e.target.value;save();pushS()}
+  if(e.target.id==='jk'){ST.jk=e.target.checked;save();pushS()}
+  if(e.target.id==='rv'){ST.rv=e.target.checked;save();pushS()}})}
 /* ===== دفتر من: تلفیق کامل با تقویم — کد برنامه بدون تغییر در TOOL_DAFTAR می‌ماند؛ ظاهر و داده با یک پل هماهنگ می‌شوند ===== */
 (function(){
  var fr=null,pend=null,pane=document.createElement('div'),nav=document.querySelector('nav.tabs'),h1=document.querySelector('header.top h1'),h1t=h1?h1.textContent:'';
@@ -1085,7 +1110,7 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
  (function(){var c=function(t){return'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><g transform="'+t+'" fill="none" stroke="#000" stroke-width="1.3" stroke-linecap="round"><path d="M2 26V12C2 6 6 2 12 2h14"/><path d="M6 26V15c0-5 4-9 9-9h11"/><path d="M10 15a3.2 3.2 0 1 1 3.2 3.2M13 8c3 0 5 2 5 5"/></g></svg>')+'")'},
   m=[c(''),c('matrix(-1 0 0 1 28 0)'),c('matrix(1 0 0 -1 0 28)'),c('matrix(-1 0 0 -1 28 28)')],pos=['left top','right top','left bottom','right bottom'],
   v=m.map(function(u,i){return u+' '+pos[i]+'/26px 26px no-repeat'}).join(',');
-  var s=document.createElement('style');s.textContent='.card,.hero,.mnh{position:relative}.card::before,.hero::before,.npv::before{content:"";position:absolute;inset:5px;pointer-events:none;border-radius:14px;background:var(--em);opacity:.3;-webkit-mask:'+v+';mask:'+v+'}.cal .card::before{opacity:.38}.npv{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--em),var(--emd));color:#fff;padding:16px 18px;box-shadow:var(--sh)}.npv::before{background:#fff!important;opacity:.4!important;inset:4px!important;border-radius:18px!important}.npv b{display:block;font-size:17px;line-height:1.5;color:#fff}.npv small{display:block;color:rgba(255,255,255,.88);font-size:13px;line-height:1.7}.npv img{border-radius:14px;flex:none}.cmt b::before,.cmt b::after{content:"❖";color:var(--gold);font-size:12px;margin:0 8px;vertical-align:middle;opacity:.8}.nav.tabs{border-top:1px solid var(--line)}.card{padding-block:18px}';document.head.appendChild(s)})();
+  var s=document.createElement('style');s.textContent='.card,.hero,.mnh{position:relative}.card::before,.hero::before{content:"";position:absolute;inset:5px;pointer-events:none;border-radius:14px;background:var(--em);opacity:.3;-webkit-mask:'+v+';mask:'+v+'}.cal .card::before{opacity:.38}.nf::before{display:none}.npv{background:none;border:1px solid var(--line);color:var(--ink);padding:12px 14px;box-shadow:none;border-radius:16px;font-family:Onvan,Vazirmatn,sans-serif}.npv b{display:block;font-size:16px;line-height:1.5;color:var(--ink);font-family:Onvan,Vazirmatn,sans-serif}.npv small{display:block;color:var(--mute);font-size:13px;line-height:1.7;font-family:Onvan,Vazirmatn,sans-serif}.npv img{border-radius:12px;flex:none;width:48px;height:48px}.cmt b::before,.cmt b::after{content:"❖";color:var(--gold);font-size:12px;margin:0 8px;vertical-align:middle;opacity:.8}.nav.tabs{border-top:1px solid var(--line)}.card{padding-block:18px}.set input[type=time]{border:1px solid var(--line);border-radius:10px;padding:4px 8px;background:var(--card);color:var(--ink)}';document.head.appendChild(s)})();
 
  var TOOLS=[
   {id:'planner',t:'برنامه‌ریزی روزانه',ic:'<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M9 15l2 2 4-4"/></svg>',f:planner},
@@ -1109,7 +1134,18 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
  window.__openTool=openT;window.__plan={get:function(){return TS.pl||(TS.pl={set:{w:5,s:7},d:{}})},save:function(){sv()},refresh:function(){if(cur==='planner')openT('planner')}};
  document.getElementById('tlBack').onclick=closeT;
  document.addEventListener('click',function(e){var b=e.target.closest('[data-tl]');if(b)openT(b.dataset.tl)});
- var _dt=drawTool;drawTool=function(){_dt();main.insertAdjacentHTML('afterbegin','<div class="tg">'+TOOLS.map(function(t){return'<button class="tl" data-tl="'+t.id+'"><i>'+t.ic+'</i>'+t.t+'</button>'}).join('')+'</div>')};
+ var dwcss=document.createElement('style');dwcss.textContent='#dwOv{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.42);opacity:0;pointer-events:none;transition:opacity .22s}#dwOv.on{opacity:1;pointer-events:auto}#dw{position:fixed;top:0;bottom:0;right:0;z-index:31;width:min(84vw,320px);background:var(--bg);box-shadow:-6px 0 30px rgba(0,0,0,.25);transform:translateX(105%);transition:transform .25s ease;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);visibility:hidden}#dw.on{transform:none;visibility:visible}.dwh{display:flex;align-items:center;gap:10px;padding:14px 16px 10px}.dwh b{flex:1;font-size:17px}.dwl{flex:1;overflow:auto;padding:4px 10px 18px}.dwi{display:flex;align-items:center;gap:12px;width:100%;padding:9px 10px;border-radius:14px;text-align:start;font-size:14.5px}.dwi:active{background:var(--emt)}.dwi i{width:38px;height:38px;border-radius:12px;background:var(--emt);display:grid;place-items:center;flex:none}.dwi svg{width:21px;height:21px;stroke:var(--em);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.dwi svg text{stroke:none;fill:var(--em);font-weight:700}@media(prefers-reduced-motion:reduce){#dw,#dwOv{transition:none}}';document.head.appendChild(dwcss);
+ var DWo=document.createElement('div');DWo.id='dwOv';var DWa=document.createElement('aside');DWa.id='dw';DWa.setAttribute('aria-hidden','true');DWa.setAttribute('aria-label','ابزارها');
+ DWa.innerHTML='<div class="dwh"><b>ابزارها</b><button class="ib" id="dwX" aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="dwl" id="dwL"></div>';
+ document.body.appendChild(DWo);document.body.appendChild(DWa);
+ function dwFill(){var h='<button class="dwi" data-dw="conv"><i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></i><span>تبدیل تاریخ و تنظیم ماه قمری</span></button>';
+  h+=TOOLS.map(function(t){return'<button class="dwi" data-tl="'+t.id+'"><i>'+t.ic+'</i><span>'+t.t+'</span></button>'}).join('');document.getElementById('dwL').innerHTML=h}
+ function dwOpen(o){DWa.classList.toggle('on',o);DWo.classList.toggle('on',o);DWa.setAttribute('aria-hidden',o?'false':'true');if(o)dwFill()}
+ var hd=document.querySelector('header.top'),bm=document.createElement('button');bm.className='ib';bm.id='bMenu';bm.setAttribute('aria-label','منوی ابزارها');bm.innerHTML='<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';if(hd)hd.insertBefore(bm,hd.firstChild);
+ bm.onclick=function(){dwOpen(true)};
+ document.addEventListener('click',function(e){var t=e.target;if(t.closest('#dwX')||t===DWo){dwOpen(false);return}var c=t.closest('#dw [data-dw]');if(c){dwOpen(false);if(c.dataset.dw==='conv'){if(cur)closeT();tab='tool';draw()}return}if(t.closest('#dw [data-tl]'))dwOpen(false)});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')dwOpen(false)});
+ var dwx=null;DWa.addEventListener('touchstart',function(e){dwx=e.touches[0].clientX},{passive:true});DWa.addEventListener('touchend',function(e){if(dwx!=null&&e.changedTouches[0].clientX-dwx>70)dwOpen(false);dwx=null},{passive:true});
 })();
 
 /* ===== کشیدن دست برای جابجایی ماه (فلش‌ها حذف شد) ===== */
@@ -1475,7 +1511,6 @@ async function dl(blob,name){const C=window.Capacitor,P=(C&&C.Plugins)||{};
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(a.href)},60000)}
 function view(){VIEW=true;const rows=LIB.slice(1).map(L=>'<div class="bl"><b>'+esc(L.t)+'</b><button data-ba="del" data-id="'+L.id+'">حذف</button></div>').join('');
  main.innerHTML='<div class="ba"><div class="bar"><button class="ib" data-ba="back" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>افزودن کتاب</b></div><span style="width:38px"></span></div>'+
- '<div class="card"><b>دانلود و نصب خودکار</b><div class="muted">کتاب‌های بیشتر از اینترنت دانلود و روی همین دستگاه نصب می‌شود (حجم زیاد؛ بهتر است با وای‌فای).</div><button class="btn" data-ba="auto">دانلود و نصب خودکار کتاب‌ها</button></div>'+
  '<div class="card"><b>فایل کتاب‌ها (html / docx / txt / فایل کتاب‌ها json)</b><input type="file" id="baF" accept=".html,.htm,.docx,.txt,.json,.zip" multiple style="display:block;margin:8px 0"><label style="display:block"><input type="checkbox" id="baOne" checked> اگر چند فایل انتخاب شود، همه یک کتاب‌اند (جلدها خودکار)</label><div class="muted">فرمت قدیمی doc را در Word با «ذخیره به‌عنوان docx» تبدیل کنید.</div><div id="baMsg" class="muted"></div></div>'+
  '<div id="baBk"></div>'+
  '<div class="card"><b>خروجی</b><div class="muted">کتاب‌های افزوده‌شده روی همین دستگاه ذخیره می‌شوند و همین‌جا قابل مطالعه‌اند. برای اینکه «جزو کد برنامه» شوند و با ارسال برنامه به دیگران بروند، برنامه‌ی کامل را بسازید.</div><button class="btn" data-ba="app">ساخت برنامه‌ی کامل (با همه‌ی کتاب‌ها)</button><button class="btn ghost" data-ba="bun">دانلود فایل کتاب‌ها (json)</button></div>'+
@@ -1514,19 +1549,10 @@ async function getSource(){
  try{const r=await fetch(location.href.split('#')[0]);if(r.ok){const t=await r.text();if(t.includes('id="LIBMETA"'))return t}}catch(e){}
  msg('خواندن خودکار فایل برنامه ممکن نشد. لطفاً همین فایل برنامه را انتخاب کنید.');
  return new Promise((res,rej)=>{const i=document.createElement('input');i.type='file';i.accept='.html,.htm';i.onchange=()=>i.files[0]?i.files[0].text().then(res,rej):rej(Error('فایلی انتخاب نشد'));i.click()})}
-const BOOKS_URL='https://cdn.imgurl.ir/uploads/y354231_.zip';let AUTOBUSY=false;
 function toast(t,er){let d=document.getElementById('baToast');if(!d){d=document.createElement('div');d.id='baToast';d.style.cssText='position:fixed;left:12px;right:12px;bottom:76px;z-index:99999;padding:10px 14px;border-radius:12px;background:#222;color:#fff;text-align:center;font-size:14px;box-shadow:0 2px 12px #0006';document.body.appendChild(d)}
  d.textContent=t;d.style.background=er?'#a33':'#222';d.style.display='block';clearTimeout(d._t);d._t=setTimeout(()=>{d.style.display='none'},er?9000:4500)}
 function note(t,er,keep){msg(t,er);if(!keep||er)toast(t,er);else{toast(t)}}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-/* دانلود فایل (zip) به‌صورت ArrayBuffer */
-async function fetchBuf(url){const C=window.Capacitor,P=(C&&C.Plugins)||{};
- try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return await r.arrayBuffer()}
- catch(e){
-  /* اگر سرور اجازه‌ی CORS نداد، در APK با دانلود بومی (بدون CORS) و خواندن از CACHE */
-  if(P.Filesystem&&C&&C.convertFileSrc){const d=await P.Filesystem.downloadFile({url:url,path:'dl/books.zip',directory:'CACHE',recursive:true});
-   const r2=await fetch(C.convertFileSrc(d.path||d.uri));if(!r2.ok)throw Error('HTTP '+r2.status);return await r2.arrayBuffer()}
-  throw e}}
 /* ---------- خارج‌کردن zip ---------- */
 function zipEntries(buf){const u=new Uint8Array(buf),v=new DataView(buf);let e=u.length-22;
  while(e>=0&&v.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw Error('فایل دانلودشده zip معتبر نیست');
@@ -1570,20 +1596,6 @@ async function installList(list){const titles=new Set(LIB.map(x=>x.t.trim())),se
  let bad=0,n=0;for(const b of sel){note('در حال نصب '+(++n)+' از '+sel.length+': '+b.t,0,1);bad+=await saveBooks([{t:b.t,s:b.s,data:b.data}]);await sleep(30)}
  sidx=null;if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();
  note('✓ '+sel.length+' کتاب نصب شد'+(bad?' (ذخیره‌ی دائمی '+bad+' کتاب ممکن نشد)':'.'));return sel.length}
-async function autoInstall(){if(AUTOBUSY)return false;AUTOBUSY=true;let ok=false;
- try{note('در حال دانلود کتاب‌ها… (ممکن است چند دقیقه طول بکشد)',0,1);
-  const buf=await fetchBuf(BOOKS_URL);note('دانلود تمام شد؛ در حال خارج‌کردن از حالت فشرده…',0,1);
-  const u=new Uint8Array(buf,0,Math.min(2,buf.byteLength));let list;
-  if(u[0]===0x50&&u[1]===0x4b)list=await booksFromZip(buf,t=>note(t,0,1),0);
-  else{const j=JSON.parse(new TextDecoder().decode(buf).replace(/^\uFEFF/,''));if(!j||j.format!=='books-bundle'||!Array.isArray(j.books))throw Error('فایل دانلودشده zip کتاب‌ها نیست');list=j.books}
-  if(!list.length)throw Error('داخل zip کتابی (html / docx / txt / فایل کتاب‌ها json) پیدا نشد');
-  await installList(list);ok=true;try{localStorage.setItem('baAuto2','1')}catch(e){}}
- catch(x){note('دانلود/نصب انجام نشد: '+(x&&x.message||x),1)}
- finally{AUTOBUSY=false}return ok}
-/* اولین اجرا: بدون پرسش، خودکار دانلود و نصب می‌شود؛ اگر موفق نشد، اجرای بعدی دوباره تلاش می‌کند */
-function autoOffer(){let done=false;try{done=localStorage.getItem('baAuto2')==='1'}catch(e){}
- if(done||LIB.some(x=>x.u)||navigator.onLine===false)return;
- setTimeout(autoInstall,3000)}
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-ba]');if(!t)return;const a=t.dataset.ba;
  try{
   if(a==='open')view();
@@ -1592,7 +1604,6 @@ document.addEventListener('click',async e=>{const t=e.target.closest('[data-ba]'
   else if(a==='add'){const list=BKS.map(b=>{const{P,T}=paginate(b);return{t:b.title,s:b.sub,data:{title:b.title,toc:T,pages:P}}});const bad=await saveBooks(list);BKS=[];FILES=[];view();msg('✓ '+list.length+' کتاب اضافه شد'+(bad?' (ذخیره‌ی دائمی روی این دستگاه ممکن نشد؛ حتماً برنامه‌ی کامل را بسازید)':'.'))}
   else if(a==='addb'){const sel=[...document.querySelectorAll('#baBk [data-bi]')].filter(c=>c.checked).map(c=>BUN.books[+c.dataset.bi]);if(!sel.length)return msg('کتابی انتخاب نشده',1);const bad=await saveBooks(sel.map(b=>({t:b.t,s:b.s,data:b.data})));BUN=null;view();msg('✓ '+sel.length+' کتاب اضافه شد'+(bad?' (ذخیره‌ی دائمی ممکن نشد؛ برنامه‌ی کامل را بسازید)':'.'))}
   else if(a==='del'){const L=LIB.find(x=>x.id===t.dataset.id);if(!L||!confirm('کتاب «'+L.t+'» حذف شود؟'))return;LIB.splice(LIB.indexOf(L),1);try{await dbDel(L.id)}catch(x){}if(!L.u){const d=getDel();d.push(L.id);setDel(d)}delete GB[L.id];sidx=null;view();msg('حذف شد')}
-  else if(a==='auto'){await autoInstall()}
   else if(a==='bun'){msg('در حال ساخت فایل…');await dl(await bundleOut(),'books-bundle.json');msg('✓ فایل کتاب‌ها آماده شد')}
   else if(a==='app'){msg('در حال ساخت برنامه‌ی کامل…');const src=await getSource(),added=LIB.filter(x=>x.u).map(x=>({id:x.id,t:x.t,s:x.s,data:bookData(x.id)})),out=buildAppText(src,getDel(),added),nm=fileName();await dl(new Blob([out],{type:'text/html'}),nm);msg('✓ '+nm+' آماده شد · '+added.length+' کتاب تازه داخل کد برنامه قرار گرفت')}
  }catch(x){msg(x.message||x,1)}});
@@ -1604,7 +1615,7 @@ document.addEventListener('change',e=>{if(!VIEW)return;const t=e.target;
  renderBk()});
 document.getElementById('tabs').addEventListener('click',()=>{VIEW=false});
 window.BA={buildAppText,init};
-init().then(autoOffer,autoOffer);
+init();
 })();
 
 </script>
