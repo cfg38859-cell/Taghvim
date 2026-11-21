@@ -52,7 +52,8 @@ if has_widgets:
                            ("RamadanWidget", "tw_name_ram", "tw_ram_info"),
                            ("PageWidget", "tw_name_page", "tw_page_info"),
                            ("LifeWidget", "tw_name_life", "tw_life_info"),
-                           ("NextWidget", "tw_name_next", "tw_next_info")]:
+                           ("NextWidget", "tw_name_next", "tw_next_info"),
+                           ("PlanWidget", "tw_name_plan", "tw_plan_info")]:
         wid += ('<receiver android:name=".%s" android:exported="true" android:label="@string/%s">'
                 '<intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>'
                 '<meta-data android:name="android.appwidget.provider" android:resource="@xml/%s"/></receiver>\n    ') % (cls, lab, info)
