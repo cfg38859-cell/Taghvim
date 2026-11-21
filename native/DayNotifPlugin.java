@@ -16,6 +16,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.util.Base64;
+import android.view.View;
+import android.widget.RemoteViews;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
@@ -32,6 +34,12 @@ import java.util.Locale;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * اعلان دائمی تاریخ.
+ * JS: DayNotif.show({ days:[{key:'2026-11-21', title, body, large(base64 png), small(base64 png)}...], color:'#0E6B57' })
+ * داده‌ی ۱۴ روز ذخیره می‌شود و هر نیمه‌شب، پس از روشن شدن گوشی و پس از به‌روزرسانی برنامه، اعلانِ همان روز دوباره ساخته می‌شود.
+ * (نسخه‌ی قدیمی show({title,text}) هم هنوز کار می‌کند.)
+ */
 @CapacitorPlugin(
     name = "DayNotif",
     permissions = {
@@ -44,7 +52,7 @@ public class DayNotifPlugin extends Plugin {
     static final int NOTIF_ID = 7101;
     static final String PREFS = "day_notif_store";
     static final String ACT = "app.tshia.calendar.DAYNOTIF_TICK";
-    static final String FALLBACK_TITLE = "تقویم شیعه";
+    static final String FALLBACK_TITLE = "شفیع";
     static final String STALE_TEXT = "برای به‌روزرسانی تاریخ، برنامه را یک بار باز کنید.";
 
     @PluginMethod
@@ -106,6 +114,7 @@ public class DayNotifPlugin extends Plugin {
         }
     }
 
+    /** ساخت اعلانِ امروز از روی داده‌ی ذخیره‌شده؛ از برنامه و از گیرنده‌ی پس‌زمینه صدا زده می‌شود */
     static void render(Context ctx) {
         try {
             SharedPreferences sp = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
@@ -163,14 +172,12 @@ public class DayNotifPlugin extends Plugin {
                 } catch (Throwable e) { iconSet = false; }
             }
             if (!iconSet) b.setSmallIcon(ctx.getApplicationInfo().icon);
-            if (large != null) b.setLargeIcon(large);
 
             int col = parseColor(sp.getString("color", ""));
             if (col != 0) b.setColor(col);
 
             b.setContentTitle(title)
                     .setContentText(text)
-                    .setStyle(new Notification.BigTextStyle().bigText(text))
                     .setContentIntent(pi)
                     .setOngoing(true)
                     .setOnlyAlertOnce(true)
@@ -178,10 +185,44 @@ public class DayNotifPlugin extends Plugin {
                     .setVisibility(Notification.VISIBILITY_PUBLIC);
             if (Build.VERSION.SDK_INT < 26) b.setPriority(Notification.PRIORITY_LOW);
 
+            // ظاهر مینیمال و براق (کارت سرمه‌ای با لبه‌ی طلایی)؛ اگر ساخته نشد، اعلان ساده‌ی قبلی
+            boolean custom = false;
+            if (Build.VERSION.SDK_INT >= 24) {
+                try {
+                    String first = text;
+                    int nl = text.indexOf('\n');
+                    if (nl >= 0) first = text.substring(0, nl).trim() + " …";
+                    RemoteViews sm = card(ctx, R.layout.tw_notif, title, first, large);
+                    RemoteViews bg = card(ctx, R.layout.tw_notif_big, title, text, large);
+                    b.setStyle(new Notification.DecoratedCustomViewStyle())
+                            .setCustomContentView(sm)
+                            .setCustomBigContentView(bg);
+                    custom = true;
+                } catch (Throwable e) { custom = false; }
+            }
+            if (!custom) {
+                if (large != null) b.setLargeIcon(large);
+                b.setStyle(new Notification.BigTextStyle().bigText(text));
+            }
+
             nm.notify(NOTIF_ID, b.build());
             schedule(ctx);
         } catch (Throwable e) {
+            // اعلان نباید برنامه را از کار بیندازد
         }
+    }
+
+    private static RemoteViews card(Context ctx, int layout, String title, String text, Bitmap img) {
+        RemoteViews rv = new RemoteViews(ctx.getPackageName(), layout);
+        rv.setTextViewText(R.id.tw_n_title, title);
+        rv.setTextViewText(R.id.tw_n_text, text);
+        if (img != null) {
+            rv.setImageViewBitmap(R.id.tw_n_img, img);
+            rv.setViewVisibility(R.id.tw_n_img, View.VISIBLE);
+        } else {
+            rv.setViewVisibility(R.id.tw_n_img, View.GONE);
+        }
+        return rv;
     }
 
     private static Bitmap decode(String b64) {
@@ -211,6 +252,7 @@ public class DayNotifPlugin extends Plugin {
         return PendingIntent.getBroadcast(ctx, 71, i, flags);
     }
 
+    /** بازسازی اعلان درست بعد از نیمه‌شب (تاریخ عوض می‌شود) */
     static void schedule(Context ctx) {
         try {
             AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
@@ -237,6 +279,7 @@ public class DayNotifPlugin extends Plugin {
         } catch (Throwable e) { }
     }
 
+    /** روشن شدن گوشی، به‌روزرسانی برنامه و رسیدن نیمه‌شب → اعلان دوباره ساخته شود */
     public static class Rcv extends BroadcastReceiver {
         @Override
         public void onReceive(Context c, Intent i) {
