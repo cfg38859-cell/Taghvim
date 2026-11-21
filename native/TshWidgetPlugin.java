@@ -3,6 +3,7 @@ package app.tshia.calendar;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.os.Build;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -26,6 +27,15 @@ public class TshWidgetPlugin extends Plugin {
     JSObject r = new JSObject();
     r.put("count", WBase.count(getContext()));
     r.put("pin", Build.VERSION.SDK_INT >= 26 && AppWidgetManager.getInstance(getContext()).isRequestPinAppWidgetSupported());
+    call.resolve(r);
+  }
+
+  /** تیک‌های زده‌شده روی ابزارک مدیریت برنامه‌ریزی که هنوز به برنامه نرسیده‌اند */
+  @PluginMethod
+  public void takeEdits(PluginCall call) {
+    JSObject r = new JSObject();
+    try { r.put("items", new JSArray(PlanWidget.takeQueue(getContext()))); }
+    catch (Throwable e) { r.put("items", new JSArray()); }
     call.resolve(r);
   }
 

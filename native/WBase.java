@@ -140,7 +140,7 @@ abstract class WBase extends AppWidgetProvider {
   @Override public void onDisabled(Context c) { WTick.schedule(c); }
 
   static WBase[] all() {
-    return new WBase[] {new PrayerWidget(), new DateWidget(), new OccasionWidget(), new MonthWidget(), new RamadanWidget(), new PageWidget(), new LifeWidget(), new NextWidget()};
+    return new WBase[] {new PrayerWidget(), new DateWidget(), new OccasionWidget(), new MonthWidget(), new RamadanWidget(), new PageWidget(), new LifeWidget(), new NextWidget(), new PlanWidget()};
   }
 
   static void updateAll(Context c) {
