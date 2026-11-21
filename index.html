@@ -666,9 +666,9 @@ function badge(d,kind,z){const c=document.createElement('canvas');c.width=c.heig
  if(L)g.fillStyle=on==='#06130F'?'#06130F':'#fff';else g.globalCompositeOperation='destination-out';
  g.fillText(fa(d),R,R*1.06);return c.toDataURL('image/png').split(',')[1]}
 let pq,pre=0;const pushS=()=>{clearTimeout(pq);pq=setTimeout(pushN,500)};
-async function pushN(){if(!NAT||!NP||ST.pn===false)return;try{if(!pre){pre=1;await NP.requestPermissions()}}catch(e){}
+async function pushN(){if(!NAT||!NP||ST.pn===false)return;try{if(!pre){pre=1;await NP.requestPermissions()}}catch(e){window.__show&&__show('NOTIF perm: '+(e&&e.message||e))}
  const j0=todayJ(),days=[];for(let k=0;k<14;k++){const j=j0+k,d=nData(j),dn=info(j).p.d;days.push({key:iso(j),title:d.t,body:d.b,large:badge(dn,'L',192),small:badge(dn,'S',96)})}
- try{await NP.show({days,color:curCol()})}catch(e){}}
+ try{const r=await NP.show({days,color:curCol()});if(!window.__nOk){window.__nOk=1;window.__show&&__show('NOTIF OK '+JSON.stringify(r))}}catch(e){window.__show&&__show('NOTIF: '+(e&&(e.message||e.errorMessage)||JSON.stringify(e)))}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)pushS()});
 const nPrev=()=>{const j=todayJ(),d=nData(j);return'<div class="npv"><img alt="" width="56" height="56" src="data:image/png;base64,'+badge(info(j).p.d,'L',192)+'"><div><b>'+esc(d.t)+'</b><small>'+esc(d.b).replace(/\n/g,'<br>')+'</small></div></div>'};
 function extraSet(){
