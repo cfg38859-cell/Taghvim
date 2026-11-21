@@ -74,6 +74,15 @@ if "supportsRtl" not in t:
     t = t.replace("<application", '<application android:supportsRtl="true"', 1)
 m.write_text(t, encoding="utf-8")
 
+# --- نام برنامه: «شفیع» (Shafie) ---
+sx = pathlib.Path("android/app/src/main/res/values/strings.xml")
+if sx.exists():
+    st = sx.read_text(encoding="utf-8")
+    for k in ("app_name", "title_activity_main"):
+        st = re.sub(r'(<string name="%s">)[^<]*(</string>)' % k, r"\1شفیع\2", st)
+    sx.write_text(st, encoding="utf-8")
+    print("app name -> شفیع")
+
 import os, re
 g = pathlib.Path("android/app/build.gradle")
 gt = g.read_text(encoding="utf-8")
