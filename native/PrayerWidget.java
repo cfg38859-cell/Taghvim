@@ -7,8 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PrayerWidget extends WBase {
-  static final int GOLD = 0xFFF2CF85, WHITE = 0xFFFFFFFF, CYAN = 0xFF5CE1E6, SOFT = 0xFFB9C3E6;
-
   static final String[] JM = {"فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"};
   // Calendar.DAY_OF_WEEK: 1 = یکشنبه ... 7 = شنبه
   static final String[] WD = {"یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
@@ -46,11 +44,10 @@ public class PrayerWidget extends WBase {
   }
 
   @Override RemoteViews build(Context c, int id, int sz, boolean dark, JSONObject d, JSONObject cfg) throws Exception {
-    // این ابزارک همیشه ظاهر تیره‌ی طرح مرجع را دارد (سبک و تم انتخابی نادیده گرفته می‌شود؛ شفافیت حفظ می‌شود)
+    // اگر کاربر شفافیت را تنظیم نکرده باشد، پیش‌فرض نیمه‌شفاف است
     JSONObject k = new JSONObject(cfg.toString());
-    k.put("st", 0);
+    if (!k.has("op")) k.put("op", 70);
     cfg = k;
-    dark = true;
 
     if (d == null) return shell(c, layout(), cfg, dark, "برنامه‌ی «تقویم شیعه» را یک بار باز کنید تا ابزارک داده بگیرد");
     long now = System.currentTimeMillis(), mid = WStore.midnight(now);
@@ -61,17 +58,26 @@ public class PrayerWidget extends WBase {
     if (nx == null) return shell(c, layout(), cfg, dark, "داده‌ی ابزارک قدیمی شده؛ برنامه را باز کنید");
     RemoteViews rv = shell(c, layout(), cfg, dark, null);
     boolean wide = sz >= 1;
+    int ink = ink(dark), mute = mute(dark), gold = gold(dark);
+    int hi = dark ? 0xFF6FEBD8 : em(false);
     show(rv, R.id.tw_deco, false);
 
+    // رنگ و قاب‌ها بر اساس تم (روشن/تیره/گرادیانی) برای خوانایی روی هر پس‌زمینه
+    rv.setInt(R.id.tw_card, "setBackgroundResource", dark ? R.drawable.tw_card_d : R.drawable.tw_card_l);
+    rv.setInt(R.id.tw_left, "setBackgroundResource", dark ? R.drawable.tw_pane_d : R.drawable.tw_pane_l);
+
     // کارت «اذان بعدی»
-    txt(rv, R.id.tw_label, "اذان بعدی: " + WStore.PN[(int) nx[2]], GOLD, sz == 0 ? 10 : 11);
-    txt(rv, R.id.tw_at, WStore.hm(nx[1]), WHITE, sz == 0 ? 20 : 22);
+    txt(rv, R.id.tw_label, "اذان بعدی: " + WStore.PN[(int) nx[2]], gold, sz == 0 ? 10 : 11);
+    txt(rv, R.id.tw_at, WStore.hm(nx[1]), ink, sz == 0 ? 20 : 22);
     progress(rv, dark, (int) Math.max(0, Math.min(1000, (now - nx[0]) * 1000 / Math.max(1, nx[1] - nx[0]))));
 
-    // ستون چپ: تاریخ، شهر، ساعت بزرگ، شمارش معکوس، برند
-    txt(rv, R.id.tw_city, WStore.cityName(d, ci), SOFT, 10);
-    txt(rv, R.id.tw_dt, jdate(now), GOLD, 12);
-    count(rv, nx[1] - now, CYAN, sz == 0 ? 15 : 16);
+    // ستون چپ: تاریخ، شهر، ساعت بزرگ، شمارش معکوس، نام برنامه
+    txt(rv, R.id.tw_city, WStore.cityName(d, ci), mute, 9);
+    txt(rv, R.id.tw_dt, jdate(now), gold, 12);
+    rv.setTextColor(R.id.tw_clk, ink);
+    rv.setTextColor(R.id.tw_cdl, mute);
+    txt(rv, R.id.tw_brand, "شفیع", gold, 18);
+    count(rv, nx[1] - now, hi, sz == 0 ? 14 : 15);
     show(rv, R.id.tw_dt, wide);
     show(rv, R.id.tw_clk, wide);
     show(rv, R.id.tw_brand, wide);
@@ -82,9 +88,10 @@ public class PrayerWidget extends WBase {
       JSONArray tt = pts.getJSONArray(di);
       for (int i = 0; i < 6; i++) {
         boolean nextOne = tt.getLong(i) == nx[1];
-        txt(rv, rid(c, "tw_pn", i), WStore.PS[i] + ":", nextOne ? CYAN : GOLD, sz == 2 ? 12 : 11);
-        txt(rv, rid(c, "tw_pt", i), WStore.hm(tt.getLong(i)), nextOne ? CYAN : WHITE, sz == 2 ? 13 : 12);
-        rv.setInt(rid(c, "tw_pc", i), "setBackgroundResource", nextOne ? R.drawable.tw_cell_on : R.drawable.tw_cell);
+        txt(rv, rid(c, "tw_pn", i), WStore.PS[i] + ":", nextOne ? hi : gold, sz == 2 ? 12 : 11);
+        txt(rv, rid(c, "tw_pt", i), WStore.hm(tt.getLong(i)), nextOne ? hi : ink, sz == 2 ? 13 : 12);
+        int bg = nextOne ? (dark ? R.drawable.tw_cell_on_d : R.drawable.tw_cell_on_l) : (dark ? R.drawable.tw_cell_d : R.drawable.tw_cell_l);
+        rv.setInt(rid(c, "tw_pc", i), "setBackgroundResource", bg);
       }
     }
     return rv;
