@@ -846,6 +846,8 @@ input,select{background:var(--c2)!important;border:1px solid var(--bd)!important
  function mk(){if(fr)return;try{fr=document.createElement('iframe');fr.id='dfFrame';fr.title='دفتر من';fr.setAttribute('allow','autoplay');fr.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent';
   fr.addEventListener('load',function(){try{var d=fr.contentDocument,st=d.createElement('style');st.id='tsh-bridge';st.textContent=BR;d.head.appendChild(st);theme();try{var w0=fr.contentWindow,_t=w0.toast;w0.toast=function(m){if(/پشتیبان/.test(String(m)))return;return _t.apply(this,arguments)};w0.bkBanner=function(){};['bkE','bkI','bkT','bkF'].forEach(function(i){var e=d.getElementById(i);if(e)e.style.display='none'});var bt=d.querySelector('#bkB b');if(bt)bt.textContent='قفل برنامه'}catch(e){}var p=pend;pend=null;if(p)p();refresh()}catch(e){window.__show&&__show('DAFTAR: '+e.message)}});
   fr.srcdoc=src();pane.appendChild(fr)}catch(e){window.__show&&__show('DAFTAR: '+e.message)}}
+ window.__dfMk=mk;
+ try{if(NAT)setTimeout(function(){try{var r=JSON.parse(localStorage.getItem('daftar-v1')||'{}');if(r.sms&&r.sms.rules&&r.sms.rules.length)mk()}catch(x){}},2500)}catch(x){}
  /* برنامه‌های پیش‌رو (زمان رویداد از تاریخ شمسی) */
  function plansUp(S){var n=Date.now();return(S.plans||[]).filter(function(p){return!p.done&&p.date&&p.time}).map(function(p){var a=p.date.split('/').map(Number),g=d2g(j2d(a[0],a[1],a[2])),t=p.time.split(':');return{p:p,a:a,t:new Date(g.y,g.m-1,g.d,+t[0],+t[1]).getTime()}}).filter(function(x){return x.t>=n}).sort(function(a,b){return a.t-b.t})}
  var upRow=function(x){return'<button class="set" data-df="plan" style="width:100%;text-align:start"><span>'+esc(x.p.title)+'</span><small class="muted">'+fa(x.a[2])+' '+JM[x.a[1]-1]+' · '+fa(x.p.time)+'</small></button>'};
@@ -2460,6 +2462,203 @@ var _rl4=renderLes;renderLes=function(){_rl4();
  if(g)lp.insertAdjacentHTML('afterbegin','<div style="display:flex;gap:12px;align-items:center;margin-bottom:10px">'+ring(t/g,'var(--ac)')+'<div><b>هدف امروز: '+hm(g)+' ساعت</b><br><small style="color:var(--mut)">'+(t>=g?'به هدف رسیدید':'تا هدف '+hm(g-t)+' مانده')+'</small></div></div>');
  $('lgt').textContent=g?'هدف فعلی: '+hm(g)+' ساعت در روز':'هدفی تعیین نشده است';
  $('lgClr').hidden=!g};
+
+/* ===== پیامک بانکی: یادگیری از روی پیامک نمونه و ثبت خودکار ورودی/خروجی ===== */
+(function(){
+var SM=S.sms=S.sms||{};SM.rules=SM.rules||[];SM.seen=SM.seen||[];SM.pend=SM.pend||[];
+var LIN=['واریز','دریافت','بستانکار','افزایش','ورودی','برگشت','سپرده','حقوق','deposit','credit'],
+    LOUT=['برداشت','خرید','پرداخت','انتقال','بدهکار','کسر','کاهش','خروجی','قبض','کارمزد','شارژ','withdraw','debit','purchase'],
+    ALLW=LIN.concat(LOUT),NEG='-−–',POS='+';
+function nd(s){return String(s==null?'':s).replace(/[۰-۹]/g,function(c){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)}).replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c)}).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[\u200c\u200e\u200f]/g,' ')}
+function ns(a){return String(a||'').replace(/\s+/g,'').replace(/^\+?98/,'0').toLowerCase()}
+function rx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function lc(s){return String(s).toLowerCase()}
+/* ---- پلاگین بومی (فقط در APK) ---- */
+function plug(){try{var W=(window.parent&&window.parent!==window)?window.parent:window;if(W.__tshSms!==undefined)return W.__tshSms;
+ var C=W.Capacitor;if(!C||!C.isNativePlatform||!C.isNativePlatform()){return null}
+ var p=null;if(typeof C.registerPlugin==='function')p=C.registerPlugin('TshSms');
+ else if(typeof C.nativePromise==='function'){var c=function(m){return function(o){return C.nativePromise('TshSms',m,o||{})}};p={checkPermissions:c('checkPermissions'),requestPermissions:c('requestPermissions'),list:c('list'),takeNew:c('takeNew'),setFilters:c('setFilters')}}
+ W.__tshSms=p;return p}catch(e){return null}}
+var PERM=null;
+function perm(ask){var p=plug();if(!p)return Promise.resolve(null);
+ return (ask?p.requestPermissions({permissions:['sms']}):p.checkPermissions()).then(function(r){PERM=(r&&r.sms)||'denied';return PERM}).catch(function(){PERM='denied';return PERM})}
+/* ---- تحلیل متن پیامک ---- */
+function spans(t){var out=[],m,re;
+ re=/\d{2,4}[\/\-.]\d{1,2}[\/\-.]\d{1,2}|\d{1,2}[\/]\d{1,2}(?![\d\/])|\d{1,2}:\d{2}(?::\d{2})?/g;
+ while((m=re.exec(t)))out.push({st:m.index,en:m.index+m[0].length,raw:m[0],kind:'dt'});return out}
+function toks(t){var sp=spans(t),r=sp.slice(),m,re=/\d[\d,٬]*(?:\.\d{1,2})?/g;
+ while((m=re.exec(t))){var raw=m[0].replace(/[,٬]+$/,''),st=m.index,en=st+raw.length;
+  if(sp.some(function(s){return st<s.en&&en>s.st}))continue;
+  var pre=t.slice(Math.max(0,st-12),st),nx=t.charAt(en),pv=t.charAt(st-1),k='num',plain=/^\d+$/.test(raw);
+  if((plain&&raw.length>=10)||/[*xX•]/.test(pv)||/[*xX•]/.test(nx)||/[*xX•][^\w]{0,2}$/.test(t.slice(Math.max(0,st-3),st))||(plain&&raw.length>=3&&/(کارت|حساب|شماره|شبا|IR|card|acc)/i.test(pre)))k='id';
+  r.push({st:st,en:en,raw:raw,kind:k})}
+ r.sort(function(a,b){return a.st-b.st});return r}
+function isBal(t,k){return /(مانده|موجودی|باقی|balance|bal)\s*[:：]?\s*[+\-−–]?\s*$/i.test(t.slice(Math.max(0,k.st-16),k.st))}
+function cands(t,tk){return tk.filter(function(k){return k.kind==='num'&&!isBal(t,k)})}
+function val(raw){return parseFloat(String(raw).replace(/[,٬]/g,''))||0}
+function detDir(t,kin,kout,sgn){var L=lc(t),best=null,pos=1e9;
+ function scan(arr,d){arr.forEach(function(w){var i=L.indexOf(lc(w));if(i>=0&&i<pos){pos=i;best=d}})}
+ if(kin&&kin.length||kout&&kout.length){scan(kin||[],'in');scan(kout||[],'out');if(best)return best}
+ pos=1e9;best=null;scan(LIN,'in');scan(LOUT,'out');return best}
+function unitOf(t){return /(ریال|ريال|IRR|rial)/i.test(t)?'rial':/تومان/.test(t)?'toman':null}
+function shDate(ms){var o=sh(new Date(ms));return ds(o)}
+function textDate(t,ms){var m=/\b(1[34]\d\d)[\/\-.](\d{1,2})[\/\-.](\d{1,2})\b/.exec(t);
+ if(m&&+m[2]>=1&&+m[2]<=12&&+m[3]>=1&&+m[3]<=31)return m[1]+'/'+p2(+m[2])+'/'+p2(+m[3]);return shDate(ms||Date.now())}
+/* ---- ساخت قانون از روی نمونه ---- */
+function learn(st){var t=nd(st.txt),tk=toks(t),k=tk[st.ai];if(!k)return null;
+ var before=t.slice(0,k.st),line=before.split('\n').pop(),m=/([^\s\d:：]+)\s*[:：]?\s*[+\-−–]?\s*$/.exec(line),pw=m?m[1].replace(/^[^\wآ-ی]+|[^\wآ-ی]+$/g,''):'';
+ var pgen=ALLW.some(function(w){return pw&&lc(pw).indexOf(lc(w))===0}),
+     cs=cands(t,tk),ti=cs.indexOf(k),pc=t.charAt(k.st-1),nc=t.charAt(k.en);
+ var sign=(NEG.indexOf(pc)>=0||POS===pc||NEG.indexOf(nc)>=0||POS===nc);
+ return {id:uid(),name:st.name||st.sig||'بانک',sender:ns(st.sender),sig:st.sig||'',cid:st.cid||'',card:st.card,job:st.job,
+  pw:pw,pgen:pgen,ti:ti<0?0:ti,sign:sign,unit:st.unit,kin:st.dir==='in'?st.kws.slice():[],kout:st.dir==='out'?st.kws.slice():[],since:Date.now()}}
+function amtRx(r){var core=r.pw?(r.pgen?'(?:'+ALLW.map(rx).join('|')+')':rx(r.pw)):'(?:^|\\n)';
+ return new RegExp(core+'\\s*[:：]?\\s*([+\\-−–]?)\\s*(\\d[\\d,٬]*(?:\\.\\d{1,2})?)\\s*([+\\-−–]?)','i')}
+/* ---- اعمال قانون روی یک پیامک: {type,amt,date,note} یا null ---- */
+function applyRule(r,msg){var t=nd(msg.b),a=ns(msg.a);
+ if(r.sender&&a&&a!==r.sender)return null;
+ if(!r.sender||!a){if(r.sig&&lc(t).indexOf(lc(nd(r.sig)))<0)return null}
+ if(r.cid&&t.indexOf(nd(r.cid))<0)return null;
+ var tk=toks(t),raw=null,sg='',sg2='',m=amtRx(r).exec(t);
+ if(m){var kk=tk.filter(function(k){return k.st<=t.indexOf(m[2],m.index)&&t.indexOf(m[2],m.index)<k.en})[0];if(!kk||(kk.kind==='num'&&!isBal(t,kk))){raw=m[2];sg=m[1];sg2=m[3]}}
+ if(raw===null){var cs=cands(t,tk),k=cs[Math.min(r.ti,cs.length-1)];if(!k)return null;raw=k.raw;sg=NEG.indexOf(t.charAt(k.st-1))>=0||POS===t.charAt(k.st-1)?t.charAt(k.st-1):'';sg2=NEG.indexOf(t.charAt(k.en))>=0||POS===t.charAt(k.en)?t.charAt(k.en):''}
+ var v=val(raw);if(!v)return null;
+ var dir=null;if(r.sign){var s=(sg+sg2);if(s&&NEG.indexOf(s.charAt(0))>=0)dir='out';else if(s&&s.charAt(0)===POS)dir='in'}
+ if(!dir)dir=detDir(t,r.kin,r.kout);if(!dir)return null;
+ var toman=r.unit==='rial'?Math.round(v/10):Math.round(v);if(!toman)return null;
+ var note='پیامک'+(r.name?' '+r.name:'')+' · '+t.replace(/\s+/g,' ').trim().slice(0,70);
+ return {type:dir,amt:toman,date:textDate(t,msg.d),note:note}}
+function otp(t){return /(رمز\s*(پویا|یکبار|دوم|یک\s*بار)|کد\s*(تایید|فعال|ورود)|otp|cvv2)/i.test(t)}
+function mid(msg){return String(msg.id||'')+'|'+ns(msg.a)+'|'+(msg.d||0)+'|'+String(msg.b||'').length}
+function ensureJob(r){if(r.job&&S.jobs.some(function(j){return j.id===r.job}))return r.job;
+ var j=S.jobs.filter(function(x){return x.name==='پیامک بانکی'})[0];if(!j){j={id:uid(),name:'پیامک بانکی'};S.jobs.push(j)}r.job=j.id;return j.id}
+function record(r,x,msg){S.fin.push({id:uid(),type:x.type,amt:x.amt,date:x.date,job:ensureJob(r),card:r.card,note:x.note,sms:1});
+ SM.seen.push(mid(msg));if(SM.seen.length>700)SM.seen=SM.seen.slice(-500)}
+/* ---- ورود یک پیامک به سیستم ---- */
+function ingest(msg,only){var id=mid(msg);if(SM.seen.indexOf(id)>=0)return 'dup';
+ var t=nd(msg.b),rs=(only||SM.rules).filter(function(r){return !(r.since&&msg.d&&msg.d<r.since-6e4&&!only)}),best=null,bs=-1;
+ rs.forEach(function(r){var s=(r.sender&&ns(msg.a)===r.sender?2:0)+(r.cid?3:0)+(r.sig?1:0);if(applyRule(r,msg)&&s>bs){best=r;bs=s}});
+ if(best){var x=applyRule(best,msg);record(best,x,msg);return 'ok'}
+ var known=SM.rules.some(function(r){return r.sender&&ns(msg.a)===r.sender||(r.sig&&lc(t).indexOf(lc(nd(r.sig)))>=0)});
+ if(known&&!otp(t)&&/(\d{1,3}([,٬]\d{3})+|ریال|تومان)/.test(t)&&detDir(t)){
+  if(!SM.pend.some(function(p){return p.k===id})){SM.pend.push({k:id,a:msg.a||'',b:msg.b,d:msg.d||Date.now(),i:msg.id||''});if(SM.pend.length>30)SM.pend.shift()}
+  SM.seen.push(id);return 'pend'}
+ return 'skip'}
+function syncFilters(){var p=plug();if(!p||!p.setFilters)return;var se=[],si=[];SM.rules.forEach(function(r){if(r.sender)se.push(r.sender);else if(r.sig)si.push(r.sig)});
+ p.setFilters({senders:se,sigs:si}).catch(function(){})}
+var busy=false;
+function poll(){var p=plug();if(!p||busy||!SM.rules.length)return;busy=true;
+ perm(false).then(function(g){if(g!=='granted'){busy=false;return}
+  return p.takeNew().then(function(r){var n=0,q=0;((r&&r.messages)||[]).forEach(function(m){var s=ingest(m);if(s==='ok')n++;else if(s==='pend')q++});
+   if(n||q){save();try{renderFin();renderDash&&renderDash()}catch(e){}}
+   if(n)toast(fa(n)+' تراکنش از پیامک ثبت شد');else if(q)toast('پیامکی نیاز به بررسی دارد');busy=false})}).catch(function(){busy=false})}
+/* ---- رابط کاربری: کارت پیامک در مدیریت مالی ---- */
+var card=document.createElement('div');card.className='card';card.id='smC';$('fL').insertAdjacentElement('beforebegin',card);
+function cardName(id){return nm(S.cards,id)}
+function renderSms(){var ff=$('fF');if(ff&&ff.previousElementSibling!==card)ff.insertAdjacentElement('beforebegin',card);var p=plug(),nat=!!p,rs=SM.rules,h='<b>ثبت خودکار از پیامک بانک</b>';
+ h+='<small style="display:block;color:var(--mut);margin:4px 0 8px">یک پیامک نمونه از بانک را یک‌بار به برنامه یاد بدهید؛ از آن به بعد پیامک‌های همان بانک خودکار به‌عنوان ورودی یا خروجی ثبت می‌شود. فقط پیامک بانک‌های آموزش‌دیده خوانده می‌شود.</small>';
+ if(nat){h+='<div class="row" style="align-items:center"><small id="smPs" style="flex:1;color:var(--mut)">دسترسی پیامک: '+(PERM==='granted'?'<b style="color:var(--ac)">فعال</b>':PERM==='denied'?'<b class="n">غیرفعال</b>':'بررسی نشده')+'</small>'+(PERM==='granted'?'':'<button class="mini" id="smPm">دریافت مجوز</button>')+'</div>'}
+ else h+='<small style="display:block;color:var(--mut);margin-bottom:6px">خواندن خودکار پیامک فقط در نسخه‌ی اندروید (APK) فعال است؛ در اینجا می‌توانید پیامک را دستی بچسبانید.</small>';
+ h+=rs.map(function(r){return '<div class="it"><div><b>'+esc(r.name)+'</b><br><small>'+(r.sender?'فرستنده: '+esc(r.sender)+' · ':'')+'کارت: '+esc(cardName(r.card))+(r.cid?' · شناسه '+esc(r.cid):'')+' · '+(r.unit==='rial'?'ریال':'تومان')+'</small></div><button class="x" data-smdel="'+r.id+'">حذف</button></div>'}).join('');
+ h+='<div class="row" style="margin-top:8px"><button class="btn" id="smNew" style="flex:1">+ آموزش با پیامک نمونه / چسباندن پیامک</button></div>';
+ if(SM.pend.length)h+='<div class="row"><button class="mini" id="smPend" style="flex:1">پیامک‌های نیازمند بررسی ('+fa(SM.pend.length)+')</button></div>';
+ if(nat&&rs.length)h+='<div class="row"><button class="mini" id="smPoll" style="flex:1">بررسی پیامک‌های جدید</button></div>';
+ card.innerHTML=h}
+/* ---- پنجره‌ی آموزش ---- */
+var ov=document.createElement('div');ov.id='smM';ov.hidden=true;ov.style.cssText='position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.72);overflow:auto;padding:12px';document.body.appendChild(ov);
+var TS=null;
+function newState(txt,sender,ts){return {txt:txt||'',sender:sender||'',ts:ts||Date.now(),stage:1,ai:-1,dir:null,kws:[],card:'',newCard:'',cid:'',job:'',unit:'rial',sig:'',name:'',rec:true,hist:false,only:null}}
+function autoFill(st){var t=nd(st.txt),tk=toks(t),cs=cands(t,tk);
+ var lex=cs.filter(function(k){var line=t.slice(0,k.st).split('\n').pop();return ALLW.some(function(w){return lc(line).indexOf(lc(w))>=0})})[0];
+ var pick=lex||cs[0];st.ai=pick?tk.indexOf(pick):-1;
+ st.unit=unitOf(t)||'rial';var L=lc(t);st.kws=[];
+ var di=LIN.filter(function(w){return L.indexOf(lc(w))>=0}),dout=LOUT.filter(function(w){return L.indexOf(lc(w))>=0});
+ var d=detDir(t);st.dir=d;st.kws=(d==='in'?di:d==='out'?dout:[]).slice(0,2);
+ if(pick){var s=t.charAt(pick.st-1),e=t.charAt(pick.en);if(NEG.indexOf(s)>=0||NEG.indexOf(e)>=0){st.dir='out'}else if(s===POS||e===POS){st.dir='in'}}
+ var fl=t.split('\n').filter(function(x){return x.trim()})[0]||'';var ws=fl.replace(/[0-9\/:\-*]/g,' ').split(/\s+/).filter(function(w){return w.length>=3&&ALLW.indexOf(w)<0});
+ st.sig=ws.slice(0,2).join(' ');st.name=st.name||(ws.slice(0,2).join(' ')||st.sender||'بانک');
+ if(!st.sender)st.sig=st.sig||'';}
+function chipsHtml(st){var t=nd(st.txt),tk=toks(t),h='',pos=0;
+ tk.forEach(function(k,i){h+=esc(t.slice(pos,k.st)).replace(/\n/g,'<br>');pos=k.en;
+  var on=i===st.ai,cid=st.cid&&k.raw===st.cid;
+  if(k.kind==='dt')h+='<span style="opacity:.55;direction:ltr;unicode-bidi:isolate">'+esc(k.raw)+'</span>';
+  else h+='<button class="mini" data-smai="'+i+'" style="direction:ltr;margin:1px 2px;'+(on?'background:var(--ac);color:#000;':'')+(cid?'outline:2px solid var(--ac);':'')+'">'+esc(k.raw)+'</button>'});
+ h+=esc(t.slice(pos)).replace(/\n/g,'<br>');return h}
+function idChips(st){var t=nd(st.txt),tk=toks(t);return tk.filter(function(k){return k.kind==='id'||(k.kind==='num'&&/^\d{3,9}$/.test(k.raw)&&tk.indexOf(k)!==st.ai)}).map(function(k){return '<button class="mini" data-smcid="'+esc(k.raw)+'" style="margin:2px;direction:ltr;'+(st.cid===k.raw?'background:var(--ac);color:#000':'')+'">'+esc(k.raw)+'</button>'}).join('')}
+function opts(a,v){return '<option value="">— انتخاب کنید —</option>'+a.map(function(o){return '<option value="'+o.id+'"'+(o.id===v?' selected':'')+'>'+esc(o.name)+'</option>'}).join('')}
+function previewHtml(st){if(st.ai<0)return '';var rs={txt:st.txt,ai:st.ai,dir:st.dir,kws:st.kws,card:st.card||'x',job:st.job,unit:st.unit,sig:st.sig,name:st.name,sender:st.sender,cid:st.cid},r=learn(rs);if(!r)return '';
+ var x=applyRule(r,{a:st.sender,b:st.txt,d:st.ts});
+ if(!x)return '<div class="e" style="color:var(--mut)">با این انتخاب‌ها پیامک تشخیص داده نشد؛ نوع (ورودی/خروجی) را مشخص کنید.</div>';
+ return '<div class="it"><div><b class="'+(x.type==='in'?'p':'n')+'">'+(x.type==='in'?'+':'−')+money(x.amt)+' تومان</b> · '+showD(x.date)+'<br><small>'+(x.type==='in'?'ورودی':'خروجی')+' · '+esc(st.card?cardName(st.card):(st.newCard||'کارت؟'))+'</small></div></div>'}
+function matchedRule(st){var m=null;SM.rules.forEach(function(r){if(!m&&applyRule(r,{a:st.sender,b:st.txt,d:st.ts}))m=r});return m}
+function renderM(){if(!TS){ov.hidden=true;return}var st=TS,h='<div class="card" style="max-width:520px;margin:0 auto"><div class="row" style="align-items:center"><b style="flex:1">آموزش پیامک بانکی</b><button class="mini" id="smX">بستن</button></div>';
+ h+='<label>۱) متن پیامک بانک</label><textarea id="smT" rows="5" style="width:100%" placeholder="پیامک را اینجا بچسبانید">'+esc(st.txt)+'</textarea>';
+ h+='<div class="row"><input id="smS" placeholder="فرستنده (اختیاری؛ شماره یا نام)" value="'+esc(st.sender)+'"></div>';
+ h+='<div class="row">'+(plug()?'<button class="mini" id="smInb">انتخاب از پیامک‌های دریافتی</button>':'')+'<button class="btn" id="smGo" style="flex:1">ادامه</button></div><div id="smInbL"></div>';
+ if(st.stage>=2){var mr=matchedRule(st);
+  if(mr&&!st.only)h+='<div class="card" style="background:rgba(127,127,127,.12)"><b>این پیامک با قانون «'+esc(mr.name)+'» شناخته می‌شود.</b><div class="row" style="margin-top:6px"><button class="btn" id="smRec" style="flex:1">ثبت همین پیامک</button></div><small style="color:var(--mut)">اگر نتیجه درست نیست، ادامه دهید و آموزش را اصلاح کنید.</small></div>';
+  h+='<label>۲) روی عددِ «مبلغ تراکنش» بزنید</label><div style="line-height:2.3;padding:8px;border:1px solid rgba(127,127,127,.3);border-radius:10px">'+chipsHtml(st)+'</div>';
+  h+='<label>۳) این پیامک ورودی است یا خروجی؟</label><div class="row"><button class="mini" data-smdir="in" style="flex:1;'+(st.dir==='in'?'background:var(--ac);color:#000':'')+'">ورودی (دریافتی)</button><button class="mini" data-smdir="out" style="flex:1;'+(st.dir==='out'?'background:var(--ac);color:#000':'')+'">خروجی (پرداختی)</button></div>';
+  var L=lc(nd(st.txt)),all=(st.dir==='in'?LIN:st.dir==='out'?LOUT:[]).filter(function(w){return L.indexOf(lc(w))>=0});
+  if(all.length)h+='<small style="color:var(--mut)">کلمه‌های نشانه‌ی این نوع (قابل تغییر):</small><div>'+all.map(function(w){return '<button class="mini" data-smkw="'+esc(w)+'" style="margin:2px;'+(st.kws.indexOf(w)>=0?'background:var(--ac);color:#000':'')+'">'+esc(w)+'</button>'}).join('')+'</div>';
+  h+='<div class="row"><input id="smKw" placeholder="کلمه‌ی نشانه‌ی دلخواه (اختیاری)"><button class="mini" id="smKwB">افزودن</button></div>';
+  h+='<label>۴) کارت</label><div class="row"><select id="smCd">'+opts(S.cards,st.card)+'</select></div><div class="row"><input id="smNc" placeholder="یا نام کارت جدید (مثلاً ملی ۱۲۳۴)" value="'+esc(st.newCard)+'"></div>';
+  var ic=idChips(st);if(ic)h+='<small style="color:var(--mut)">کدام عدد در پیامک، کارت/حساب را مشخص می‌کند؟ (اختیاری)</small><div>'+ic+'<button class="mini" data-smcid="" style="margin:2px">هیچکدام</button></div>';
+  h+='<label>۵) عنوان تراکنش‌ها</label><div class="row"><select id="smJb"><option value="">«پیامک بانکی» (خودکار)</option>'+S.jobs.filter(function(j){return j.name!=='پیامک بانکی'}).map(function(o){return '<option value="'+o.id+'"'+(o.id===st.job?' selected':'')+'>'+esc(o.name)+'</option>'}).join('')+'</select></div>';
+  h+='<div class="row"><select id="smUn"><option value="rial"'+(st.unit==='rial'?' selected':'')+'>مبلغ پیامک به «ریال» است</option><option value="toman"'+(st.unit==='toman'?' selected':'')+'>مبلغ پیامک به «تومان» است</option></select></div>';
+  h+='<div class="row"><input id="smNm" placeholder="نام بانک" value="'+esc(st.name)+'"></div>';
+  h+='<label>نتیجه‌ی آزمون روی همین نمونه</label>'+previewHtml(st);
+  h+='<label style="display:block"><input type="checkbox" id="smRc"'+(st.rec?' checked':'')+'> همین پیامک هم ثبت شود</label>';
+  if(plug())h+='<label style="display:block"><input type="checkbox" id="smHi"'+(st.hist?' checked':'')+'> پیامک‌های ۳۰ روز گذشته‌ی همین بانک هم ثبت شود</label>';
+  h+='<div class="row"><button class="btn" id="smSv" style="flex:1">ذخیره‌ی قانون</button></div>'}
+ h+='</div>';ov.innerHTML=h;ov.hidden=false}
+function readFields(){if(!TS)return;var g=function(i){var e=document.getElementById(i);return e?e.value:null},v;
+ if((v=g('smT'))!==null)TS.txt=v;if((v=g('smS'))!==null)TS.sender=v.trim();if((v=g('smCd'))!==null)TS.card=v;if((v=g('smNc'))!==null)TS.newCard=v.trim();
+ if((v=g('smJb'))!==null)TS.job=v;if((v=g('smUn'))!==null)TS.unit=v;if((v=g('smNm'))!==null)TS.name=v.trim();
+ var c=document.getElementById('smRc');if(c)TS.rec=c.checked;c=document.getElementById('smHi');if(c)TS.hist=c.checked}
+function open(txt,sender,ts,stage){TS=newState(txt,sender,ts);if(stage){autoFill(TS);TS.stage=2}renderM()}
+function save2(){readFields();var st=TS;if(st.ai<0)return toast('عدد مبلغ را انتخاب کنید');if(!st.dir)return toast('ورودی یا خروجی را مشخص کنید');
+ if(!st.card&&!st.newCard)return toast('کارت را انتخاب یا نام کارت جدید را وارد کنید');
+ if(!st.card){var c={id:uid(),name:st.newCard};S.cards.push(c);st.card=c.id}
+ if(!st.sender&&!st.sig&&!st.cid)return toast('فرستنده را وارد کنید تا پیامک‌ها شناخته شوند');
+ var r=learn(st);if(!r)return toast('مبلغ تشخیص داده نشد');
+ var x=applyRule(r,{a:st.sender,b:st.txt,d:st.ts});if(!x)return toast('این انتخاب‌ها نوع پیامک را تشخیص نمی‌دهد');
+ r.job=st.job||'';ensureJob(r);
+ SM.rules=SM.rules.filter(function(o){return !(o.sender===r.sender&&o.cid===r.cid&&o.card===r.card&&o.sig===r.sig)});SM.rules.push(r);
+ var n=0;if(st.rec){record(r,x,{id:st.msgId||'smp',a:st.sender,b:st.txt,d:st.ts});n++}
+ var done=function(){save();syncFilters();TS=null;renderM();try{renderFin();renderDash&&renderDash()}catch(e){}renderSms();toast('قانون ذخیره شد'+(n?' · '+fa(n)+' تراکنش ثبت شد':''))};
+ if(st.hist&&plug()){perm(true).then(function(g){if(g!=='granted')return done();return plug().list({since:Date.now()-30*864e5,limit:400}).then(function(res){((res&&res.messages)||[]).forEach(function(m){if(ingest(m,[r])==='ok')n++});done()})}).catch(done)}
+ else done()}
+/* ---- رویدادها ---- */
+document.addEventListener('click',function(e){var t=e.target,b;
+ if(t.id==='smNew'){return open('','',0,false)}
+ if(t.id==='smX'){TS=null;return renderM()}
+ if(t.id==='smPm'){return perm(true).then(function(){renderSms();if(PERM==='granted'){syncFilters();poll()}else toast('مجوز پیامک داده نشد')})}
+ if(t.id==='smPoll'){return perm(true).then(function(g){if(g==='granted'){syncFilters();poll();toast('در حال بررسی…')}else toast('مجوز پیامک لازم است')})}
+ if(t.id==='smPend'){var P=SM.pend[0];if(!P)return;SM.pend.shift();save();renderSms();var o=open(P.b,P.a,P.d,true);TS.msgId=P.i||undefined;return o}
+ if((b=t.closest&&t.closest('[data-smdel]'))){return ask('این قانون حذف شود؟',function(){SM.rules=SM.rules.filter(function(r){return r.id!==b.dataset.smdel});save();syncFilters();renderSms()})}
+ if(!TS)return;
+ if(t.id==='smGo'){readFields();if(!TS.txt.trim())return toast('متن پیامک را وارد کنید');autoFill(TS);TS.stage=2;return renderM()}
+ if(t.id==='smInb'){return perm(true).then(function(g){if(g!=='granted')return toast('مجوز پیامک لازم است');return plug().list({since:Date.now()-60*864e5,limit:40}).then(function(res){var L=(res&&res.messages)||[];var el=document.getElementById('smInbL');el.innerHTML=L.length?L.map(function(m,i){return '<button class="mini" data-smpk="'+i+'" style="display:block;width:100%;text-align:start;margin:4px 0"><b>'+esc(m.address||'')+'</b> · '+esc(String(m.body||'').replace(/\s+/g,' ').slice(0,80))+'</button>'}).join(''):'<div class="e">پیامکی پیدا نشد</div>';TS._inb=L})})}
+ if((b=t.closest&&t.closest('[data-smpk]'))){var m=TS._inb[+b.dataset.smpk];readFields();TS.txt=m.body;TS.sender=m.address||'';TS.ts=m.date||Date.now();TS.msgId=m.id;autoFill(TS);TS.stage=2;return renderM()}
+ if((b=t.closest&&t.closest('[data-smai]'))){readFields();TS.ai=+b.dataset.smai;var tt=nd(TS.txt),tk=toks(tt),k=tk[TS.ai],s=tt.charAt(k.st-1),en=tt.charAt(k.en);if(NEG.indexOf(s)>=0||NEG.indexOf(en)>=0)TS.dir='out';else if(s===POS||en===POS)TS.dir='in';return renderM()}
+ if((b=t.closest&&t.closest('[data-smdir]'))){readFields();TS.dir=b.dataset.smdir;var L=lc(nd(TS.txt));TS.kws=(TS.dir==='in'?LIN:LOUT).filter(function(w){return L.indexOf(lc(w))>=0}).slice(0,2);return renderM()}
+ if((b=t.closest&&t.closest('[data-smkw]'))){readFields();var w=b.dataset.smkw,i=TS.kws.indexOf(w);if(i>=0)TS.kws.splice(i,1);else TS.kws.push(w);return renderM()}
+ if(t.id==='smKwB'){readFields();var kv=document.getElementById('smKw').value.trim();if(kv&&TS.kws.indexOf(kv)<0)TS.kws.push(kv);return renderM()}
+ if((b=t.closest&&t.closest('[data-smcid]'))){readFields();TS.cid=b.dataset.smcid;return renderM()}
+ if(t.id==='smRec'){readFields();var r=matchedRule(TS);if(r){var x=applyRule(r,{a:TS.sender,b:TS.txt,d:TS.ts});if(x){record(r,x,{id:'smp'+Date.now(),a:TS.sender,b:TS.txt,d:TS.ts});save();TS=null;renderM();try{renderFin();renderDash&&renderDash()}catch(e){}renderSms();toast('ثبت شد')}}return}
+ if(t.id==='smSv'){return save2()}
+});
+document.addEventListener('change',function(e){if(TS&&e.target&&/^sm(Cd|Jb|Un|Rc|Hi)$/.test(e.target.id)){readFields();if(e.target.id!=='smRc'&&e.target.id!=='smHi')renderM()}});
+var _rf=renderFin;renderFin=function(){_rf();renderSms()};
+/* ---- زمان‌بندی ---- */
+function arm(){var p=plug();if(!p)return;try{if(p.addListener&&!window.__smL){window.__smL=1;p.addListener('smsReceived',function(){poll()})}}catch(e){}
+ perm(false).then(function(){syncFilters();poll();renderSms()});
+ var W=window.parent&&window.parent!==window?window.parent:window;try{W.document.addEventListener('visibilitychange',function(){if(!W.document.hidden)poll()})}catch(e){}
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)poll()});setInterval(poll,45000)}
+setTimeout(arm,700);renderSms();
+window.__smsTest={nd:nd,toks:toks,learn:learn,applyRule:applyRule,ingest:ingest,SM:SM,state:function(){return TS},open:open,autoFill:autoFill};
+})();
 
 applyIcons();
 renderAll();
