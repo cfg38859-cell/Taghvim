@@ -44,6 +44,9 @@ jobs:
     - name: Patch Android Files
       run: python3 scripts/patch_android.py
 
+    - name: Add SMS plugin
+      run: python3 native/sms/add_sms_native.py android
+
     - name: Capacitor Sync
       run: npx cap sync android
 
