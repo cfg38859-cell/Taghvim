@@ -27,7 +27,7 @@ def find(pattern_fn):
                 return p
     return None
 
-manifest = find(lambda p, f: f == 'AndroidManifest.xml' and '/src/main/' in p.replace('\\', '/'))
+manifest = find(lambda p, f: f == 'AndroidManifest.xml' and '/app/src/main/' in p.replace('\\', '/'))
 main = find(lambda p, f: f in ('MainActivity.java', 'MainActivity.kt'))
 if not manifest or not main:
     sys.exit('AndroidManifest.xml یا MainActivity پیدا نشد؛ مسیر پوشه‌ی android را بررسی کنید.')
