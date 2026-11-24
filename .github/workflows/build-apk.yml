@@ -29,7 +29,7 @@ jobs:
         mkdir -p ~/.android
         cp debug.keystore ~/.android/debug.keystore
 
-    # این بخش جادو می‌کند: پوشه www را می‌سازد و فایل index.html را کپی می‌کند
+    # این بخش جاده می‌سازد و فایل www را می‌سازد و index.html را کپی می‌کند
     - name: Prepare www directory
       run: |
         mkdir -p www
@@ -49,6 +49,12 @@ jobs:
 
     - name: Capacitor Sync
       run: npx cap sync android
+
+    - name: Set Version (for update)
+      run: |
+        sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/" android/app/build.gradle
+        sed -i "s/versionName \".*\"/versionName \"1.0.${{ github.run_number }}\"/" android/app/build.gradle
+        grep -E "versionCode|versionName" android/app/build.gradle
 
     - name: Build APK
       run: |
