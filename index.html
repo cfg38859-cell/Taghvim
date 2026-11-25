@@ -122,7 +122,7 @@ input[type=range]{accent-color:var(--em)}
 .bk .sec{margin:1.3em 0 .1em;font-weight:700;color:var(--gold)}
 .bkx h2{margin:1.5em 0 .3em;font-size:1.35em;color:var(--emd)}.bkx h3{margin:1.3em 0 .2em;font-size:1.12em;color:var(--em);font-style:normal;font-weight:700}.bkx h4{margin:1.1em 0 0;font-size:1em;color:var(--gold);font-weight:700}
 .bkx h5{margin:1em 0 0;font-size:1em;color:var(--em);font-weight:700}
-.bkx h6{margin:.9em 0 0;font-size:1em;color:var(--mute);font-weight:700}.bkx img{display:block;max-width:100%;height:auto;margin:.8em auto;border-radius:.5em}.bkx .ar{font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:1.08em}.bkx .fnx{margin:.6em 0 1em;padding-top:.5em;border-top:1px solid var(--line);font-size:.82em;line-height:1.9;color:var(--mute)}.bkx .fnx p{margin:.3em 0}.bkx .fnx b{color:var(--em)}.btn:disabled{opacity:.35}
+.bkx h6{margin:.9em 0 0;font-size:1em;color:var(--mute);font-weight:700}.bkx img{display:block;max-width:100%;height:auto;margin:.8em auto;border-radius:.5em}.bkx .ar{font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:1.08em}.bkx .fnx{margin:.6em 0 1em;padding-top:.5em;border-top:1px solid var(--line);font-size:.82em;line-height:1.9;color:var(--mute)}.bkx .fnx{display:none!important}.bkx .ref[data-f]{padding:.1em .45em;font-size:.78em}.bkx .fnx p{margin:.3em 0}.bkx .fnx b{color:var(--em)}.btn:disabled{opacity:.35}
 .bk .cap{text-align:center;color:var(--mute);font-size:.85em}
 .sal{font-family:"Noto Naskh Arabic","Traditional Arabic",serif;font-size:.78em;color:var(--gold);white-space:nowrap}
 .ref{color:var(--em);font-size:.7em;font-weight:700;cursor:pointer;padding:0 .3em;margin:0 .1em;border-radius:.5em;background:var(--emt);font-family:Onvan,Vazirmatn,Tahoma,sans-serif;vertical-align:super;line-height:1}
@@ -242,6 +242,7 @@ html[data-bf=n],html[data-bf=nb]{--bkf:BNazanin,Onvan,Tahoma,sans-serif}html[dat
 html[data-bf] .bkx,html[data-bf] .bkx *:not(.ar):not(.sal):not(.qar):not(.qbs){font-family:var(--bkf)}
 html[data-bf=nb] .bkx,html[data-bf=nb] .bkx *:not(.ar):not(.sal):not(.qar):not(.qbs),html[data-bf=mb] .bkx,html[data-bf=mb] .bkx *:not(.ar):not(.sal):not(.qar):not(.qbs){font-weight:700}
 .seg.w{flex-wrap:wrap;gap:2px}.seg.w button{flex:1 0 30%}
+.card.rmc{padding:0}.rmh{display:flex;align-items:center;gap:8px;width:100%;padding:12px 14px;text-align:start}.rmh small{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rmv{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;flex:none;transition:transform .2s}.rmh[aria-expanded=true] .rmv{transform:rotate(180deg)}.rmb{padding:0 14px 12px}.rmb .fld{width:100%;margin-bottom:10px}
 .qar,.qbs,.dtx{font-weight:700;font-family:QuranOlya,Amiri,"Noto Naskh Arabic","Traditional Arabic",serif}
 /* ===== حالت‌های صفحه‌ی کتاب و قفسه ===== */
 :root{--w1:#6d4524;--w2:#4a2d15}
@@ -652,11 +653,12 @@ const bmCard=id=>{const a=(ST.bm||{})[id]||[];return a.length?'<div class="card"
 /* قفسه‌ی کتاب */
 const hue=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))%360;return h};
 const seg=(k,arr,cur,w)=>'<div class="seg'+(w?' w':'')+'" style="margin:0 0 10px">'+arr.map(o=>'<button data-'+k+'="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>').join('')+'</div>',lb=t=>'<div class="muted" style="margin-bottom:6px">'+t+'</div>';
-const rmCtl=()=>'<div class="card">'+lb('حالت صفحه‌ی کتاب')+seg('rmd',RMS,ST.rm==='single'?'single':'pdf')+lb('پس‌زمینه‌ی متن')+seg('pbd',[['w','سفید'],['c','کرمی'],['g','سبز ملایم']],ST.pb||'w')+lb('قلم متن کتاب‌ها')+seg('bfd',[['','پیش‌فرض'],['n','نازنین'],['nb','نازنین بولد'],['m','میترا'],['mb','میترا بولد'],['t','تیتر']],ST.bf||'',1)+lb('نمایش کتاب‌ها')+seg('bvd',[['list','فهرست'],['shelf','قفسه‌ی کتاب']],ST.bv==='shelf'?'shelf':'list')+'</div>';
+let rmOpen=false;const PBS=[['w','سفید'],['c','کرمی'],['g','سبز ملایم']],BFS=[['','پیش‌فرض'],['n','نازنین'],['nb','نازنین بولد'],['m','میترا'],['mb','میترا بولد'],['t','تیتر']],BVS=[['list','فهرست'],['shelf','قفسه‌ی کتاب']],lab=(a,k)=>(a.find(o=>o[0]===k)||a[0])[1];const rmCtl=()=>{const m=ST.rm==='single'?'single':'pdf',p=ST.pb||'w',f=ST.bf||'',v=ST.bv==='shelf'?'shelf':'list';return '<div class="card rmc"><button class="rmh" data-rmt aria-expanded="'+rmOpen+'"><b class="rmt">تنظیمات نمایش</b><small class="muted">'+lab(RMS,m)+' · '+lab(PBS,p)+' · '+lab(BFS,f)+' · '+lab(BVS,v)+'</small><svg class="rmv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>'+(rmOpen?'<div class="rmb">'+lb('حالت صفحه‌ی کتاب')+seg('rmd',RMS,m)+lb('پس‌زمینه‌ی متن')+seg('pbd',PBS,p)+lb('قلم متن کتاب‌ها')+'<select class="fld" data-bfs>'+BFS.map(o=>'<option value="'+o[0]+'"'+(o[0]===f?' selected':'')+'>'+o[1]+'</option>').join('')+'</select>'+lb('نمایش کتاب‌ها')+seg('bvd',BVS,v)+'</div>':'')+'</div>'};
 function shelfHTML(A){shSel=null;const per=Math.max(3,Math.floor(((main.clientWidth||360)-28)/50));let h='<div class="shv">';
  for(let i=0;i<A.length;i+=per)h+='<div class="shr">'+A.slice(i,i+per).map(x=>{const b=x.b,n=pgN(b.id);return'<button class="bs" data-bs="'+b.id+'" aria-label="'+esc(b.t)+'" style="--h:'+hue(b.id)+';height:'+(120+Math.min(60,Math.round(n/8)))+'px;width:'+(30+Math.min(16,Math.round(n/40)))+'px"><span>'+esc(b.t.replace(/\s*[(（].*$/,''))+'</span></button>'}).join('')+'</div><div class="shp"></div>';
  return h+'</div><div class="shi" id="shi"><span class="muted">یک کتاب را لمس کنید تا از قفسه بیرون بیاید؛ لمس دوباره‌ی آن، کتاب را باز می‌کند.</span></div>'}
 main.addEventListener('click',e=>{if(tab!=='book'||bookSel)return;let x;
+ if(x=e.target.closest('[data-rmt]')){rmOpen=!rmOpen;drawBook();return}
  if(x=e.target.closest('[data-rmd]')){ST.rm=x.dataset.rmd;save();drawBook();return}
  if(x=e.target.closest('[data-bvd]')){ST.bv=x.dataset.bvd;save();drawBook();return}
  if(x=e.target.closest('[data-pbd]')){ST.pb=x.dataset.pbd;save();applyUI();drawBook();return}
@@ -664,6 +666,7 @@ main.addEventListener('click',e=>{if(tab!=='book'||bookSel)return;let x;
  if(x=e.target.closest('[data-bs]')){const id=x.dataset.bs;if(shSel===id){shSel=null;bookSel=id;bkPath=[];drawBook();main.scrollTop=0;return}
   shSel=id;document.querySelectorAll('.bs').forEach(b=>b.classList.toggle('sel',b===x));document.querySelectorAll('.shr').forEach(r=>r.classList.add('hs'));
   const L=LIB.find(b=>b.id===id);$('#shi').innerHTML='<b>'+esc(L.t)+'</b><small class="muted" style="display:block">'+esc(L.s||'')+'</small><div class="muted" style="margin-top:4px">برای باز کردن، دوباره روی همین کتاب بزنید</div>'}});
+main.addEventListener('change',e=>{if(tab!=='book'||bookSel)return;const x=e.target.closest('[data-bfs]');if(x){ST.bf=x.value;save();applyUI();drawBook()}});
 function drawMonth(m){const mo=MN[m-1];let h='<div class="bar"><button class="ib" data-a="bk" aria-label="بازگشت"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><div class="t"><b>'+HM[m-1]+'</b><small>'+mo.name+'</small></div><span style="width:38px"></span></div><div class="card"><button class="btn" data-k="mall:'+m+'">خواندن همه‌ی متن ماه</button><h3 style="margin-top:14px">روزهای دارای رویداد</h3><div class="days">'+
  mo.groups.filter(g=>g.k==='day').map(g=>'<button data-k="d:'+m+':'+g.key+'">'+fa(g.key)+'</button>').join('')+'</div>'+
  (tails(m).length?'<h3>بخش‌های ویژه</h3><div class="days">'+tails(m).map((g,i)=>'<button class="t" data-k="t:'+m+':'+i+'">'+esc(g.key)+'</button>').join('')+'</div>':'')+'</div>';
