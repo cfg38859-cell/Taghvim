@@ -671,12 +671,33 @@ function drawMonth(m){const mo=MN[m-1];let h='<div class="bar"><button class="ib
  mo.groups.filter(g=>g.k==='day').map(g=>'<button data-k="d:'+m+':'+g.key+'">'+fa(g.key)+'</button>').join('')+'</div>'+
  (tails(m).length?'<h3>بخش‌های ویژه</h3><div class="days">'+tails(m).map((g,i)=>'<button class="t" data-k="t:'+m+':'+i+'">'+esc(g.key)+'</button>').join('')+'</div>':'')+'</div>';
  main.innerHTML=h}
-let sidx=null;
+ let sidx=null,sidxP=null,sidxV=0,IXP={d:0,t:''},cOn=false,RC=[];function idxReset(){sidx=null;sidxP=null;sidxV++;cOn=false;RC=[]}
+ const yld=(()=>{try{const c=new MessageChannel(),q=[];c.port1.onmessage=()=>{const f=q.shift();if(f)f()};return()=>new Promise(r=>{q.push(r);c.port2.postMessage(0)})}catch(e){return()=>new Promise(r=>setTimeout(r,0))}})();
 const nz=s=>s.replace(/[\u064B-\u065F\u0670\u0640\u200c\u200f]/g,'').replace(/[يىئ]/g,'ی').replace(/ك/g,'ک').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/[\ue000-\ue004\u27e6\u27e7]/g,' ').replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\s+/g,' ');
-const dec=s=>s.replace(/&nbsp;/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#(\d+);/g,(_,d)=>String.fromCharCode(+d)).replace(/&amp;/g,'&'),CP=/[\s\u200c\u200f.,;:!?؟،؛«»()\[\]{}"'`\-–—ـ*\/\\]/g,FNX=/<div class="fnx">[\s\S]*?<\/div>/g,plain=h=>dec(h.replace(/<img[^>]*>/g,' ').replace(/<[^>]+>/g,' '));
-function buildIdx(){sidx=[];MN.forEach((mo,mi)=>mo.groups.forEach((g,gi)=>g.items.forEach((it,ii)=>{const t=it[it.length-1];sidx.push({k:'g',mi,gi,ii,t:nz(t)})})));
- Object.entries(NOTES).forEach(([n,t])=>sidx.push({k:'n',n,t:nz(t)}));BOOK.front.forEach((it,ii)=>sidx.push({k:'f',ii,t:nz(it[1])}));
-  LIB.forEach((L,li)=>{if(L.id==='tsh')return;const b=gbOf(L.id);b.pages.forEach((p,pi)=>{let f='';const body=p.replace(FNX,m=>{f+=' '+m;return' '});const t=nz(plain(body)),u=f?nz(plain(f)):'';if(t.trim().length>1)sidx.push({k:'b',li,pi,t,ty:'x'});if(u.trim().length>1)sidx.push({k:'b',li,pi,t:u,ty:'f'})});(b.toc||[]).forEach(e=>{const t=nz(plain(String(e[1])));if(t.trim())sidx.push({k:'b',li,pi:e[2]|0,t,ty:'h'})})})}
+const dec=s=>s.indexOf('&')<0?s:s.replace(/&nbsp;/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#(\d+);/g,(_,d)=>String.fromCharCode(+d)).replace(/&amp;/g,'&'),CP=/[\s\u200c\u200f.,;:!?؟،؛«»()\[\]{}"'`\-–—ـ*\/\\]/g,FNX=/<div class="fnx">[\s\S]*?<\/div>/g,plain=h=>dec(h.replace(/(?:<[^>]+>)+/g,' '));
+ function idxPaint(){const b=document.getElementById('ixb'),x=document.getElementById('ixt');if(b)b.style.width=Math.round(IXP.d*100)+'%';if(x)x.textContent='در حال آماده‌سازی جستجو… '+fa(Math.round(IXP.d*100))+'٪'+(IXP.t?' — '+IXP.t:'')}
+ function idxShow(){const o=$('#out'),s=$('#fsum');if(!o)return;if(s)s.innerHTML='';if(!document.getElementById('ixb'))o.innerHTML='<div class="empty"><div style="height:6px;border-radius:3px;background:rgba(128,128,128,.25);overflow:hidden;margin:0 0 10px"><i id="ixb" style="display:block;height:100%;width:0;background:var(--gold,#c9a24b)"></i></div><span class="muted" id="ixt"></span></div>';idxPaint()}
+ /* ساخت ایندکس تکه‌تکه: هر ~۱۰ میلی‌ثانیه کنترل به مرورگر برمی‌گردد؛ محتوا و ترتیب دقیقاً مثل نسخه‌ی قبل */
+ async function buildIdxAsync(v){const A=[];let t0=performance.now();
+  const ok=async()=>{if(performance.now()-t0<10)return true;idxPaint();await yld();t0=performance.now();return v===sidxV};
+  try{
+   for(let mi=0;mi<MN.length;mi++){const mo=MN[mi];for(let gi=0;gi<mo.groups.length;gi++){const g=mo.groups[gi];for(let ii=0;ii<g.items.length;ii++){const it=g.items[ii],t=it[it.length-1];A.push({k:'g',mi,gi,ii,t:nz(t)})}if(!await ok())return null}}
+   for(const [n,t] of Object.entries(NOTES)){A.push({k:'n',n,t:nz(t)})}
+   BOOK.front.forEach((it,ii)=>A.push({k:'f',ii,t:nz(it[1])}));
+   const nb=Math.max(1,LIB.length);
+   for(let li=0;li<LIB.length;li++){const Lb=LIB[li];if(Lb.id==='tsh')continue;IXP.t=Lb.t||'';if(!await ok())return null;
+    let b;try{b=gbOf(Lb.id)}catch(e){console.warn('idx book skipped',Lb.id,e);continue}
+    const P=b.pages;
+    for(let pi=0;pi<P.length;pi++){const p=P[pi];let f='';const body=p.replace(FNX,m=>{f+=' '+m;return' '});const t=nz(plain(body)),u=f?nz(plain(f)):'';
+     if(t.trim().length>1)A.push({k:'b',li,pi,t,ty:'x'});if(u.trim().length>1)A.push({k:'b',li,pi,t:u,ty:'f'});
+     if((pi&7)===7){IXP.d=(li+pi/P.length)/nb;if(!await ok())return null}}
+    (b.toc||[]).forEach(e=>{const t=nz(plain(String(e[1])));if(t.trim())A.push({k:'b',li,pi:e[2]|0,t,ty:'h'})});
+   }
+  }catch(e){console.warn('idx',e);if(v!==sidxV)return null}
+  IXP.d=1;return A}
+ function ensureIdx(){if(sidx)return Promise.resolve();if(sidxP)return sidxP;const v=sidxV;
+  const p=sidxP=buildIdxAsync(v).then(A=>{if(A&&v===sidxV)sidx=A;if(sidxP===p)sidxP=null}).catch(e=>{console.warn(e);if(v===sidxV&&!sidx)sidx=[];if(sidxP===p)sidxP=null});return p}
+ async function idxReady(){while(!sidx)await ensureIdx()}
 let RH=null;
 const FS={q:'',mode:'all',scope:'all',sort:'rel',lim:40,re:null,hre:null,res:[],cnt:{all:0},ws:[]};
 const sk=e=>e.k==='b'?LIB[e.li].id:'tsh',scLab=t=>t.replace(/\s*[(（].*$/,''),escRe=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
@@ -694,13 +715,14 @@ function scopeBar(){const e=$('#fsc');if(!e)return;const q=FS.re!==null,A=[['all
  e.innerHTML=A.filter(x=>!q||x[0]==='all'||x[2]>0||x[0]===FS.scope).map(x=>'<button data-fsc="'+x[0]+'" class="'+(FS.scope===x[0]?'on':'')+'">'+esc(x[1])+(q?'<i>'+fa(x[2])+'</i>':'')+'</button>').join('')}
 const SEPR=/[\s\u200c.,;:!?؟،؛«»()\-ـ\u064B-\u065F\u0670]*/.source;
 function mkLoose(ws,ph){const V={'ی':'[یيىئ]','ک':'[کك]','ا':'[اأإآٱ]','ه':'[هة]'},one=w=>[...w].map(c=>V[c]||(/\d/.test(c)?'['+c+FA[c]+']':escRe(c))).join(SEPR);return new RegExp(ph?one(ws.join('')):ws.map(one).join('|'),'g')}
-function rawTxt(e){if(e.r!=null)return e.r;const p=gbOf(LIB[e.li].id).pages[e.pi]||'';let f='';const body=p.replace(FNX,m=>{f+=' '+m;return' '});return e.r=(e.ty==='f'?plain(f):e.ty==='h'?'':plain(body)).replace(/[\s\u200c]+/g,' ')}
-function srch(ws,neg,comp){
+function rawTxt(e){if(e.r!=null)return e.r;const p=gbOf(LIB[e.li].id).pages[e.pi]||'';let f='';const body=p.replace(FNX,m=>{f+=' '+m;return' '});if(RC.length>400){for(const x of RC)x.r=null;RC.length=0}RC.push(e);return e.r=(e.ty==='f'?plain(f):e.ty==='h'?'':plain(body)).replace(/[\s\u200c]+/g,' ')}
+async function srch(ws,neg,comp,my){
  const W=comp?ws.map(w=>w.replace(CP,'')).filter(Boolean):ws,N=comp?neg.map(w=>w.replace(CP,'')).filter(Boolean):neg,P=comp?W.join(''):W.join(' '),R=[],ww=FS.ww,mode=FS.mode,bd=c=>/[\u0600-\u06FF\w]/.test(c);
  FS.cnt={all:0};if(!W.length)return R;
  const cnt=(t,w)=>{let c=0,i=0;while(c<30&&(i=t.indexOf(w,i))>=0){if(!ww||((i===0||!bd(t[i-1]))&&(i+w.length>=t.length||!bd(t[i+w.length]))))c++;i+=w.length}return c};
  const rw=FS.q.trim().replace(/[\s\u200c]+/g,' ').split(' ').filter(w=>w&&!(w[0]==='-'&&w.length>1));
- for(const e of sidx){const ty=e.ty||'x';if(FS.ty==='all'?ty==='h':ty!==FS.ty)continue;
+ let n=0,t0=performance.now();
+ for(const e of sidx){if((++n&15)===0&&performance.now()-t0>12){await yld();if(my!==FS.tok)return null;t0=performance.now()}const ty=e.ty||'x';if(FS.ty==='all'?ty==='h':ty!==FS.ty)continue;
   const k=sk(e);if(FS.cat!=='all'&&(FS.cat==='_'?bcOf(k):bcOf(k)!==FS.cat))continue;
   const t=comp?(e.c||(e.c=e.t.replace(CP,''))):e.t;if(N.length&&N.some(w=>t.includes(w)))continue;let sc=0;
   if(mode==='ph'){sc=cnt(t,P)}
@@ -710,24 +732,27 @@ function srch(ws,neg,comp){
   if(FS.ex&&e.k==='b'&&ty!=='h'){const r=rawTxt(e).replace(/\u200c/g,'');const q=mode==='ph'?[rw.join(' ')]:rw;const hit=q.map(w=>r.includes(w.replace(/\u200c/g,'')));if(mode==='any'?!hit.some(Boolean):!hit.every(Boolean))continue}
   FS.cnt.all++;FS.cnt[k]=(FS.cnt[k]||0)+1;if(FS.scope==='all'||FS.scope===k)R.push({e,sc:sc/(1+t.length/3000),i:R.length})}
  return R}
-function runSearch(){const out=$('#out'),nq=nz(FS.q.trim());FS.cnt={all:0};FS.res=[];FS.auto=false;
+ async function runSearch(){const out=$('#out'),nq=nz(FS.q.trim()),my=++FS.tok;FS.cnt={all:0};FS.res=[];FS.auto=false;FS.busy=0;
  const toks=nq.split(' ').filter(Boolean),neg=toks.filter(w=>w[0]==='-'&&w.length>1).map(w=>w.slice(1)),ws=toks.filter(w=>!(w[0]==='-'&&w.length>1));
  if(nq.replace(/-/g,'').length<2||!ws.length){FS.re=null;FS.hre=null;out._r=[];scopeBar();$('#fsum').innerHTML='';out.innerHTML=histHtml()+'<div class="empty">کلمه یا عبارتی از کتاب‌ها را بنویسید.<br><span class="muted">برای حذف یک کلمه از نتایج، قبل از آن «-» بگذارید. از «فیلترها» برای محدودکردن نوع، دسته و دقت استفاده کنید.</span></div>';return}
- if(!sidx)buildIdx();const ph=ws.join(' ');let comp=!!FS.sp,R=srch(ws,neg,comp);
- if(!R.length&&!comp&&FS.cnt.all===0){const R2=srch(ws,neg,true);if(R2.length||FS.cnt.all){R=R2;comp=true;FS.auto=true}}
+ FS.busy=1;if(!sidx){idxShow();await idxReady();if(my!==FS.tok)return;if(tab!=='find'||$('#out')!==out){FS.busy=0;return}}
+  const slow=setTimeout(()=>{if(my===FS.tok){const s=$('#fsum');if(s)s.innerHTML='<span class="muted">در حال جستجو…</span>'}},250);
+  const ph=ws.join(' ');let comp=!!FS.sp,R=await srch(ws,neg,comp,my);if(R===null){clearTimeout(slow);return}
+ if(!R.length&&!comp&&FS.cnt.all===0){const R2=await srch(ws,neg,true,my);if(R2===null){clearTimeout(slow);return}if(R2.length||FS.cnt.all){R=R2;comp=true;FS.auto=true}}
+  clearTimeout(slow);
  if(FS.sort==='rel')R.sort((a,b)=>b.sc-a.sc||a.i-b.i);
  FS.res=R.map(x=>x.e);FS.ws=ws;FS.ph=ph;FS.re=comp?mkLoose(ws,FS.mode==='ph'):mkRe(ws,FS.mode==='ph');
  if(comp){FS.pre=mkLoose(ws,FS.mode==='ph');FS.hre=new RegExp(FS.pre.source,'g')}
  else{FS.pre=null;const parts=(FS.mode==='ph'?[ph]:ws.slice().sort((a,b)=>b.length-a.length)).map(w=>escRe(esc(w)));FS.hre=new RegExp(parts.join('|'),'g')}
- scopeBar();renderRes()}
-function renderRes(){const out=$('#out');if(FS.re===null)return;const R=FS.res,ws=FS.ws,show=R.slice(0,FS.lim);out._r=R;
+ FS.busy=0;scopeBar();renderRes()}
+function renderRes(){const out=$('#out');if(FS.re===null||FS.busy)return;const R=FS.res,ws=FS.ws,show=R.slice(0,FS.lim);out._r=R;
  const snip=t=>{let p=-1;for(const w of(FS.mode==='ph'?[FS.ph]:ws)){const i=t.indexOf(w);if(i>=0&&(p<0||i<p))p=i}if(p<0&&FS.pre){FS.pre.lastIndex=0;const m=FS.pre.exec(t);if(m)p=m.index}if(p<0)p=0;const a=Math.max(0,p-60),b=Math.min(t.length,p+140),s=esc(t.slice(a,b)).replace(FS.hre,m=>'<mark>'+m+'</mark>');return(a?'… ':'')+s+(b<t.length?' …':'')};
  $('#fsum').innerHTML='<span class="muted">'+fa(R.length)+' نتیجه'+(FS.scope==='all'?'':' در این کتاب')+(FS.auto?' · بدون توجه به فاصله و نیم‌فاصله':'')+'</span><select id="fso" class="fld" aria-label="مرتب‌سازی نتایج"><option value="rel"'+(FS.sort==='rel'?' selected':'')+'>مرتبط‌ترین</option><option value="ord"'+(FS.sort==='ord'?' selected':'')+'>ترتیب کتاب</option></select>';
  out.innerHTML=R.length?show.map((e,i)=>{let w;
   if(e.k==='g'){const g=MN[e.mi].groups[e.gi];w=HM[e.mi]+' · '+(g.k==='day'?fa(g.key)+' '+HM[e.mi]:g.k==='intro'?'خلاصه‌ی ماه':g.key)}else if(e.k==='n')w='پی‌نوشت '+fa(e.n);else if(e.k==='b')w=LIB[e.li].t+' · صفحه‌ی '+fa(e.pi+1)+(e.ty==='h'?' · عنوان':e.ty==='f'?' · پاورقی':'');else w='مقدمه';
   return'<button class="res" data-s="'+i+'"><b>'+esc(w)+'</b><p>'+snip(e.t)+'</p></button>'}).join('')+(R.length>show.length?'<button class="btn ghost fmore" data-fmore>نمایش بیشتر ('+fa(R.length-show.length)+' نتیجه‌ی دیگر)</button>':''):'<div class="empty">نتیجه‌ای پیدا نشد.<br><span class="muted">حالت «هر کلمه» را امتحان کنید یا دامنه را روی «همه» بگذارید.</span></div>'}
 function doSearch(q){FS.q=q;FS.lim=40;runSearch()}
-Object.assign(FS,{ty:'all',cat:'all',ww:false,sp:false,ex:false,fo:false,auto:false,pre:null});
+Object.assign(FS,{tok:0,busy:0,ty:'all',cat:'all',ww:false,sp:false,ex:false,fo:false,auto:false,pre:null});
 function flBar(){const e=$('#ffl');if(!e)return;const C=cats(),act=(FS.ty!=='all')+(FS.cat!=='all')+(FS.ww?1:0)+(FS.sp?1:0)+(FS.ex?1:0);
  let h='<div class="fq"><button data-fo class="'+(FS.fo||act?'on':'')+'">فیلترها'+(act?'<i>'+fa(act)+'</i>':'')+'</button></div>';
  if(FS.fo)h+='<div class="fq">'+[['all','متن و پاورقی'],['x','فقط متن'],['f','فقط پاورقی'],['h','فقط عنوان‌ها']].map(o=>'<button data-ft="'+o[0]+'" class="'+(FS.ty===o[0]?'on':'')+'">'+o[1]+'</button>').join('')+'</div><div class="fq">'+[['ww','کلمه‌ی کامل'],['sp','نادیده‌گرفتن فاصله و نیم‌فاصله'],['ex','اعراب دقیق']].map(o=>'<button data-fw="'+o[0]+'" class="'+(FS[o[0]]?'on':'')+'">'+o[1]+'</button>').join('')+'</div><div class="fsel"><span class="muted">دسته‌ی کتاب</span><select id="fcatsel" class="fld"><option value="all">همه</option>'+C.map(c=>'<option'+(FS.cat===c?' selected':'')+'>'+esc(c)+'</option>').join('')+'<option value="_"'+(FS.cat==='_'?' selected':'')+'>بدون دسته</option></select></div><div class="fq"><button data-fr>پاک‌کردن فیلترها</button></div>';
@@ -740,7 +765,7 @@ main.addEventListener('click',e=>{if(tab!=='find')return;let x;
 main.addEventListener('change',e=>{if(e.target.id==='fcatsel'){FS.cat=e.target.value;flBar();doSearch(FS.q)}});
 
 function drawFind(){main.innerHTML='<div class="search"><input id="q" class="fld" type="search" placeholder="جستجو در متن همه‌ی کتاب‌ها…" autocomplete="off" enterkeyhint="search" value="'+esc(FS.q)+'"></div><div class="fq" id="fmode"></div><div id="ffl"></div><div class="fq" id="fsc"></div><div class="fsel" id="fsum"></div><div id="out"></div>';
- modeBar();flBar();scopeBar();runSearch();
+ modeBar();flBar();scopeBar();runSearch();if(!sidx&&!FS.q.trim())setTimeout(()=>{if(tab==='find'&&!sidx)ensureIdx()},120);
  let t;const q=$('#q');q.addEventListener('input',e=>{clearTimeout(t);t=setTimeout(()=>doSearch(e.target.value),160)});
  q.addEventListener('keydown',e=>{if(e.key==='Enter'){clearTimeout(t);doSearch(q.value);addHist(q.value);q.blur()}})}
 main.addEventListener('click',e=>{let x;
@@ -1954,7 +1979,7 @@ function buildAppText(src,del,added){
 async function init(){
  for(const id of getDel()){const i=LIB.findIndex(x=>x.id===id);if(i>0)LIB.splice(i,1)}
  try{for(const o of await dbAll()){if(LIB.some(x=>x.id===o.id)||getDel().includes(o.id))continue;GB[o.id]=o.data;LIB.push({id:o.id,t:o.t,s:o.s,u:1,f:()=>drawGen(o.id)})}}catch(e){}
- sidx=null;if(tab==='book'&&!bookSel&&!VIEW)drawBook()}
+ idxReset();if(tab==='book'&&!bookSel&&!VIEW)drawBook()}
 
 /* ---- رابط ---- */
 let VIEW=false,BKS=[],FILES=[],BUN=null;
@@ -1996,7 +2021,7 @@ async function pick(files){msg('در حال پردازش…');FILES=[];BUN=null;
     let nk=0;const live=async r=>{nk+=await installOne(r)};
    const rest=await booksFromZip(f,t=>{msg(t);toast(t)},0,live);
    if(rest.length)await installList(rest);
-   else{sidx=null;if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();note(nk?'✓ '+nk+' کتاب نصب شد.':'همه‌ی کتاب‌ها از قبل نصب‌اند.')}
+   else{idxReset();if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();note(nk?'✓ '+nk+' کتاب نصب شد.':'همه‌ی کتاب‌ها از قبل نصب‌اند.')}
    continue}
   if(/\.json$/i.test(f.name)){const j=JSON.parse(await f.text());if(j.format!=='books-bundle'||!Array.isArray(j.books))throw Error('این فایل json «فایل کتاب‌ها»ی این برنامه نیست');
    const titles=new Set(LIB.map(x=>x.t.trim()));j.books.forEach(b=>b._dup=titles.has(String(b.t).trim()));BUN=j;continue}
@@ -2005,7 +2030,7 @@ async function pick(files){msg('در حال پردازش…');FILES=[];BUN=null;
 async function saveBooks(list){let bad=0;for(const o of list){let id=o.id;if(!id||LIB.some(x=>x.id===id))id='u'+Date.now().toString(36)+RAND();while(LIB.some(x=>x.id===id))id='u'+Date.now().toString(36)+RAND();
   const rec={id,t:o.t,s:o.s||'',data:o.data};GB[id]=o.data;LIB.push({id,t:rec.t,s:rec.s,u:1,f:()=>drawGen(id)});
   try{await dbPut(rec)}catch(e){bad++}}
- sidx=null;return bad}
+ idxReset();return bad}
 async function bundleOut(){const parts=['{"format":"books-bundle","version":1,"books":['];LIB.slice(1).forEach((L,i)=>{parts.push((i?',':'')+JSON.stringify({id:L.id,t:L.t,s:L.s,data:bookData(L.id)}))});parts.push(']}');return new Blob(parts,{type:'application/json'})}
 async function getSource(){
  try{const r=await fetch(location.href.split('#')[0]);if(r.ok){const t=await r.text();if(t.includes('id="LIBMETA"'))return t}}catch(e){}
@@ -2186,7 +2211,7 @@ async function installList(list){const titles=new Set(LIB.map(x=>x.t.trim())),se
  for(const b of list){const t=String(b&&b.t||'').trim();if(b&&b.data&&t&&!titles.has(t)){titles.add(t);sel.push(b)}}
  if(!sel.length){note('همه‌ی کتاب‌ها از قبل نصب‌اند.');return 0}
  let bad=0,n=0;for(const b of sel){note('در حال نصب '+(++n)+' از '+sel.length+': '+b.t,0,1);bad+=await saveBooks([{t:b.t,s:b.s,c:b.c||'',data:b.data}]);await sleep(30)}
- sidx=null;if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();
+ idxReset();if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();
  note('✓ '+sel.length+' کتاب نصب شد'+(bad?' (ذخیره‌ی دائمی '+bad+' کتاب ممکن نشد)':'.'));return sel.length}
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-ba]');if(!t)return;const a=t.dataset.ba;
  try{
@@ -2195,7 +2220,7 @@ document.addEventListener('click',async e=>{const t=e.target.closest('[data-ba]'
   else if(a==='up'||a==='dn'){const b=BKS[t.closest('.card').dataset.i];b.bs.forEach(x=>{if(x.k==='h')x.lv=Math.max(0,Math.min(4,x.lv+(a==='up'?-1:1)))});renderBk()}
   else if(a==='add'){const list=BKS.map(b=>{const{P,T}=paginate(b);return{t:b.title,s:b.sub,c:b.cat||'',data:{title:b.title,toc:T,pages:P}}});const bad=await saveBooks(list);BKS=[];FILES=[];view();msg('✓ '+list.length+' کتاب اضافه شد'+(bad?' (ذخیره‌ی دائمی روی این دستگاه ممکن نشد؛ حتماً برنامه‌ی کامل را بسازید)':'.'))}
   else if(a==='addb'){const sel=[...document.querySelectorAll('#baBk [data-bi]')].filter(c=>c.checked).map(c=>BUN.books[+c.dataset.bi]);if(!sel.length)return msg('کتابی انتخاب نشده',1);const bad=await saveBooks(sel.map(b=>({t:b.t,s:b.s,c:b.cat!==undefined?b.cat:(b.c||''),data:b.data})));BUN=null;view();msg('✓ '+sel.length+' کتاب اضافه شد'+(bad?' (ذخیره‌ی دائمی ممکن نشد؛ برنامه‌ی کامل را بسازید)':'.'))}
-  else if(a==='del'){const L=LIB.find(x=>x.id===t.dataset.id);if(!L||!confirm('کتاب «'+L.t+'» حذف شود؟'))return;LIB.splice(LIB.indexOf(L),1);try{await dbDel(L.id)}catch(x){}if(!L.u){const d=getDel();d.push(L.id);setDel(d)}delete GB[L.id];sidx=null;view();msg('حذف شد')}
+  else if(a==='del'){const L=LIB.find(x=>x.id===t.dataset.id);if(!L||!confirm('کتاب «'+L.t+'» حذف شود؟'))return;LIB.splice(LIB.indexOf(L),1);try{await dbDel(L.id)}catch(x){}if(!L.u){const d=getDel();d.push(L.id);setDel(d)}delete GB[L.id];idxReset();view();msg('حذف شد')}
   else if(a==='bun'){msg('در حال ساخت فایل…');await dl(await bundleOut(),'books-bundle.json');msg('✓ فایل کتاب‌ها آماده شد')}
   else if(a==='app'){msg('در حال ساخت برنامه‌ی کامل…');const src=await getSource(),added=LIB.filter(x=>x.u).map(x=>({id:x.id,t:x.t,s:x.s,data:bookData(x.id)})),out=buildAppText(src,getDel(),added),nm=fileName();await dl(new Blob([out],{type:'text/html'}),nm);msg('✓ '+nm+' آماده شد · '+added.length+' کتاب تازه داخل کد برنامه قرار گرفت')}
  }catch(x){msg(x.message||x,1)}});
