@@ -54,6 +54,7 @@ public class DayNotifPlugin extends Plugin {
     static final String STALE_TEXT = "برای به‌روزرسانی تاریخ، برنامه را یک بار باز کنید.";
     static final String REM_CHANNEL = "tsh_remind";
     static final String ACT_SCHED = "app.tshia.calendar.TSH_SCHED_TICK";
+    static final String ACT_DEL = "app.tshia.calendar.DAYNOTIF_DISMISSED";
 
     private String pendingOpen = null;
 
@@ -232,6 +233,7 @@ public class DayNotifPlugin extends Plugin {
                     .setContentText(text)
                     .setStyle(new Notification.BigTextStyle().bigText(text))
                     .setContentIntent(pi)
+                    .setDeleteIntent(delIntent(ctx))
                     .setOngoing(true)
                     .setOnlyAlertOnce(true)
                     .setShowWhen(false)
@@ -272,7 +274,16 @@ public class DayNotifPlugin extends Plugin {
         return PendingIntent.getBroadcast(ctx, 71, i, flags);
     }
 
-    /** بازسازی اعلان درست بعد از نیمه‌شب (تاریخ عوض می‌شود) */
+    /** اگر کاربر اعلان را کنار زد (اندروید ۱۴ به بالا یا «پاک کردن همه»)، بلافاصله دوباره ساخته می‌شود */
+    private static PendingIntent delIntent(Context ctx) {
+        Intent i = new Intent(ctx, Rcv.class);
+        i.setAction(ACT_DEL);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= 23) flags |= PendingIntent.FLAG_IMMUTABLE;
+        return PendingIntent.getBroadcast(ctx, 73, i, flags);
+    }
+
+    /** بازسازی اعلان درست بعد از نیمه‌شب (تاریخ عوض می‌شود) و هر ۳۰ دقیقه برای اطمینان از ماندن اعلان */
     static void schedule(Context ctx) {
         try {
             AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
@@ -284,6 +295,8 @@ public class DayNotifPlugin extends Plugin {
             c.set(Calendar.SECOND, 3);
             c.set(Calendar.MILLISECOND, 0);
             long t = c.getTimeInMillis();
+            long soon = System.currentTimeMillis() + 30L * 60L * 1000L;
+            if (soon < t) t = soon;
             if (Build.VERSION.SDK_INT >= 23) {
                 am.setAndAllowWhileIdle(AlarmManager.RTC, t, alarmIntent(ctx));
             } else {
