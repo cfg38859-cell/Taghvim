@@ -10,60 +10,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v4
+      - name: Checkout Source
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 17
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
 
-    - name: Copy Keystore
-      run: |
-        mkdir -p ~/.android
-        cp debug.keystore ~/.android/debug.keystore
+      - name: Copy Keystore
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
 
-    # این بخش جاده می‌سازد و فایل www را می‌سازد و index.html را کپی می‌کند
-    - name: Prepare www directory
-      run: |
-        mkdir -p www
-        cp index.html www/index.html
+      # پوشه www را می‌سازد و index.html را در آن کپی می‌کند
+      - name: Prepare www directory
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Capacitor Add Android
-      run: npx cap add android
+      - name: Capacitor Add Android
+        run: npx cap add android
 
-    - name: Patch Android Files
-      run: python3 scripts/patch_android.py
+      - name: Patch Android Files
+        run: python3 scripts/patch_android.py
 
-    - name: Add SMS plugin
-      run: python3 native/sms/add_sms_native.py android
+      - name: Add SMS plugin
+        run: python3 native/sms/add_sms_native.py android
 
-    - name: Capacitor Sync
-      run: npx cap sync android
+      - name: Capacitor Sync
+        run: npx cap sync android
 
-    - name: Set Version (for update)
-      run: |
-        sed -i "s/versionCode [0-9]*/versionCode ${{ github.run_number }}/" android/app/build.gradle
-        sed -i "s/versionName \".*\"/versionName \"1.0.${{ github.run_number }}\"/" android/app/build.gradle
-        grep -E "versionCode|versionName" android/app/build.gradle
+      - name: Set Version (for update)
+        run: |
+          VC=$(date +%s)
+          sed -i "s/versionCode [0-9]*/versionCode $VC/" android/app/build.gradle
+          sed -i "s/versionName \".*\"/versionName \"1.0.${{ github.run_number }}\"/" android/app/build.gradle
+          grep -E "versionCode|versionName" android/app/build.gradle
 
-    - name: Build APK
-      run: |
-        cd android
-        chmod +x gradlew
-        ./gradlew assembleDebug
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: tshia-apk
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tshia-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
