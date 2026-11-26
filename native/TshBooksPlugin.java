@@ -42,6 +42,8 @@ public class TshBooksPlugin extends Plugin {
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final ExecutorService sx = Executors.newSingleThreadExecutor();
     private static volatile int tok = 0;
+    /** ایندکس کلمه‌ای FTS4: fxOn = جدول ساخته شد، fxReady = پرشدن اولیه‌ی ایندکس برای کتاب‌های موجود تمام شد */
+    private static volatile boolean fxOn = false, fxReady = false, fxBuilding = false;
     private static final ExecutorService scan = Executors.newFixedThreadPool(3);
 
     private static synchronized SQLiteDatabase db(android.content.Context c) {
@@ -55,6 +57,10 @@ public class TshBooksPlugin extends Plugin {
             db.execSQL("CREATE TABLE IF NOT EXISTS ix(id INTEGER PRIMARY KEY, b TEXT, p INTEGER, ty INTEGER, t TEXT)");
             db.execSQL("CREATE TABLE IF NOT EXISTS ic(id INTEGER PRIMARY KEY, c TEXT)");
             db.execSQL("CREATE INDEX IF NOT EXISTS ix_b ON ix(b)");
+            try {
+                db.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS fx USING fts4(t, tokenize=unicode61)");
+                fxOn = true;
+            } catch (Throwable e) { fxOn = false; }
         }
         return db;
     }
@@ -110,8 +116,52 @@ public class TshBooksPlugin extends Plugin {
     @PluginMethod
     public void open(final PluginCall call) {
         work(call, new Job() { public void run(SQLiteDatabase d) {
+            startFx(d);
             JSObject r = new JSObject(); r.put("ok", true); call.resolve(r);
         }});
+    }
+
+    /** پرکردن ایندکس کلمه‌ای برای کتاب‌های قدیمی: تکه‌تکه روی همان رشته‌ی io تا با ذخیره‌ی کتاب‌ها تداخل نکند */
+    private void startFx(final SQLiteDatabase d) {
+        if (!fxOn || fxReady || fxBuilding) return;
+        long cx = 0, ci = 0, mx = 0;
+        Cursor c = d.rawQuery("SELECT (SELECT COUNT(*) FROM fx),(SELECT COUNT(*) FROM ix),(SELECT IFNULL(MAX(id),0) FROM ix)", null);
+        try { if (c.moveToFirst()) { cx = c.getLong(0); ci = c.getLong(1); mx = c.getLong(2); } } finally { c.close(); }
+        if (cx >= ci) { fxReady = true; return; }
+        fxBuilding = true;
+        final long top = mx;
+        // اگر قبلاً نیمه‌کاره بوده، از آخرین docid ادامه بدهیم
+        long from = 0;
+        Cursor c2 = d.rawQuery("SELECT IFNULL(MAX(docid),0) FROM fx", null);
+        try { if (c2.moveToFirst()) from = c2.getLong(0); } finally { c2.close(); }
+        fxStep(d, from, top);
+    }
+
+    private void fxStep(final SQLiteDatabase d, final long from, final long top) {
+        io.execute(new Runnable() {
+            @Override public void run() {
+                try {
+                    if (!d.isOpen()) { fxBuilding = false; return; }
+                    long to = Math.min(top, from + 20000);
+                    d.beginTransaction();
+                    try {
+                        d.execSQL("INSERT INTO fx(docid,t) SELECT id,t FROM ix WHERE id>? AND id<=? AND id NOT IN (SELECT docid FROM fx WHERE docid>? AND docid<=?)",
+                            new Object[]{from, to, from, to});
+                        d.setTransactionSuccessful();
+                    } finally { d.endTransaction(); }
+                    if (to >= top) { fxReady = true; fxBuilding = false; return; }
+                    fxStep(d, to, top);
+                } catch (Throwable e) { fxBuilding = false; logErr(e); }
+            }
+        });
+    }
+
+    /** جستجوی کلمه‌ای: وضعیت ایندکس را به برنامه می‌دهد */
+    @PluginMethod
+    public void fxState(final PluginCall call) {
+        JSObject r = new JSObject();
+        r.put("on", fxOn); r.put("ready", fxReady);
+        call.resolve(r);
     }
 
     @PluginMethod
@@ -132,6 +182,7 @@ public class TshBooksPlugin extends Plugin {
     }
 
     private static void wipe(SQLiteDatabase d, String id) {
+        if (fxOn) d.execSQL("DELETE FROM fx WHERE docid IN (SELECT id FROM ix WHERE b=?)", new Object[]{id});
         d.execSQL("DELETE FROM ic WHERE id IN (SELECT id FROM ix WHERE b=?)", new Object[]{id});
         d.execSQL("DELETE FROM ix WHERE b=?", new Object[]{id});
         d.execSQL("DELETE FROM page WHERE b=?", new Object[]{id});
@@ -165,11 +216,12 @@ public class TshBooksPlugin extends Plugin {
 
     private static String nz(String s) { return s == null ? "" : s; }
 
-    private static void addIx(SQLiteStatement si, SQLiteStatement sc, String b, int p, int ty, String t, String c) {
+    private static void addIx(SQLiteStatement si, SQLiteStatement sc, SQLiteStatement sf, String b, int p, int ty, String t, String c) {
         si.bindString(1, b); si.bindLong(2, p); si.bindLong(3, ty); si.bindString(4, t);
         long id = si.executeInsert();
         sc.bindLong(1, id); sc.bindString(2, c);
         sc.executeInsert();
+        if (fxOn && sf != null) { sf.bindLong(1, id); sf.bindString(2, t); sf.executeInsert(); }
     }
 
     /** rows: [{h, t, c, u, uc}] برای صفحه‌های from … from+n-1 */
@@ -184,15 +236,16 @@ public class TshBooksPlugin extends Plugin {
                 SQLiteStatement sp = d.compileStatement("INSERT OR REPLACE INTO page(b,p,h) VALUES(?,?,?)");
                 SQLiteStatement si = d.compileStatement("INSERT INTO ix(b,p,ty,t) VALUES(?,?,?,?)");
                 SQLiteStatement sc = d.compileStatement("INSERT INTO ic(id,c) VALUES(?,?)");
+                SQLiteStatement sf = fxOn ? d.compileStatement("INSERT INTO fx(docid,t) VALUES(?,?)") : null;
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject r = rows.getJSONObject(i);
                     int p = from + i;
                     sp.bindString(1, b); sp.bindLong(2, p); sp.bindString(3, r.optString("h", ""));
                     sp.executeInsert();
                     String t = r.optString("t", "");
-                    if (t.length() > 0) addIx(si, sc, b, p, 0, t, r.optString("c", ""));
+                    if (t.length() > 0) addIx(si, sc, sf, b, p, 0, t, r.optString("c", ""));
                     String u = r.optString("u", "");
-                    if (u.length() > 0) addIx(si, sc, b, p, 1, u, r.optString("uc", ""));
+                    if (u.length() > 0) addIx(si, sc, sf, b, p, 1, u, r.optString("uc", ""));
                 }
                 d.setTransactionSuccessful();
             } finally { d.endTransaction(); }
@@ -210,9 +263,10 @@ public class TshBooksPlugin extends Plugin {
             try {
                 SQLiteStatement si = d.compileStatement("INSERT INTO ix(b,p,ty,t) VALUES(?,?,?,?)");
                 SQLiteStatement sc = d.compileStatement("INSERT INTO ic(id,c) VALUES(?,?)");
+                SQLiteStatement sf = fxOn ? d.compileStatement("INSERT INTO fx(docid,t) VALUES(?,?)") : null;
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject r = rows.getJSONObject(i);
-                    addIx(si, sc, b, r.optInt("p", 0), 2, r.optString("t", ""), r.optString("c", ""));
+                    addIx(si, sc, sf, b, r.optInt("p", 0), 2, r.optString("t", ""), r.optString("c", ""));
                 }
                 d.setTransactionSuccessful();
             } finally { d.endTransaction(); }
@@ -359,6 +413,28 @@ public class TshBooksPlugin extends Plugin {
         }
     };
 
+    private static String cleanTok(String w) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < w.length(); i++) { char ch = w.charAt(i); if (Character.isLetterOrDigit(ch)) b.append(ch); }
+        return b.toString();
+    }
+
+    /** عبارت MATCH برای FTS4 یا null (یعنی اسکن کامل) */
+    private static String ftsQuery(Q q) {
+        if (!fxOn || !fxReady || q.comp) return null;
+        ArrayList<String> ts = new ArrayList<String>();
+        if (q.mode.equals("ph")) {
+            for (String w : q.P.split("\\s+")) { String c = cleanTok(w); if (c.length() < 3 || !c.equals(w)) return null; ts.add(c); }
+        } else {
+            for (String w : q.W) { String c = cleanTok(w); if (c.length() < 3 || !c.equals(w)) return null; ts.add(c); }
+        }
+        if (ts.isEmpty()) return null;
+        StringBuilder sb = new StringBuilder();
+        boolean or = q.mode.equals("any");
+        for (int i = 0; i < ts.size(); i++) { if (i > 0) sb.append(or ? " OR " : " "); sb.append('"').append(ts.get(i)).append("*\""); }
+        return sb.toString();
+    }
+
     /** یک تکه از جدول (id بین lo و hi) را می‌خواند و امتیاز می‌دهد؛ ترتیب و فرمول مثل srch در جاوااسکریپت. */
     private static Part scanChunk(SQLiteDatabase d, String sql, ArrayList<String> baseArgs, long lo, long hi, Q q, int my) {
         Part part = new Part();
@@ -453,6 +529,10 @@ public class TshBooksPlugin extends Plugin {
             for (String w : q.W) { sb.append(" AND instr(").append(col).append(",?)>0"); args.add(w); }
         }
         for (String n : q.N) { sb.append(" AND instr(").append(col).append(",?)=0"); args.add(n); }
+        // کاندیدها از ایندکس کلمه‌ای (پیشوندی)؛ بعد همان امتیازدهی و بررسی دقیق قبلی روی کاندیدها انجام می‌شود.
+        // فقط وقتی همه‌ی کلمه‌ها ≥ ۳ حرف باشند و حالت بدون‌فاصله نباشد؛ وگرنه اسکن کامل مثل قبل.
+        final String fq = ftsQuery(q);
+        if (fq != null) { sb.append(" AND x.id IN (SELECT docid FROM fx WHERE fx MATCH ?)"); args.add(fq); }
         sb.append(" AND x.id BETWEEN ? AND ?");
         final String sql = sb.toString();
 
