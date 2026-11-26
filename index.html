@@ -737,7 +737,7 @@ async function srch(ws,neg,comp,my){
  if(NATB){
   let books=null;if(FS.cat!=='all')books=LIB.filter(b=>b.u&&!(FS.cat==='_'?bcOf(b.id):bcOf(b.id)!==FS.cat)).map(b=>b.id);
   let nr=null;try{nr=await TBK.search({W,N,P,mode,ww:!!ww,comp:!!comp,ty:FS.ty,books,scope:FS.scope,ex:!!FS.ex,rw,rph:rw.join(' '),K:FS.K||400,sort:FS.sort})}
-  catch(e){if(/cancel/i.test(String(e&&e.message||e)))return null;console.warn('native search',e)}
+  catch(e){if(/cancel/i.test(String(e&&e.message||e)))return null;console.warn('native search',e);try{toast('خطای جستجوی بومی: '+String(e&&e.message||e).slice(0,120),1)}catch(_){}}
   if(my!==FS.tok)return null;
   if(nr){FS.cnt.all+=nr.all;for(const k in nr.cnt)FS.cnt[k]=(FS.cnt[k]||0)+nr.cnt[k];
    const LI={};LIB.forEach((b,i)=>{LI[b.id]=i});const TYS=['x','f','h'];
@@ -751,9 +751,8 @@ async function srch(ws,neg,comp,my){
  if(nq.replace(/-/g,'').length<2||!ws.length){FS.re=null;FS.hre=null;out._r=[];scopeBar();$('#fsum').innerHTML='';out.innerHTML=histHtml()+'<div class="empty">کلمه یا عبارتی از کتاب‌ها را بنویسید.<br><span class="muted">برای حذف یک کلمه از نتایج، قبل از آن «-» بگذارید. از «فیلترها» برای محدودکردن نوع، دسته و دقت استفاده کنید.</span></div>';return}
  FS.busy=1;if(!sidx){idxShow();await idxReady();if(my!==FS.tok)return;if(tab!=='find'||$('#out')!==out){FS.busy=0;return}}
   const slow=setTimeout(()=>{if(my===FS.tok){const s=$('#fsum');if(s)s.innerHTML='<span class="muted">در حال جستجو…</span>'}},250);
-  const ph=ws.join(' ');let comp=!!FS.sp,R=await srch(ws,neg,comp,my);if(R===null){clearTimeout(slow);return}
- if(!R.length&&!comp&&FS.cnt.all===0){const R2=await srch(ws,neg,true,my);if(R2===null){clearTimeout(slow);return}if(R2.length||FS.cnt.all){R=R2;comp=true;FS.auto=true}}
-  clearTimeout(slow);
+  const ph=ws.join(' ');let comp=!!FS.sp||!!FS.wide,R=await srch(ws,neg,comp,my);if(R===null){clearTimeout(slow);return}FS.auto=!!FS.wide&&!FS.sp;
+   clearTimeout(slow);
  if(FS.sort==='rel')R.sort((a,b)=>b.sc-a.sc||a.i-b.i);
  FS.res=R.map(x=>x.e);FS.ws=ws;FS.ph=ph;FS.re=comp?mkLoose(ws,FS.mode==='ph'):mkRe(ws,FS.mode==='ph');
  if(comp){FS.pre=mkLoose(ws,FS.mode==='ph');FS.hre=new RegExp(FS.pre.source,'g')}
@@ -764,14 +763,15 @@ function renderRes(){const out=$('#out');if(FS.re===null||FS.busy)return;const R
  $('#fsum').innerHTML='<span class="muted">'+fa(R.length+(FS.more||0))+' نتیجه'+(FS.scope==='all'?'':' در این کتاب')+(FS.auto?' · بدون توجه به فاصله و نیم‌فاصله':'')+'</span><select id="fso" class="fld" aria-label="مرتب‌سازی نتایج"><option value="rel"'+(FS.sort==='rel'?' selected':'')+'>مرتبط‌ترین</option><option value="ord"'+(FS.sort==='ord'?' selected':'')+'>ترتیب کتاب</option></select>';
  out.innerHTML=R.length?show.map((e,i)=>{let w;
   if(e.k==='g'){const g=MN[e.mi].groups[e.gi];w=HM[e.mi]+' · '+(g.k==='day'?fa(g.key)+' '+HM[e.mi]:g.k==='intro'?'خلاصه‌ی ماه':g.key)}else if(e.k==='n')w='پی‌نوشت '+fa(e.n);else if(e.k==='b')w=LIB[e.li].t+' · صفحه‌ی '+fa(e.pi+1)+(e.ty==='h'?' · عنوان':e.ty==='f'?' · پاورقی':'');else w='مقدمه';
-  return'<button class="res" data-s="'+i+'"><b>'+esc(w)+'</b><p>'+snip(e.t)+'</p></button>'}).join('')+(R.length+(FS.more||0)>show.length?'<button class="btn ghost fmore" data-fmore>نمایش بیشتر ('+fa(R.length+(FS.more||0)-show.length)+' نتیجه‌ی دیگر)</button>':''):'<div class="empty">نتیجه‌ای پیدا نشد.<br><span class="muted">حالت «هر کلمه» را امتحان کنید یا دامنه را روی «همه» بگذارید.</span></div>'}
-function doSearch(q){FS.q=q;FS.lim=40;FS.K=400;runSearch()}
+  return'<button class="res" data-s="'+i+'"><b>'+esc(w)+'</b><p>'+snip(e.t)+'</p></button>'}).join('')+(R.length+(FS.more||0)>show.length?'<button class="btn ghost fmore" data-fmore>نمایش بیشتر ('+fa(R.length+(FS.more||0)-show.length)+' نتیجه‌ی دیگر)</button>':''):'<div class="empty">نتیجه‌ای پیدا نشد.<br><span class="muted">حالت «هر کلمه» را امتحان کنید یا دامنه را روی «همه» بگذارید.</span>'+(!FS.sp&&!FS.auto?'<button class="btn ghost" data-fwide style="margin-top:10px">جستجوی بدون توجه به فاصله و نیم‌فاصله</button>':'')+'</div>'}
+function doSearch(q){FS.q=q;FS.lim=40;FS.K=400;FS.wide=false;runSearch()}
 Object.assign(FS,{tok:0,busy:0,ty:'all',cat:'all',ww:false,sp:false,ex:false,fo:false,auto:false,pre:null,K:400,more:0});
 function flBar(){const e=$('#ffl');if(!e)return;const C=cats(),act=(FS.ty!=='all')+(FS.cat!=='all')+(FS.ww?1:0)+(FS.sp?1:0)+(FS.ex?1:0);
  let h='<div class="fq"><button data-fo class="'+(FS.fo||act?'on':'')+'">فیلترها'+(act?'<i>'+fa(act)+'</i>':'')+'</button></div>';
  if(FS.fo)h+='<div class="fq">'+[['all','متن و پاورقی'],['x','فقط متن'],['f','فقط پاورقی'],['h','فقط عنوان‌ها']].map(o=>'<button data-ft="'+o[0]+'" class="'+(FS.ty===o[0]?'on':'')+'">'+o[1]+'</button>').join('')+'</div><div class="fq">'+[['ww','کلمه‌ی کامل'],['sp','نادیده‌گرفتن فاصله و نیم‌فاصله'],['ex','اعراب دقیق']].map(o=>'<button data-fw="'+o[0]+'" class="'+(FS[o[0]]?'on':'')+'">'+o[1]+'</button>').join('')+'</div><div class="fsel"><span class="muted">دسته‌ی کتاب</span><select id="fcatsel" class="fld"><option value="all">همه</option>'+C.map(c=>'<option'+(FS.cat===c?' selected':'')+'>'+esc(c)+'</option>').join('')+'<option value="_"'+(FS.cat==='_'?' selected':'')+'>بدون دسته</option></select></div><div class="fq"><button data-fr>پاک‌کردن فیلترها</button></div>';
  e.innerHTML=h}
 main.addEventListener('click',e=>{if(tab!=='find')return;let x;
+ if(e.target.closest('[data-fwide]')){FS.wide=true;runSearch();return}
  if(e.target.closest('[data-fo]')){FS.fo=!FS.fo;flBar();return}
  if(x=e.target.closest('[data-ft]')){FS.ty=x.dataset.ft;flBar();doSearch(FS.q);return}
  if(x=e.target.closest('[data-fw]')){FS[x.dataset.fw]=!FS[x.dataset.fw];flBar();doSearch(FS.q);return}
