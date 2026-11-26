@@ -1719,12 +1719,12 @@ function wgPayload(){
    for(let d=1;d<=L;d++){const x=info(f+d-1);if(grp(x.h.m,x.h.d)||extrasA(x).length)ev.push(d);if(holiday(x))hl.push(d);hd.push(x.h.d)}
    mons.push({n:JM[m-1]+' '+fa(y),ed:wgMid(f),len:L,f:wdOf(f),ev,hl,hd,hs:rng('h',f,f+L-1)});m++;if(m>12){m=1;y++}}}
  const hx=info(j0).h,rj=h2j(hx.m>9?hx.y+1:hx.y,9,1);
- return{v:2,gen:Date.now(),days,cn:CN,pt:PT,dc,months:mons,ram:{ed:wgMid(rj)},q:wgQuotes()}}
+ return{v:2,gen:Date.now(),appTheme:ST.theme||'auto',days,cn:CN,pt:PT,dc,months:mons,ram:{ed:wgMid(rj)},q:wgQuotes()}}
 {const _pw=pushWidget;pushWidget=async function(){
   if(NAT&&NW&&NW.setData){try{await NW.setData({json:JSON.stringify(wgPayload())})}catch(e){}}
   try{await _pw()}catch(e){}}}
 /* تغییر شهر/موقعیت/تنظیم قمری → ابزارک‌ها هم به‌روز شوند */
-{let _wk='';const _sv=save;save=function(){_sv();if(!NAT)return;let k='';try{k=JSON.stringify([ST.city,ST.gps,ST.off,ST.ov,ST.hol])}catch(e){}if(k!==_wk){const f=_wk==='';_wk=k;if(!f)pushS()}}}
+{let _wk='';const _sv=save;save=function(){_sv();if(!NAT)return;let k='';try{k=JSON.stringify([ST.city,ST.gps,ST.off,ST.ov,ST.hol,ST.theme])}catch(e){}if(k!==_wk){const f=_wk==='';_wk=k;if(!f)pushS()}}}
 if(NAT)setTimeout(()=>{try{pushS()}catch(e){}},2500);
 /* کارت «ابزارک‌ها» در صفحه‌ی رنگ و شخصی‌سازی / تنظیمات */
 const WG=[['اوقات شرعی و اذان بعدی','شمارش معکوس تا اذان، نوار پیشرفت، شهر قابل تنظیم'],['تاریخ سه‌گانه و ساعت','شمسی، قمری و میلادی با ساعت'],['مناسبت امروز و نصایح','مناسبت‌ها و گزیده‌ای از کتاب نصایح'],['تقویم ماه','با نقطه‌ی مناسبت‌ها'],['ویژه‌ی ماه رمضان','مانده تا افطار و سحر'],['روزی یک صفحه','قرآن، کتاب یا دعا؛ هر روز یک صفحه'],['روز زندگی من','روزهای عمر، سن دقیق و تا تولد بعدی'],['مناسبت بعدی','نزدیک‌ترین مناسبت و تعطیلی با روزشمار'],['مدیریت برنامه‌ریزی','کارهای امروز با تیک «انجام شد» و نوار پیشرفت']];
