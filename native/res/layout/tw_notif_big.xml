@@ -24,8 +24,8 @@
         android:layout_marginStart="11dp"
         android:orientation="vertical">
 
-        <TextView
-android:fontFamily="@font/onvan_fd"             android:id="@+id/tw_n_title"
+        <TextView android:fontFamily="@font/onvan_fd"
+            android:id="@+id/tw_n_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -35,8 +35,8 @@ android:fontFamily="@font/onvan_fd"             android:id="@+id/tw_n_title"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
-android:fontFamily="@font/onvan_fd"             android:id="@+id/tw_n_text"
+        <TextView android:fontFamily="@font/onvan_fd"
+            android:id="@+id/tw_n_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
