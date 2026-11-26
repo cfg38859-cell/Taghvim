@@ -734,7 +734,7 @@ async function srch(ws,neg,comp,my){
   if(!sc)continue;
   if(FS.ex&&e.k==='b'&&ty!=='h'){const r=rawTxt(e).replace(/\u200c/g,'');const q=mode==='ph'?[rw.join(' ')]:rw;const hit=q.map(w=>r.includes(w.replace(/\u200c/g,'')));if(mode==='any'?!hit.some(Boolean):!hit.every(Boolean))continue}
   FS.cnt.all++;FS.cnt[k]=(FS.cnt[k]||0)+1;if(FS.scope==='all'||FS.scope===k)R.push({e,sc:sc/(1+t.length/3000),i:R.length})}
- if(NATB){
+ if(NATB&&(FS.scope==='all'||(LIB.find(b=>b.id===FS.scope)||{}).u)){
   let books=null;if(FS.cat!=='all')books=LIB.filter(b=>b.u&&!(FS.cat==='_'?bcOf(b.id):bcOf(b.id)!==FS.cat)).map(b=>b.id);
   let nr=null;try{nr=await TBK.search({W,N,P,mode,ww:!!ww,comp:!!comp,ty:FS.ty,books,scope:FS.scope,ex:!!FS.ex,rw,rph:rw.join(' '),K:FS.K||400,sort:FS.sort})}
   catch(e){if(/cancel/i.test(String(e&&e.message||e)))return null;console.warn('native search',e);try{toast('خطای جستجوی بومی: '+String(e&&e.message||e).slice(0,120),1)}catch(_){}}
@@ -752,6 +752,9 @@ async function srch(ws,neg,comp,my){
  FS.busy=1;if(!sidx){idxShow();await idxReady();if(my!==FS.tok)return;if(tab!=='find'||$('#out')!==out){FS.busy=0;return}}
   const slow=setTimeout(()=>{if(my===FS.tok){const s=$('#fsum');if(s)s.innerHTML='<span class="muted">در حال جستجو…</span>'}},250);
   const ph=ws.join(' ');let comp=!!FS.sp||!!FS.wide,R=await srch(ws,neg,comp,my);if(R===null){clearTimeout(slow);return}FS.auto=!!FS.wide&&!FS.sp;
+ const ck=[FS.q,FS.mode,FS.ww,FS.sp||FS.wide,FS.ex,FS.ty,FS.cat].join('|');
+ if(FS.scope==='all'){FS.cntFull=Object.assign({},FS.cnt);FS.cntKey=ck}
+ else if(FS.cntKey===ck&&FS.cntFull){const m=FS.cnt[FS.scope]||0;FS.cnt=Object.assign({},FS.cntFull);FS.cnt[FS.scope]=m}
    clearTimeout(slow);
  if(FS.sort==='rel')R.sort((a,b)=>b.sc-a.sc||a.i-b.i);
  FS.res=R.map(x=>x.e);FS.ws=ws;FS.ph=ph;FS.re=comp?mkLoose(ws,FS.mode==='ph'):mkRe(ws,FS.mode==='ph');
@@ -2009,6 +2012,36 @@ async function migrateIdb(){let ids=[];try{ids=await dbDo('readonly',s=>s.getAll
   if(!LIB.some(x=>x.id===id)){try{await bsSave(id,o.t,o.s,'',o.data);LIB.push(mkU({id,t:o.t,s:o.s,n:(o.data.pages||[]).length}))}catch(e){console.warn('mig',id,e);continue}}
   try{await dbDel(id)}catch(e){}}
  idxReset();if(tab==='book'&&!bookSel&&!VIEW)drawBook()}
+const shortId=()=>'k'+Math.random().toString(36).slice(2,7);
+/* ---- کتابخانه‌ی پوشه‌ای: هر کتاب یک فایل فشرده‌ی کوچک با کد کوتاه در پوشه‌ی برنامه ---- */
+const FSY=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem,FDIR='Shafie/books',FDS='EXTERNAL';
+const fdm=s=>{const m=document.getElementById('fdMsg');if(m)m.textContent=s};
+const gzU=async u=>new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+const ungzU=async u=>new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+const b64u=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+const unb64u=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function foldCat(){try{const r=await FSY().readFile({path:FDIR+'/catalog.json',directory:FDS,encoding:'utf8'});return JSON.parse(r.data).books||{}}catch(e){return{}}}
+async function foldCatSave(c){await FSY().writeFile({path:FDIR+'/catalog.json',directory:FDS,encoding:'utf8',recursive:true,data:JSON.stringify({format:'shb-catalog',v:1,books:c})})}
+async function foldPut(id,cat){const L=LIB.find(x=>x.id===id),d=await bookDataA(id);
+ const u=await gzU(new TextEncoder().encode(JSON.stringify({format:'shb',v:1,code:id,t:L.t,s:L.s||'',c:bcOf(id)||'',data:d})));
+ await FSY().writeFile({path:FDIR+'/'+id+'.shb',directory:FDS,recursive:true,data:b64u(u)});
+ cat[id]={code:id,t:L.t,s:L.s||'',c:bcOf(id)||'',n:(d.pages||[]).length,size:u.length}}
+async function foldGet(code){const r=await FSY().readFile({path:FDIR+'/'+code+'.shb',directory:FDS});return JSON.parse(new TextDecoder().decode(await ungzU(unb64u(r.data))))}
+async function foldInstall(code){if(LIB.some(x=>x.id===code))return;const b=await foldGet(code);
+ const bad=await saveBooks([{id:code,t:b.t,s:b.s,c:b.c,data:b.data}]);if(bad)throw Error('ذخیره‌ی کتاب ممکن نشد');
+ if(b.c){(ST.bc=ST.bc||{})[code]=b.c;save()}idxReset()}
+async function foldRelease(code){const L=LIB.find(x=>x.id===code);if(!L||!L.u)return;const cat=await foldCat();if(!cat[code]){await foldPut(code,cat);await foldCatSave(cat)}
+ LIB.splice(LIB.indexOf(L),1);try{if(NATB)await TBK.delBook({id:code});else await dbDel(code)}catch(e){}delete GB[code];idxReset()}
+async function renderFold(){const el=document.getElementById('fdBox');if(!el)return;if(!FSY()){el.innerHTML='';return}
+ const cat=await foldCat(),inst=new Set(LIB.filter(x=>x.u).map(x=>x.id));
+ el.innerHTML='<div class="card"><b>کتابخانه‌ی پوشه‌ای (کم‌حجم)</b><div class="muted">هر کتاب با یک کد کوتاه به‌صورت فایل فشرده در پوشه‌ی برنامه ذخیره می‌شود. کتاب‌های کم‌استفاده را از برنامه بردارید (در پوشه می‌مانند) و هر زمان با کدشان برگردانید.</div><button class="btn" data-fd="all">ذخیره‌ی همه‌ی کتاب‌های نصب‌شده در پوشه</button><div class="r2" style="margin-top:8px"><input type="text" id="fdCode" placeholder="کد کتاب"><button class="btn ghost" data-fd="code">نصب با کد</button></div><div id="fdMsg" class="muted"></div>'+
+ Object.values(cat).map(m=>'<div class="bl"><b>'+esc(m.t)+' <small class="muted">'+esc(m.code)+' · '+fa(Math.round(m.size/1024))+' کیلوبایت</small></b>'+(inst.has(m.code)?'<button data-fd="rel" data-c="'+esc(m.code)+'">برداشتن از برنامه</button>':'<button data-fd="ins" data-c="'+esc(m.code)+'">نصب</button>')+'</div>').join('')+'</div>'}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-fd]');if(!b||!VIEW)return;const a=b.dataset.fd;
+ try{
+  if(a==='all'){const A=LIB.filter(x=>x.u),cat=await foldCat();for(let i=0;i<A.length;i++){fdm('در حال ذخیره‌ی '+fa(i+1)+' از '+fa(A.length)+'…');await foldPut(A[i].id,cat);if(i%20===19)await foldCatSave(cat)}await foldCatSave(cat);fdm('✓ '+fa(A.length)+' کتاب در پوشه ذخیره شد');renderFold()}
+  else if(a==='ins'||a==='code'){const code=a==='ins'?b.dataset.c:(document.getElementById('fdCode').value||'').trim();if(!code)return;fdm('در حال نصب…');await foldInstall(code);view();fdm('✓ نصب شد')}
+  else if(a==='rel'){if(!confirm('کتاب از برنامه برداشته شود؟ در پوشه می‌ماند و با کد برمی‌گردد.'))return;await foldRelease(b.dataset.c);view()}
+ }catch(x){fdm('خطا: '+(x&&x.message||x))}});
 async function pinSpecial(){for(const re of[/روایت\s*کوتاه/,/نصایح|نصائح/]){const L=LIB.find(x=>x.u&&re.test(x.t));if(L){PIN.add(L.id);try{await hyd(L.id)}catch(e){}}}
  try{_rv=null}catch(e){}try{_wq=null}catch(e){}}
 
@@ -2031,7 +2064,8 @@ async function init(){
  if(NATB){try{const r=await TBK.catalog();for(const m of r.books){if(LIB.some(x=>x.id===m.id)||getDel().includes(m.id))continue;LIB.push(mkU(m))}}catch(e){console.warn('catalog',e)}}
  else{try{for(const o of await dbAll()){if(LIB.some(x=>x.id===o.id)||getDel().includes(o.id))continue;GB[o.id]=o.data;LIB.push({id:o.id,t:o.t,s:o.s,u:1,f:()=>drawGen(o.id)})}}catch(e){}}
  idxReset();if(tab==='book'&&!bookSel&&!VIEW)drawBook();
- if(NATB){await pinSpecial();migrateIdb()}}
+ if(NATB){try{const r=await TBK.diag({clear:true});if(r&&r.text)openSheet('گزارش خطای قبلی','<pre style="white-space:pre-wrap;direction:ltr;text-align:left;font-size:11px">'+esc(r.text)+'</pre>','')}catch(e){}
+  await pinSpecial();migrateIdb()}}
 
 /* ---- رابط ---- */
 let VIEW=false,BKS=[],FILES=[],BUN=null;
@@ -2046,8 +2080,8 @@ function view(){VIEW=true;const rows=LIB.slice(1).map(L=>'<div class="bl"><b>'+e
  '<div class="card"><b>فایل کتاب‌ها (html / docx / txt / zip / فایل کتاب‌ها json)</b><input type="file" id="baF" accept=".html,.htm,.docx,.txt,.json,.zip" multiple style="display:block;margin:8px 0"><label style="display:block"><input type="checkbox" id="baOne" checked> اگر چند فایل انتخاب شود، همه یک کتاب‌اند (جلدها خودکار)</label><div class="muted">فرمت قدیمی doc را در Word با «ذخیره به‌عنوان docx» تبدیل کنید.</div><div id="baMsg" class="muted"></div></div>'+
  '<div id="baBk"></div>'+
  '<div class="card"><b>خروجی</b><div class="muted">کتاب‌های افزوده‌شده روی همین دستگاه ذخیره می‌شوند و همین‌جا قابل مطالعه‌اند. برای اینکه «جزو کد برنامه» شوند و با ارسال برنامه به دیگران بروند، برنامه‌ی کامل را بسازید.</div><button class="btn" data-ba="app">ساخت برنامه‌ی کامل (با همه‌ی کتاب‌ها)</button><button class="btn ghost" data-ba="bun">دانلود فایل کتاب‌ها (json)</button></div>'+
- '<div class="card"><b>کتاب‌های برنامه</b>'+(rows||'<div class="muted">کتابی نیست.</div>')+'</div></div>';
- renderBk();main.scrollTop=0}
+ '<div class="card"><b>کتاب‌های برنامه</b>'+(rows||'<div class="muted">کتابی نیست.</div>')+'</div><div id="fdBox"></div></div>';
+ renderBk();renderFold();main.scrollTop=0}
 function renderBk(){const el=document.getElementById('baBk');if(!el)return;let h='';
  if(BUN)h+='<div class="card"><b>کتاب‌های داخل فایل</b>'+BUN.books.map((b,i)=>'<label class="bl"><input type="checkbox" data-bi="'+i+'"'+(b._dup?'':' checked')+'><b>'+esc(b.t)+(b._dup?' (از قبل هست)':'')+'</b></label>').join('')+'<button class="btn" data-ba="addb">افزودن کتاب‌های انتخاب‌شده</button></div>';
  h+=BKS.map((b,i)=>{const hs=b.bs.map((x,j)=>x.k==='h'?j:-1).filter(j=>j>=0),pg=paginate(b),lv=[0,1,2,3,4].map(l=>hs.filter(j=>b.bs[j].lv===l).length);
@@ -2059,7 +2093,7 @@ function renderBk(){const el=document.getElementById('baBk');if(!el)return;let h
   '<details><summary>ویرایش عنوان‌ها</summary><div class="r2"><button class="btn ghost" data-ba="up">همه یک سطح بالاتر</button><button class="btn ghost" data-ba="dn">همه یک سطح پایین‌تر</button></div>'+
   hs.slice(0,500).map(j=>'<div class="hr"><select data-bj="'+j+'"><option value="x">حذف</option>'+[0,1,2,3,4].map(l=>'<option value="'+l+'"'+(b.bs[j].lv===l?' selected':'')+'>سطح '+(l+1)+'</option>').join('')+'</select><span>'+esc(b.bs[j].h.replace(/<[^>]+>/g,'').replace(/\uE000\d+\uE001/g,''))+'</span></div>').join('')+(hs.length>500?'<div class="muted">… و '+(hs.length-500)+' عنوان دیگر (با دکمه‌های بالا سطح همه تغییر می‌کند)</div>':'')+'</details></div>'}).join('');
  if(BKS.length)h+='<button class="btn" data-ba="add">افزودن به برنامه</button>';el.innerHTML=h}
-function mk(){BKS=[];const nid=()=>{let id;do id='u'+Date.now().toString(36)+RAND();while(LIB.some(x=>x.id===id));return id};
+function mk(){BKS=[];const nid=()=>{let id;do id=shortId();while(LIB.some(x=>x.id===id));return id};
  const bk=(parts,title)=>{const b={title,sub:'',id:nid(),info:'',parts,fn:'auto',lang:'both',size:2500};build(b);BKS.push(b)};
  const one=document.getElementById('baOne');
  if(FILES.length>1&&one&&one.checked){const f=FILES.map((x,i)=>({...x,v:vol(x.name),i})).sort((a,b)=>(a.v??1e9)-(b.v??1e9)||a.name.localeCompare(b.name,'fa',{numeric:true}));
@@ -2079,7 +2113,7 @@ async function pick(files){msg('در حال پردازش…');FILES=[];BUN=null;
    const titles=new Set(LIB.map(x=>x.t.trim()));j.books.forEach(b=>b._dup=titles.has(String(b.t).trim()));BUN=j;continue}
   FILES.push({name:f.name,raw:await parse(f)})}catch(x){msg(f.name+': '+x.message,1);return}}
  msg('');mk()}
-async function saveBooks(list){let bad=0;for(const o of list){let id=o.id;if(!id||LIB.some(x=>x.id===id))id='u'+Date.now().toString(36)+RAND();while(LIB.some(x=>x.id===id))id='u'+Date.now().toString(36)+RAND();
+async function saveBooks(list){let bad=0;for(const o of list){let id=o.id;if(!id||LIB.some(x=>x.id===id))id=shortId();while(LIB.some(x=>x.id===id))id=shortId();
   if(NATB){try{await bsSave(id,o.t,o.s||'',o.c||'',o.data);LIB.push(mkU({id,t:o.t,s:o.s||'',n:(o.data.pages||[]).length}))}catch(e){console.warn('save',e);bad++}continue}
   const rec={id,t:o.t,s:o.s||'',data:o.data};GB[id]=o.data;LIB.push({id,t:rec.t,s:rec.s,u:1,f:()=>drawGen(id)});
   try{await dbPut(rec)}catch(e){bad++}}
