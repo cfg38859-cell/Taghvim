@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class WConfig extends Activity {
   int wid;
   JSONObject cfg;
-  RadioGroup rgTheme, rgOp, rgStyle, rgSrc;
+  RadioGroup rgTheme, rgOp, rgStyle, rgSrc, rgAccent;
   Spinner spCity;
   CheckBox cbQ, cbH;
 
@@ -80,6 +80,12 @@ public class WConfig extends Activity {
     root.addView(head("سبک ظاهری"));
     rgStyle = radios(new String[] {"ساده (روشن یا تیره)", "زمردی", "شب", "طلایی", "اقیانوس", "بنفشه", "انار"}, Math.max(0, Math.min(6, cfg.optInt("st", 0))));
     root.addView(rgStyle);
+
+    root.addView(head("رنگ تأکیدی نوشته‌ها"));
+    rgAccent = radios(new String[] {"هماهنگ با تم برنامه (طلایی)", "زمردی", "آبی", "یاقوتی"},
+        Math.max(0, Math.min(3, cfg.optInt("ac", 0))));
+    root.addView(rgAccent);
+
     if (kind == 5) {
       root.addView(head("منبع صفحه‌ی روزانه"));
       rgSrc = radios(new String[] {"قرآن (صفحه‌ی مصحف)", "کتاب", "دعا"}, Math.max(0, Math.min(2, cfg.optInt("src", 0))));
@@ -140,6 +146,7 @@ public class WConfig extends Activity {
       int[] ops = {100, 85, 70, 50};
       cfg.put("th", rgTheme.getCheckedRadioButtonId() - 1000);
       cfg.put("st", Math.max(0, Math.min(6, rgStyle.getCheckedRadioButtonId() - 1000)));
+      cfg.put("ac", Math.max(0, Math.min(3, rgAccent.getCheckedRadioButtonId() - 1000)));
       if (rgSrc != null) cfg.put("src", Math.max(0, Math.min(2, rgSrc.getCheckedRadioButtonId() - 1000)));
       cfg.put("op", ops[Math.max(0, Math.min(3, rgOp.getCheckedRadioButtonId() - 1000))]);
       if (spCity != null) cfg.put("city", spCity.getSelectedItemPosition() - 1);

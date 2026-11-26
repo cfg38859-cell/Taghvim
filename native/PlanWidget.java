@@ -52,7 +52,7 @@ public class PlanWidget extends WBase {
     int cap = sz == 0 ? 3 : sz == 1 ? 5 : 8;
     ArrayList<JSONObject> all = new ArrayList<JSONObject>(todo);
     all.addAll(done);
-    int[] lc = {0, red(dark), gold(dark), em(dark)};
+    int[] lc = {0, red(dark), accent(dark, cfg), em(dark)};
     for (int i = 1; i <= 8; i++) {
       int rr = rid(c, "tw_pl_r", i), cc = rid(c, "tw_pl_c", i), tt = rid(c, "tw_pl_t", i), mi = rid(c, "tw_pl_m", i);
       boolean on = i <= cap && i <= all.size();

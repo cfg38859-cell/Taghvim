@@ -28,7 +28,7 @@ public class MonthWidget extends WBase {
     }
     if (m == null) return shell(c, layout(), cfg, dark, "داده‌ی ابزارک قدیمی شده؛ برنامه را باز کنید");
     RemoteViews rv = shell(c, layout(), cfg, dark, null);
-    int ink = ink(dark), mute = mute(dark), em = em(dark), gold = gold(dark), red = red(dark);
+    int ink = ink(dark), mute = mute(dark), em = em(dark), gold = accent(dark, cfg), red = red(dark);
     boolean hij = cfg.optInt("h", 0) == 1;
     txt(rv, R.id.tw_mt, m.optString("n"), ink, sz == 0 ? 12 : 14);
     txt(rv, R.id.tw_ms, m.optString("hs"), mute, 10);

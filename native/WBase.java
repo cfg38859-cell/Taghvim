@@ -24,22 +24,29 @@ abstract class WBase extends AppWidgetProvider {
   static int mute(boolean d) { return d ? 0xFF8CA196 : 0xFF66786F; }
   static int em(boolean d) { return d ? 0xFF3DB496 : 0xFF0E6B57; }
   static int gold(boolean d) { return d ? 0xFFDDB35A : 0xFFA87A1E; }
+  /** رنگ تأکیدی قابل انتخاب در تنظیمات هر ابزارک */
+  static int accent(boolean d, JSONObject cfg) {
+    switch (cfg.optInt("ac", 0)) {
+      case 1: return d ? 0xFF6FEBD8 : 0xFF0E6B57;
+      case 2: return d ? 0xFF9FC5FF : 0xFF245DA8;
+      case 3: return d ? 0xFFFFA6B5 : 0xFFA83252;
+      default: return gold(d);
+    }
+  }
   static int red(boolean d) { return d ? 0xFFEE7676 : 0xFFBF3636; }
 
   static final int[] STYLE = {R.drawable.tw_bg_g1, R.drawable.tw_bg_g2, R.drawable.tw_bg_g3, R.drawable.tw_bg_g4, R.drawable.tw_bg_g5, R.drawable.tw_bg_g6};
 
   /** سبک گرادیانی (۱ تا ۶) متن روشن دارد؛ سبک ۰ خودکار/روشن/تیره است */
-  static boolean dark(Context c, JSONObject cfg) {
+  static boolean dark(Context c, JSONObject cfg, JSONObject data) {
     if (cfg.optInt("st", 0) > 0) return true;
-    // هماهنگی پوسته‌ی ابزارک با پوسته‌ی انتخاب‌شده در خود برنامه
-    try {
-      JSONObject data = WStore.data(c);
-      String appTheme = data == null ? "auto" : data.optString("appTheme", "auto");
-      if ("dark".equals(appTheme)) return true;
-      if ("light".equals(appTheme)) return false;
-    } catch (Throwable ignored) { }
     int th = cfg.optInt("th", 0);
-    return th == 2 || (th == 0 && isNight(c));
+    if (th == 2) return true;
+    if (th == 1) return false;
+    String appTheme = data == null ? "auto" : data.optString("theme", "auto");
+    if ("dark".equals(appTheme)) return true;
+    if ("light".equals(appTheme)) return false;
+    return isNight(c);
   }
 
   static boolean isNight(Context c) {
@@ -116,14 +123,15 @@ abstract class WBase extends AppWidgetProvider {
 
   void push(Context c, AppWidgetManager m, int id) {
     JSONObject cfg = WStore.cfg(c, id);
-    boolean dark = dark(c, cfg);
+    JSONObject data = WStore.data(c);
+    boolean dark = dark(c, cfg, data);
     RemoteViews rv;
     try {
       Bundle o = m.getAppWidgetOptions(id);
       int w = o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 250);
       int h = o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 110);
       int sz = w >= 180 ? (h >= 180 ? 2 : 1) : 0;
-      rv = build(c, id, sz, dark, WStore.data(c), cfg);
+      rv = build(c, id, sz, dark, data, cfg);
     } catch (Throwable e) {
       rv = shell(c, layout(), cfg, dark, "نمایش ابزارک ممکن نشد؛ برنامه را باز کنید");
     }

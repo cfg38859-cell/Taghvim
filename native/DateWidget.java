@@ -16,7 +16,7 @@ public class DateWidget extends WBase {
     RemoteViews rv = shell(c, layout(), cfg, dark, null);
     int ink = ink(dark), mute = mute(dark), em = em(dark);
     txt(rv, R.id.tw_wd, x.optString("wd"), mute, sz == 0 ? 12 : 14);
-    txt(rv, R.id.tw_d1, x.optString("p"), ink, sz == 0 ? 17 : sz == 1 ? 26 : 32);
+    txt(rv, R.id.tw_d1, x.optString("p"), ink, sz == 0 ? 18 : sz == 1 ? 28 : 34);
     txt(rv, R.id.tw_d2, x.optString("h"), em, sz == 0 ? 12 : 14);
     txt(rv, R.id.tw_d3, x.optString("g"), mute, 13);
     show(rv, R.id.tw_d3, sz >= 1);

@@ -58,7 +58,7 @@ public class PrayerWidget extends WBase {
     if (nx == null) return shell(c, layout(), cfg, dark, "داده‌ی ابزارک قدیمی شده؛ برنامه را باز کنید");
     RemoteViews rv = shell(c, layout(), cfg, dark, null);
     boolean wide = sz >= 1;
-    int ink = ink(dark), mute = mute(dark), gold = gold(dark);
+    int ink = ink(dark), mute = mute(dark), gold = accent(dark, cfg);
     int hi = dark ? 0xFF6FEBD8 : em(false);
     show(rv, R.id.tw_deco, false);
 
@@ -68,7 +68,7 @@ public class PrayerWidget extends WBase {
 
     // کارت «اذان بعدی»
     txt(rv, R.id.tw_label, "اذان بعدی: " + WStore.PN[(int) nx[2]], gold, sz == 0 ? 10 : 11);
-    txt(rv, R.id.tw_at, WStore.hm(nx[1]), ink, sz == 0 ? 20 : 22);
+    txt(rv, R.id.tw_at, WStore.hm(nx[1]), ink, sz == 0 ? 21 : 26);
     progress(rv, dark, (int) Math.max(0, Math.min(1000, (now - nx[0]) * 1000 / Math.max(1, nx[1] - nx[0]))));
 
     // ستون چپ: تاریخ، شهر، ساعت بزرگ، شمارش معکوس، نام برنامه
@@ -77,7 +77,7 @@ public class PrayerWidget extends WBase {
     rv.setTextColor(R.id.tw_clk, ink);
     rv.setTextColor(R.id.tw_cdl, mute);
     txt(rv, R.id.tw_brand, "شفیع", gold, 18);
-    count(rv, nx[1] - now, hi, sz == 0 ? 14 : 15);
+    count(rv, nx[1] - now, hi, sz == 0 ? 15 : 17);
     show(rv, R.id.tw_dt, wide);
     show(rv, R.id.tw_clk, wide);
     show(rv, R.id.tw_brand, wide);
@@ -88,8 +88,8 @@ public class PrayerWidget extends WBase {
       JSONArray tt = pts.getJSONArray(di);
       for (int i = 0; i < 6; i++) {
         boolean nextOne = tt.getLong(i) == nx[1];
-        txt(rv, rid(c, "tw_pn", i), WStore.PS[i] + ":", nextOne ? hi : gold, sz == 2 ? 12 : 11);
-        txt(rv, rid(c, "tw_pt", i), WStore.hm(tt.getLong(i)), nextOne ? hi : ink, sz == 2 ? 13 : 12);
+        txt(rv, rid(c, "tw_pn", i), WStore.PS[i] + ":", nextOne ? hi : gold, sz == 2 ? 13 : 12);
+        txt(rv, rid(c, "tw_pt", i), WStore.hm(tt.getLong(i)), nextOne ? hi : ink, sz == 2 ? 14 : 13);
         int bg = nextOne ? (dark ? R.drawable.tw_cell_on_d : R.drawable.tw_cell_on_l) : (dark ? R.drawable.tw_cell_d : R.drawable.tw_cell_l);
         rv.setInt(rid(c, "tw_pc", i), "setBackgroundResource", bg);
       }

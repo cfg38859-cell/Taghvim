@@ -17,7 +17,7 @@ public class LifeWidget extends WBase {
     RemoteViews rv = shell(c, layout(), cfg, dark, null);
     int ink = ink(dark), mute = mute(dark), gold = dark ? 0xFFF2D58A : gold(false);
     txt(rv, R.id.tw_lf_h, "امروز روزِ", mute, sz == 0 ? 11 : 12);
-    txt(rv, R.id.tw_lf_n, WStore.num(x.optLong("ld")), gold, sz == 0 ? 30 : sz == 1 ? 42 : 56);
+    txt(rv, R.id.tw_lf_n, WStore.num(x.optLong("ld")), gold, sz == 0 ? 32 : sz == 1 ? 44 : 58);
     txt(rv, R.id.tw_lf_u, "از زندگی شماست", ink, sz == 0 ? 12 : 14);
     progress(rv, dark, x.optInt("ap"));
     txt(rv, R.id.tw_lf_a, x.optString("ag"), ink, sz == 0 ? 11 : 13);
