@@ -2102,13 +2102,15 @@ function mk(){BKS=[];const nid=()=>{let id;do id=shortId();while(LIB.some(x=>x.i
 async function pick(files){msg('در حال پردازش…');FILES=[];BUN=null;BKS=[];
  for(const f of files){try{
   if(/\.zip$/i.test(f.name)){msg('در حال خارج‌کردن zip…');const ents0=await zipEntriesBlob(f),be=ents0.find(en=>/(^|\/)books-bundle\.json$/i.test(en.name));
-    if(be){await bundleStreamInstall(entryStream(be));continue}
+    if(be){const j=JSON.parse(new TextDecoder().decode(await entryBytes(be)).replace(/^\uFEFF/,''));if(j.format!=='books-bundle'||!Array.isArray(j.books))throw Error('فایل کتاب‌ها در zip معتبر نیست');
+     (j.cats||[]).forEach(c=>{if(c&&cats().indexOf(c)<0)cats().push(c)});save();const titles=new Set(LIB.map(x=>x.t.trim()));j.books.forEach(b=>{b._dup=titles.has(String(b.t).trim());b.cat=b.c||''});BUN=j;continue}
     let nk=0;const live=async r=>{nk+=await installOne(r)};
    const rest=await booksFromZip(f,t=>{msg(t);toast(t)},0,live);
    if(rest.length)await installList(rest);
    else{idxReset();if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();note(nk?'✓ '+nk+' کتاب نصب شد.':'همه‌ی کتاب‌ها از قبل نصب‌اند.')}
    continue}
-  if(/\.json$/i.test(f.name)){await bundleStreamInstall(f.stream());continue}
+  if(/\.json$/i.test(f.name)){const j=JSON.parse(await f.text());if(j.format!=='books-bundle'||!Array.isArray(j.books))throw Error('این فایل json «فایل کتاب‌ها»ی این برنامه نیست');
+   const titles=new Set(LIB.map(x=>x.t.trim()));j.books.forEach(b=>b._dup=titles.has(String(b.t).trim()));BUN=j;continue}
   FILES.push({name:f.name,raw:await parse(f)})}catch(x){msg(f.name+': '+x.message,1);return}}
  msg('');mk()}
 async function saveBooks(list){let bad=0;for(const o of list){let id=o.id;if(!id||LIB.some(x=>x.id===id))id=shortId();while(LIB.some(x=>x.id===id))id=shortId();
@@ -2271,7 +2273,8 @@ const vol99=n=>{const x=vol(n);return x!=null&&x<100?x:null};
 /* از داخل zip: «فایل کتاب‌ها json»، یا فایل‌های html/docx/txt کتاب‌ها (با zip تو در تو) ← فهرست {t,s,data} */
 async function booksFromZip(buf,prog,depth,live){const ents=buf instanceof Blob?await zipEntriesBlob(buf):zipEntries(buf),res=[],groups={};let skipped=0;
  for(const en of ents){const x=((en.name.match(/\.([^.\/]+)$/)||[])[1]||'').toLowerCase();
-  if(x==='json'){try{await streamBundle(entryStream(en),()=>{},async b=>{if(live)await live(b);else res.push(b)})}catch(e){}continue}
+  if(x==='json'){let j=null;try{j=JSON.parse(new TextDecoder().decode(await entryBytes(en)).replace(/^\uFEFF/,''))}catch(e){}
+   if(j&&j.format==='books-bundle'&&Array.isArray(j.books))res.push(...j.books);continue}
   if(x==='zip'&&depth<2){res.push(...await booksFromZip((await entryBytes(en)).buffer,prog,depth+1,live));continue}
   if(x==='html'||x==='htm'||x==='docx'||x==='txt'){const k=en.name.includes('/')?en.name.replace(/\/[^\/]*$/,''):'';(groups[k]=groups[k]||[]).push(en)}
   else if(x==='doc')skipped++;
@@ -2288,40 +2291,6 @@ async function booksFromZip(buf,prog,depth,live){const ents=buf instanceof Blob?
   else for(let i=0;i<g.length;i++){try{const p=await load(g[i],i);p.vol=1;await mkBook(names[i],[p])}catch(x){prog(base(g[i].name)+': '+(x.message||x))}}}
  if(!res.length&&skipped)throw Error('کتاب‌ها با فرمت قدیمی doc هستند؛ آن‌ها را به docx تبدیل کنید');
  return res}
-async function streamBundle(stream,onHead,onBook){
- const rd=stream.pipeThrough(new TextDecoderStream()).getReader();
- let head='',state=0,inStr=false,esc=false,depth=0,cur=[],ps=0,fin=false;
- const RS=/["\\]/g,RO=/["{}\]]/g;
- const proc=async s=>{const L=s.length;let i=0;ps=0;
-  while(i<L&&!fin){
-   if(esc){esc=false;i++;continue}
-   if(inStr){RS.lastIndex=i;const m=RS.exec(s);if(!m){i=L;break}
-    if(m[0]==='\\'){if(m.index+1>=L){esc=true;i=L}else i=m.index+2;continue}
-    inStr=false;i=m.index+1;continue}
-   RO.lastIndex=i;const m=RO.exec(s);if(!m){i=L;break}
-   const c=m[0],k=m.index;
-   if(c==='"'){inStr=true;i=k+1;continue}
-   if(c==='{'){if(depth===0)ps=k;depth++;i=k+1;continue}
-   if(c==='}'){depth--;i=k+1;if(depth===0){cur.push(s.slice(ps,k+1));const t=cur.join('');cur=[];let o=null;try{o=JSON.parse(t)}catch(e){}if(o)await onBook(o)}continue}
-   if(c===']'&&depth===0){fin=true;break}
-   i=k+1}
-  if(depth>0&&!fin)cur.push(s.slice(ps))};
- try{for(;;){const r=await rd.read();if(r.done)break;let s=r.value;
-  if(state===0){head+=s;const m=/"books"\s*:\s*\[/.exec(head);
-   if(!m){if(head.length>5e6)throw Error('فایل کتاب‌ها معتبر نیست');continue}
-   let h=null;try{h=JSON.parse(head.slice(0,m.index).replace(/,\s*$/,'')+'}')}catch(e){}
-   if(!h||h.format!=='books-bundle')throw Error('این فایل «فایل کتاب‌ها»ی این برنامه نیست');
-   onHead(h);s=head.slice(m.index+m[0].length);head='';state=1}
-  await proc(s);if(fin)break}
- if(state===0)throw Error('فایل کتاب‌ها معتبر نیست')}finally{try{await rd.cancel()}catch(e){}}}
-
-
-/* نصب کتاب‌به‌کتاب از فایل کتاب‌ها (json/zip) بدون بارگذاری کل فایل در حافظه؛ مناسب هزاران جلد */
-async function bundleStreamInstall(stream){let n=0,skip=0;
- await streamBundle(stream,h=>{if(h&&Array.isArray(h.cats)){h.cats.forEach(c=>{if(c&&cats().indexOf(c)<0)cats().push(c)});save()}},
-  async b=>{const r=await installOne(b);if(r)n++;else skip++;msg('نصب: '+n+(skip?' · ردشده: '+skip:'')+' — '+String(b&&b.t||'').slice(0,40));b.data=null;await sleep(0)});
- idxReset();if(VIEW)view();else if(tab==='book'&&!bookSel)drawBook();
- note('✓ '+n+' کتاب نصب شد'+(skip?' ('+skip+' تکراری از قبل بود)':'')+'.');return n}
 async function installOne(b){const t=String(b&&b.t||'').trim();if(!b||!b.data||!t||LIB.some(x=>x.t.trim()===t))return 0;
  const bad=await saveBooks([{t:b.t,s:b.s,c:b.c||'',data:b.data}]);if(bad)toast('ذخیره‌ی دائمی «'+t+'» روی این دستگاه ممکن نشد',1);return 1}
 /* ذخیره‌ی کتاب‌های بیرون‌آمده (بدون تکرار) */
