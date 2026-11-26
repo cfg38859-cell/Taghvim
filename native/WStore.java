@@ -27,10 +27,19 @@ final class WStore {
   static JSONObject cfg(Context c, int id) {
     try {
       String s = c.getSharedPreferences(CFG, 0).getString("w" + id, null);
-      if (s != null) return new JSONObject(s);
+      if (s != null) {
+        JSONObject o = new JSONObject(s);
+        // مهاجرت تنظیمات قدیمی: سبک پیش‌فرض گرادیانی به پوسته‌ی یکپارچه‌ی برنامه تبدیل شود.
+        if (!o.optBoolean("themeSync", false)) {
+          o.put("st", 0);
+          o.put("themeSync", true);
+          saveCfg(c, id, o);
+        }
+        return o;
+      }
     } catch (Exception e) { }
     JSONObject o = new JSONObject();
-    try { o.put("th", 0); o.put("st", 1); o.put("src", 0); o.put("op", 100); o.put("city", -1); o.put("q", 1); o.put("h", 0); } catch (Exception e) { }
+    try { o.put("th", 0); o.put("st", 0); o.put("themeSync", true); o.put("src", 0); o.put("op", 100); o.put("city", -1); o.put("q", 1); o.put("h", 0); } catch (Exception e) { }
     return o;
   }
 
