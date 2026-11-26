@@ -20,11 +20,11 @@ abstract class WBase extends AppWidgetProvider {
   abstract int layout();
   abstract RemoteViews build(Context c, int id, int sz, boolean dark, JSONObject d, JSONObject cfg) throws Exception;
 
-  static int ink(boolean d) { return d ? 0xFFE3EEE8 : 0xFF17261F; }
-  static int mute(boolean d) { return d ? 0xFF8CA196 : 0xFF66786F; }
-  static int em(boolean d) { return d ? 0xFF3DB496 : 0xFF0E6B57; }
-  static int gold(boolean d) { return d ? 0xFFDDB35A : 0xFFA87A1E; }
-  static int red(boolean d) { return d ? 0xFFEE7676 : 0xFFBF3636; }
+  static int ink(boolean d) { return d ? 0xFFF5F0E5 : 0xFF26372F; }
+  static int mute(boolean d) { return d ? 0xFFB7C9BE : 0xFF68776D; }
+  static int em(boolean d) { return d ? 0xFF83D1B4 : 0xFF17644F; }
+  static int gold(boolean d) { return d ? 0xFFEBD09A : 0xFF95691F; }
+  static int red(boolean d) { return d ? 0xFFFF9A91 : 0xFFB53E36; }
 
   static final int[] STYLE = {R.drawable.tw_bg_g1, R.drawable.tw_bg_g2, R.drawable.tw_bg_g3, R.drawable.tw_bg_g4, R.drawable.tw_bg_g5, R.drawable.tw_bg_g6};
 
@@ -62,8 +62,8 @@ abstract class WBase extends AppWidgetProvider {
     rv.setInt(R.id.tw_bgl, "setImageAlpha", a);
     rv.setInt(R.id.tw_bgd, "setImageAlpha", a);
     rv.setInt(R.id.tw_bgs, "setImageAlpha", a);
-    rv.setInt(R.id.tw_deco, "setColorFilter", dark ? 0xFFFFFFFF : 0xFF0E6B57);
-    rv.setInt(R.id.tw_deco, "setImageAlpha", dark ? 26 : 22);
+    rv.setInt(R.id.tw_deco, "setColorFilter", dark ? 0xFFEBD09A : 0xFF9A7435);
+    rv.setInt(R.id.tw_deco, "setImageAlpha", dark ? 36 : 30);
     rv.setViewVisibility(R.id.tw_body, msg == null ? View.VISIBLE : View.GONE);
     rv.setViewVisibility(R.id.tw_msg, msg == null ? View.GONE : View.VISIBLE);
     if (msg != null) {
