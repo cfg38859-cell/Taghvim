@@ -18,6 +18,8 @@ if has_widgets:
     plugins += "    registerPlugin(TshWidgetPlugin.class);\n"
 if pathlib.Path("native/TshSysPlugin.java").exists():
     plugins += "    registerPlugin(TshSysPlugin.class);\n"
+if pathlib.Path("native/TshBooksPlugin.java").exists():
+    plugins += "    registerPlugin(TshBooksPlugin.class);\n"
 
 (d / "MainActivity.java").write_text("""package app.tshia.calendar;
 
