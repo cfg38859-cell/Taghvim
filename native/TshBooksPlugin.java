@@ -59,6 +59,43 @@ public class TshBooksPlugin extends Plugin {
         return db;
     }
 
+    @Override
+    public void load() {
+        try {
+            final Thread.UncaughtExceptionHandler prev = Thread.getDefaultUncaughtExceptionHandler();
+            final File lf = new File(getContext().getFilesDir(), "books-error.txt");
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override public void uncaughtException(Thread t, Throwable e) {
+                    try {
+                        java.io.FileWriter w = new java.io.FileWriter(lf, true);
+                        w.write("CRASH " + new java.util.Date() + " thread=" + t.getName() + "\n" + android.util.Log.getStackTraceString(e) + "\n");
+                        w.close();
+                    } catch (Throwable ignored) { }
+                    if (prev != null) prev.uncaughtException(t, e);
+                }
+            });
+        } catch (Throwable ignored) { }
+    }
+
+    /** متن گزارش خطای ذخیره‌شده (اگر برنامه بسته شده باشد، دلیلش اینجاست) */
+    @PluginMethod
+    public void diag(final PluginCall call) {
+        JSObject r = new JSObject();
+        String txt = "";
+        try {
+            File lf = new File(getContext().getFilesDir(), "books-error.txt");
+            if (lf.exists()) {
+                java.io.FileInputStream in = new java.io.FileInputStream(lf);
+                byte[] b = new byte[(int) Math.min(lf.length(), 6000)];
+                int n = in.read(b); in.close();
+                txt = new String(b, 0, Math.max(0, n), "UTF-8");
+                if (call.getBoolean("clear", false)) lf.delete();
+            }
+        } catch (Throwable ignored) { }
+        r.put("text", txt);
+        call.resolve(r);
+    }
+
     private interface Job { void run(SQLiteDatabase d) throws Exception; }
 
     private void work(final PluginCall call, final Job j) {
@@ -419,19 +456,45 @@ public class TshBooksPlugin extends Plugin {
         sb.append(" AND x.id BETWEEN ? AND ?");
         final String sql = sb.toString();
 
-        long lo = 0, hi = -1;
-        Cursor mc = d.rawQuery("SELECT MIN(id),MAX(id) FROM ix", null);
-        try { if (mc.moveToFirst() && !mc.isNull(0)) { lo = mc.getLong(0); hi = mc.getLong(1); } } finally { mc.close(); }
+        // فقط کتاب‌هایی که می‌توانند نتیجه بدهند خوانده می‌شوند (دامنه‌ی یک کتاب یا یک دسته)
+        String[] idList = null;
+        if (!q.scope.equals("all")) {
+            boolean okScope = q.allow == null || q.allow.contains(q.scope);
+            idList = okScope ? new String[]{q.scope} : new String[0];
+            q.allow = new HashSet<String>();
+            if (okScope) q.allow.add(q.scope);
+        } else if (q.allow != null) idList = q.allow.toArray(new String[0]);
+        ArrayList<long[]> rg = new ArrayList<long[]>();
+        if (idList == null) {
+            Cursor mc = d.rawQuery("SELECT MIN(id),MAX(id) FROM ix", null);
+            try { if (mc.moveToFirst() && !mc.isNull(0)) rg.add(new long[]{mc.getLong(0), mc.getLong(1)}); } finally { mc.close(); }
+        } else {
+            for (String bid : idList) {
+                Cursor mc = d.rawQuery("SELECT MIN(id),MAX(id) FROM ix WHERE b=?", new String[]{bid});
+                try { if (mc.moveToFirst() && !mc.isNull(0)) rg.add(new long[]{mc.getLong(0), mc.getLong(1)}); } finally { mc.close(); }
+            }
+            Collections.sort(rg, new Comparator<long[]>() {
+                public int compare(long[] x, long[] y) { return x[0] < y[0] ? -1 : (x[0] > y[0] ? 1 : 0); }
+            });
+            ArrayList<long[]> mg = new ArrayList<long[]>();
+            for (long[] r : rg) {
+                if (!mg.isEmpty() && r[0] <= mg.get(mg.size() - 1)[1] + 1) { long[] l = mg.get(mg.size() - 1); if (r[1] > l[1]) l[1] = r[1]; }
+                else mg.add(new long[]{r[0], r[1]});
+            }
+            rg = mg;
+        }
         final long CH = 4000;
         ArrayList<Future<Part>> fut = new ArrayList<Future<Part>>();
-        for (long a = lo; a <= hi; a += CH) {
-            final long fa = a, fb = Math.min(hi, a + CH - 1);
-            fut.add(scan.submit(new Callable<Part>() {
-                public Part call() {
-                    if (my != tok) throw new RuntimeException("cancelled");
-                    return scanChunk(d, sql, args, fa, fb, q, my);
-                }
-            }));
+        for (long[] r : rg) {
+            for (long a0 = r[0]; a0 <= r[1]; a0 += CH) {
+                final long fa = a0, fb = Math.min(r[1], a0 + CH - 1);
+                fut.add(scan.submit(new Callable<Part>() {
+                    public Part call() {
+                        if (my != tok) throw new RuntimeException("cancelled");
+                        return scanChunk(d, sql, args, fa, fb, q, my);
+                    }
+                }));
+            }
         }
         int all = 0, total = 0, offset = 0;
         HashMap<String, Integer> cm = new HashMap<String, Integer>();
