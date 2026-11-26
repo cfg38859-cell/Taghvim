@@ -3,7 +3,6 @@ package app.tshia.calendar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.os.CancellationSignal;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -24,7 +23,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
@@ -41,7 +42,7 @@ public class TshBooksPlugin extends Plugin {
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final ExecutorService sx = Executors.newSingleThreadExecutor();
     private static volatile int tok = 0;
-    private static volatile CancellationSignal cs = null;
+    private static final ExecutorService scan = Executors.newFixedThreadPool(3);
 
     private static synchronized SQLiteDatabase db(android.content.Context c) {
         if (db == null || !db.isOpen()) {
@@ -218,24 +219,32 @@ public class TshBooksPlugin extends Plugin {
     }
 
     // ───────────────────────── جستجو ─────────────────────────
+    // جدول ix به تکه‌های ۴۰۰۰تایی (بر پایه‌ی id) تقسیم می‌شود و ۳ رشته هم‌زمان آن‌ها را می‌خوانند.
+    // لغو جستجو بین تکه‌ها بررسی می‌شود (بدون CancellationSignal).
 
     @PluginMethod
     public void search(final PluginCall call) {
         final int my = ++tok;
-        CancellationSignal old = cs;
-        if (old != null) { try { old.cancel(); } catch (Throwable ignored) { } }
-        final CancellationSignal sig = new CancellationSignal();
-        cs = sig;
         sx.execute(new Runnable() {
             @Override public void run() {
                 try {
                     if (my != tok) { call.reject("cancelled"); return; }
-                    call.resolve(doSearch(db(getContext()), call.getData(), my, sig));
+                    call.resolve(doSearch(db(getContext()), call.getData(), my));
                 } catch (Throwable e) {
-                    call.reject(my != tok ? "cancelled" : String.valueOf(e.getMessage()));
+                    if (my != tok || "cancelled".equals(e.getMessage())) { call.reject("cancelled"); return; }
+                    logErr(e);
+                    call.reject("native search: " + e);
                 }
             }
         });
+    }
+
+    private void logErr(Throwable e) {
+        try {
+            java.io.FileWriter w = new java.io.FileWriter(new File(getContext().getFilesDir(), "books-error.txt"), true);
+            w.write(new java.util.Date() + " " + android.util.Log.getStackTraceString(e) + "\n");
+            w.close();
+        } catch (Throwable ignored) { }
     }
 
     private static boolean bd(char ch) {
@@ -284,6 +293,20 @@ public class TshBooksPlugin extends Plugin {
         double sc; int i; String b; int p; int ty; String t;
     }
 
+    private static final class Part {
+        int all = 0, total = 0;
+        HashMap<String, Integer> cm = new HashMap<String, Integer>();
+        ArrayList<Hit> hits = new ArrayList<Hit>();
+    }
+
+    private static final class Q {
+        String[] W, N, RW;
+        String P, mode, scope, rph;
+        boolean ww, comp, ex, byScore;
+        int K;
+        Set<String> allow;
+    }
+
     private static String[] arr(JSONObject q, String k) {
         JSONArray a = q.optJSONArray(k);
         if (a == null) return new String[0];
@@ -292,110 +315,152 @@ public class TshBooksPlugin extends Plugin {
         return r;
     }
 
-    /**
-     * پارامترها (همه را برنامه آماده می‌کند، دقیقاً مثل srch در جاوااسکریپت):
-     * W کلمات، N کلمات منفی، P عبارت، mode(all|any|ph)، ww، comp (بدون فاصله)، ty(all|x|f|h)،
-     * books (فهرست مجاز دسته یا null)، scope، ex و rw/rph (اعراب دقیق)، K (تعداد نتیجه)، sort(rel|ord)
-     */
-    private JSObject doSearch(SQLiteDatabase d, JSONObject q, final int my, CancellationSignal sig) throws Exception {
-        final String[] W = arr(q, "W"), N = arr(q, "N"), RW = arr(q, "rw");
-        final String P = q.optString("P", ""), mode = q.optString("mode", "all"), tyq = q.optString("ty", "all"), scope = q.optString("scope", "all"), sort = q.optString("sort", "rel");
-        final boolean ww = q.optBoolean("ww", false), comp = q.optBoolean("comp", false), ex = q.optBoolean("ex", false);
-        final int K = Math.max(1, q.optInt("K", 400));
-        Set<String> allow = null;
-        if (q.has("books") && !q.isNull("books")) { allow = new HashSet<String>(); for (String s : arr(q, "books")) allow.add(s); }
-        JSObject out = new JSObject();
-        JSObject counts = new JSObject();
-        JSArray rowsOut = new JSArray();
-        if (W.length == 0) { out.put("all", 0); out.put("cnt", counts); out.put("rows", rowsOut); out.put("total", 0); return out; }
-
-        StringBuilder sql = new StringBuilder();
-        ArrayList<String> args = new ArrayList<String>();
-        String col = comp ? "c.c" : "x.t";
-        if (comp) sql.append("SELECT x.id,x.b,x.p,x.ty,x.t,c.c FROM ic c JOIN ix x ON x.id=c.id WHERE 1=1");
-        else sql.append("SELECT x.id,x.b,x.p,x.ty,x.t FROM ix x WHERE 1=1");
-        if (tyq.equals("all")) sql.append(" AND x.ty IN (0,1)");
-        else sql.append(" AND x.ty=").append(tyq.equals("x") ? 0 : tyq.equals("f") ? 1 : 2);
-        if (mode.equals("ph")) { sql.append(" AND instr(").append(col).append(",?)>0"); args.add(P); }
-        else if (mode.equals("any")) {
-            sql.append(" AND (");
-            for (int i = 0; i < W.length; i++) { if (i > 0) sql.append(" OR "); sql.append("instr(").append(col).append(",?)>0"); args.add(W[i]); }
-            sql.append(")");
-        } else {
-            for (String w : W) { sql.append(" AND instr(").append(col).append(",?)>0"); args.add(w); }
+    private static final Comparator<Hit> WORST_FIRST = new Comparator<Hit>() {
+        public int compare(Hit a, Hit b) {
+            if (a.sc != b.sc) return a.sc < b.sc ? -1 : 1;
+            return a.i > b.i ? -1 : (a.i < b.i ? 1 : 0);
         }
-        for (String n : N) { sql.append(" AND instr(").append(col).append(",?)=0"); args.add(n); }
+    };
 
-        final boolean byScore = sort.equals("rel");
-        PriorityQueue<Hit> heap = new PriorityQueue<Hit>(K + 1, new Comparator<Hit>() {
-            // «بدترین» نتیجه بالای صف: امتیاز کمتر، و در تساوی ترتیب دیرتر
-            public int compare(Hit a, Hit b) {
-                if (a.sc != b.sc) return a.sc < b.sc ? -1 : 1;
-                return a.i > b.i ? -1 : (a.i < b.i ? 1 : 0);
-            }
-        });
-        ArrayList<Hit> first = new ArrayList<Hit>();
-        HashMap<String, Integer> cm = new HashMap<String, Integer>();
-        int all = 0, total = 0, seq = 0, nrow = 0;
-        boolean wmode = mode.equals("ph");
-        Cursor c = d.rawQuery(sql.toString(), args.toArray(new String[0]), sig);
+    /** یک تکه از جدول (id بین lo و hi) را می‌خواند و امتیاز می‌دهد؛ ترتیب و فرمول مثل srch در جاوااسکریپت. */
+    private static Part scanChunk(SQLiteDatabase d, String sql, ArrayList<String> baseArgs, long lo, long hi, Q q, int my) {
+        Part part = new Part();
+        ArrayList<String> args = new ArrayList<String>(baseArgs);
+        args.add(String.valueOf(lo)); args.add(String.valueOf(hi));
+        PriorityQueue<Hit> heap = q.byScore ? new PriorityQueue<Hit>(q.K + 1, WORST_FIRST) : null;
+        boolean wmode = q.mode.equals("ph");
+        int seq = 0, nrow = 0;
+        Cursor c = d.rawQuery(sql, args.toArray(new String[0]));
         try {
             while (c.moveToNext()) {
-                if ((++nrow & 63) == 0 && my != tok) throw new RuntimeException("cancelled");
+                if ((++nrow & 255) == 0 && my != tok) throw new RuntimeException("cancelled");
                 String b = c.getString(1);
-                if (allow != null && !allow.contains(b)) continue;
+                if (q.allow != null && !q.allow.contains(b)) continue;
                 int ty = c.getInt(3);
                 String tn = c.getString(4);
-                String t = comp ? c.getString(5) : tn;
+                String t = q.comp ? c.getString(5) : tn;
                 if (t == null) continue;
                 double sc = 0;
-                if (wmode) sc = cnt(t, P, ww);
+                if (wmode) sc = cnt(t, q.P, q.ww);
                 else {
                     boolean allw = true; int any = 0;
-                    for (String w : W) {
-                        int k = cnt(t, w, ww);
-                        if (k > 0) { any++; sc += k; } else { allw = false; if (mode.equals("all")) break; }
+                    for (String w : q.W) {
+                        int k = cnt(t, w, q.ww);
+                        if (k > 0) { any++; sc += k; } else { allw = false; if (q.mode.equals("all")) break; }
                     }
-                    if (mode.equals("all") ? !allw : any == 0) continue;
+                    if (q.mode.equals("all") ? !allw : any == 0) continue;
                     sc += any * 3;
-                    if (W.length > 1 && t.contains(P)) sc += 8;
+                    if (q.W.length > 1 && t.contains(q.P)) sc += 8;
                 }
                 if (sc == 0) continue;
-                if (ex && ty != 2) {
+                if (q.ex && ty != 2) {
                     String h = null;
                     Cursor pc = d.rawQuery("SELECT h FROM page WHERE b=? AND p=?", new String[]{b, String.valueOf(c.getInt(2))});
                     try { if (pc.moveToFirst()) h = pc.getString(0); } finally { pc.close(); }
                     String r = rawText(h == null ? "" : h, ty);
                     boolean ok;
-                    if (wmode) ok = r.contains(q.optString("rph", ""));
+                    if (wmode) ok = r.contains(q.rph);
                     else {
-                        boolean any = false, every = true;
-                        for (String w : RW) { if (r.contains(w)) any = true; else every = false; }
-                        ok = mode.equals("any") ? any : every;
+                        boolean anyH = false, every = true;
+                        for (String w : q.RW) { if (r.contains(w)) anyH = true; else every = false; }
+                        ok = q.mode.equals("any") ? anyH : every;
                     }
                     if (!ok) continue;
                 }
-                all++;
-                Integer old = cm.get(b); cm.put(b, old == null ? 1 : old + 1);
-                if (!(scope.equals("all") || scope.equals(b))) continue;
-                total++;
+                part.all++;
+                Integer old = part.cm.get(b); part.cm.put(b, old == null ? 1 : old + 1);
+                if (!(q.scope.equals("all") || q.scope.equals(b))) continue;
+                part.total++;
                 Hit hh = new Hit();
                 hh.sc = sc / (1 + t.length() / 3000.0); hh.i = seq++; hh.b = b; hh.p = c.getInt(2); hh.ty = ty; hh.t = tn;
-                if (byScore) {
-                    if (heap.size() < K) heap.add(hh);
-                    else { Hit worst = heap.peek(); if (hh.sc > worst.sc) { heap.poll(); heap.add(hh); } }
-                } else if (first.size() < K) first.add(hh);
+                if (q.byScore) {
+                    if (heap.size() < q.K) heap.add(hh);
+                    else if (hh.sc > heap.peek().sc) { heap.poll(); heap.add(hh); }
+                } else if (part.hits.size() < q.K) part.hits.add(hh);
             }
         } finally { c.close(); }
+        if (q.byScore) part.hits.addAll(heap);
+        return part;
+    }
 
-        ArrayList<Hit> res = byScore ? new ArrayList<Hit>(heap) : first;
-        if (byScore) Collections.sort(res, new Comparator<Hit>() {
+    /**
+     * پارامترها را برنامه دقیقاً مثل srch جاوااسکریپت آماده می‌کند:
+     * W کلمات، N کلمات منفی، P عبارت، mode(all|any|ph)، ww، comp (بدون فاصله)، ty(all|x|f|h)،
+     * books (فهرست مجاز دسته یا null)، scope، ex و rw/rph (اعراب دقیق)، K (تعداد نتیجه)، sort(rel|ord)
+     */
+    private JSObject doSearch(final SQLiteDatabase d, JSONObject jq, final int my) throws Exception {
+        final Q q = new Q();
+        q.W = arr(jq, "W"); q.N = arr(jq, "N"); q.RW = arr(jq, "rw");
+        q.P = jq.optString("P", ""); q.mode = jq.optString("mode", "all"); q.scope = jq.optString("scope", "all"); q.rph = jq.optString("rph", "");
+        String tyq = jq.optString("ty", "all");
+        q.ww = jq.optBoolean("ww", false); q.comp = jq.optBoolean("comp", false); q.ex = jq.optBoolean("ex", false);
+        q.K = Math.max(1, jq.optInt("K", 400)); q.byScore = jq.optString("sort", "rel").equals("rel");
+        if (jq.has("books") && !jq.isNull("books")) { q.allow = new HashSet<String>(); for (String s : arr(jq, "books")) q.allow.add(s); }
+        JSObject out = new JSObject(), counts = new JSObject();
+        JSArray rowsOut = new JSArray();
+        if (q.W.length == 0) { out.put("all", 0); out.put("cnt", counts); out.put("rows", rowsOut); out.put("total", 0); return out; }
+
+        StringBuilder sb = new StringBuilder();
+        final ArrayList<String> args = new ArrayList<String>();
+        String col = q.comp ? "c.c" : "x.t";
+        if (q.comp) sb.append("SELECT x.id,x.b,x.p,x.ty,x.t,c.c FROM ix x JOIN ic c ON c.id=x.id WHERE 1=1");
+        else sb.append("SELECT x.id,x.b,x.p,x.ty,x.t FROM ix x WHERE 1=1");
+        if (tyq.equals("all")) sb.append(" AND x.ty IN (0,1)");
+        else sb.append(" AND x.ty=").append(tyq.equals("x") ? 0 : tyq.equals("f") ? 1 : 2);
+        if (q.mode.equals("ph")) { sb.append(" AND instr(").append(col).append(",?)>0"); args.add(q.P); }
+        else if (q.mode.equals("any")) {
+            sb.append(" AND (");
+            for (int i = 0; i < q.W.length; i++) { if (i > 0) sb.append(" OR "); sb.append("instr(").append(col).append(",?)>0"); args.add(q.W[i]); }
+            sb.append(")");
+        } else {
+            for (String w : q.W) { sb.append(" AND instr(").append(col).append(",?)>0"); args.add(w); }
+        }
+        for (String n : q.N) { sb.append(" AND instr(").append(col).append(",?)=0"); args.add(n); }
+        sb.append(" AND x.id BETWEEN ? AND ?");
+        final String sql = sb.toString();
+
+        long lo = 0, hi = -1;
+        Cursor mc = d.rawQuery("SELECT MIN(id),MAX(id) FROM ix", null);
+        try { if (mc.moveToFirst() && !mc.isNull(0)) { lo = mc.getLong(0); hi = mc.getLong(1); } } finally { mc.close(); }
+        final long CH = 4000;
+        ArrayList<Future<Part>> fut = new ArrayList<Future<Part>>();
+        for (long a = lo; a <= hi; a += CH) {
+            final long fa = a, fb = Math.min(hi, a + CH - 1);
+            fut.add(scan.submit(new Callable<Part>() {
+                public Part call() {
+                    if (my != tok) throw new RuntimeException("cancelled");
+                    return scanChunk(d, sql, args, fa, fb, q, my);
+                }
+            }));
+        }
+        int all = 0, total = 0, offset = 0;
+        HashMap<String, Integer> cm = new HashMap<String, Integer>();
+        ArrayList<Hit> hits = new ArrayList<Hit>();
+        try {
+            for (Future<Part> f : fut) {
+                Part p = f.get();
+                all += p.all;
+                for (Map.Entry<String, Integer> e : p.cm.entrySet()) { Integer o = cm.get(e.getKey()); cm.put(e.getKey(), o == null ? e.getValue() : o + e.getValue()); }
+                for (Hit h : p.hits) { h.i += offset; hits.add(h); }
+                offset += p.total; total += p.total;
+            }
+        } catch (Throwable e) {
+            for (Future<Part> f : fut) f.cancel(true);
+            Throwable c = e.getCause() != null ? e.getCause() : e;
+            if (c instanceof RuntimeException && "cancelled".equals(c.getMessage())) throw new RuntimeException("cancelled");
+            throw new Exception(c);
+        }
+        if (q.byScore) Collections.sort(hits, new Comparator<Hit>() {
             public int compare(Hit a, Hit b) {
                 if (a.sc != b.sc) return a.sc > b.sc ? -1 : 1;
                 return a.i < b.i ? -1 : (a.i > b.i ? 1 : 0);
             }
         });
-        for (Hit h : res) {
+        else Collections.sort(hits, new Comparator<Hit>() {
+            public int compare(Hit a, Hit b) { return a.i < b.i ? -1 : (a.i > b.i ? 1 : 0); }
+        });
+        for (int k = 0; k < hits.size() && k < q.K; k++) {
+            Hit h = hits.get(k);
             JSObject o = new JSObject();
             o.put("b", h.b); o.put("p", h.p); o.put("ty", h.ty); o.put("sc", h.sc); o.put("i", h.i); o.put("t", h.t);
             rowsOut.put(o);
