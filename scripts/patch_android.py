@@ -43,7 +43,10 @@ for _p in ("REQUEST_IGNORE_BATTERY_OPTIMIZATIONS", "SCHEDULE_EXACT_ALARM"):
         perms += '<uses-permission android:name="android.permission.%s"/>\n    ' % _p
 rcv = ('<receiver android:name=".DayNotifPlugin$Rcv" android:exported="false">'
        '<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/>'
-       '<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/></intent-filter></receiver>\n    ')
+       '<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>'
+       '<action android:name="android.intent.action.TIME_SET"/>'
+       '<action android:name="android.intent.action.TIMEZONE_CHANGED"/>'
+       '<action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"/></intent-filter></receiver>\n    ')
 
 wid = ""
 if has_widgets:
