@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl">
+
+    <ImageView
+        android:id="@+id/tw_nc_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/tw_nc_day" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:id="@+id/tw_nc_img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_gravity="top"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="11dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView android:fontFamily="@font/onvan_fd"
+                    android:id="@+id/tw_nc_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tw_nc_chip"
+                    android:paddingStart="7dp"
+                    android:paddingEnd="7dp"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="2dp"
+                    android:maxLines="1"
+                    android:textColor="#F7DE9A"
+                    android:textSize="10sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView android:fontFamily="@font/onvan_fd"
+                    android:id="@+id/tw_nc_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="#F7DE9A"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView android:fontFamily="@font/onvan_fd"
+                android:id="@+id/tw_nc_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="start"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/tw_nc_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/tw_nc_line"
+                android:visibility="visible" />
+
+            <TextView android:fontFamily="@font/onvan_fd"
+                android:id="@+id/tw_nc_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="start"
+                android:maxLines="9"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp"
+                android:textColor="#EAF3EE"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
