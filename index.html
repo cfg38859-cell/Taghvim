@@ -961,10 +961,10 @@ function ics(){const p=n=>String(n).padStart(2,'0'),E=s=>s.replace(/[\\,;]/g,'\\
  L.push('END:VCALENDAR');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([L.join('\r\n')],{type:'text/calendar'}));a.download='tshia.ics';a.click()}
 main.addEventListener('click',e=>{const z=e.target.closest('[data-z]');if(!z)return;const v=z.dataset.z;
  if(v==='tab'){tab='time';draw();main.scrollTop=0}else if(v==='test')adhan(2,false);else if(v==='pick')$('#zf').click();else if(v==='ics')ics();
- else if(v==='gps')navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{ST.gps=[p.coords.latitude,p.coords.longitude];save();drawTime()},()=>msg('دسترسی به موقعیت داده نشد؛ شهر را دستی انتخاب کنید.')):msg('مرورگر موقعیت‌یابی ندارد.')});
+ else if(v==='gps')navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{ST.gps=[p.coords.latitude,p.coords.longitude];save();drawTime();try{pushS()}catch(e){}},()=>msg('دسترسی به موقعیت داده نشد؛ شهر را دستی انتخاب کنید.')):msg('مرورگر موقعیت‌یابی ندارد.')});
 main.addEventListener('change',async e=>{const t=e.target;
- if(t.id==='zc'){ST.city=+t.value;ST.gps=null;save();drawTime()}
- else if(t.dataset.zk){const k=t.dataset.zk;ST[k]=t.checked;save();if(k==='nt'&&t.checked){if(!window.Notification)msg('این مرورگر اعلان را پشتیبانی نمی‌کند.');else if(await Notification.requestPermission()!=='granted'){ST.nt=false;save();t.checked=false;msg('اجازه‌ی اعلان داده نشد.')}}}
+ if(t.id==='zc'){ST.city=+t.value;ST.gps=null;save();drawTime();try{pushS()}catch(e){}}
+ else if(t.dataset.zk){const k=t.dataset.zk;ST[k]=t.checked;save();if(k==='az'){try{pushS()}catch(e){}}if(k==='nt'&&t.checked){if(!window.Notification)msg('این مرورگر اعلان را پشتیبانی نمی‌کند.');else if(await Notification.requestPermission()!=='granted'){ST.nt=false;save();t.checked=false;msg('اجازه‌ی اعلان داده نشد.')}}}
  else if(t.id==='zf'&&t.files[0]){try{await idb(s=>s.put(t.files[0],'a'));ST.hasA=true;save();msg('فایل اذان ذخیره شد.')}catch(err){msg('ذخیره‌ی فایل ممکن نشد.')}}});
 
 /* ===== رنگ‌بندی (هم‌سبک برنامه‌ی هیئت) ===== */
@@ -1016,7 +1016,8 @@ function ravList(){if(_rv)return _rv;_rv=[];try{const L=LIB.find(x=>/روایت\
 function tshModal(ti,h,fn){let o=document.getElementById('tshM');if(!o){o=document.createElement('div');o.id='tshM';o.className='bfo';o.innerHTML='<div class="bfc"><h3 id="tshT" style="margin:0 0 8px"></h3><div id="tshB" style="line-height:1.9;white-space:pre-wrap"></div><button class="btn" id="tshX" style="margin-top:12px">بستن</button></div>';document.body.appendChild(o);o.addEventListener('click',e=>{if(e.target===o||e.target.id==='tshX')o.classList.remove('on')})}document.getElementById('tshT').textContent=ti;document.getElementById('tshB').innerHTML=h;o.classList.add('on');if(fn)fn()}
 function showItem(v){v=String(v||'');const m=v.split(':'),i=+m[1];
  if(m[0]==='joke'&&JOKES[i])tshModal('چیستان / جوک','<div>'+esc(JOKES[i][0])+'</div><div style="margin-top:12px"><button class="btn ghost" id="tshA">نمایش پاسخ</button><div id="tshAn" style="display:none;margin-top:8px;font-weight:700"></div></div>',()=>{document.getElementById('tshA').onclick=()=>{const a=document.getElementById('tshAn');a.textContent=JOKES[i][1];a.style.display='block'}});
- else if(m[0]==='rav'){const r=ravList()[i];if(r)tshModal('روایت کوتاه',esc(r))}}
+ else if(m[0]==='rav'){const r=ravList()[i];if(r)tshModal('روایت کوتاه',esc(r))}
+ else if(m[0]==='adhan'){try{tab='time';draw()}catch(e){}}}
 window.__tshOpen=showItem;
 function initLaunch(){if(!NAT||!NP)return;try{NP.addListener('tshOpen',e=>showItem(e&&e.open))}catch(e){}try{NP.getLaunch().then(r=>{if(r&&r.open)showItem(r.open)}).catch(()=>{})}catch(e){}}
 setTimeout(initLaunch,1500);
@@ -1024,6 +1025,7 @@ setTimeout(initLaunch,1500);
 async function pushR(){if(!NAT||!NP)return;
  try{if(!pre){pre=1;await NP.requestPermissions()}}catch(e){}
  const it=[],now=Date.now();
+ if(on('az')){const j0=todayJ(),C=city();for(let k=0;k<10;k++){const j=j0+k,T=pt(j);[0,2,4].forEach(i=>{const tt=at(j,T[i]);if(tt>now+5000)it.push({id:'adhan'+j+'_'+i,kind:'adhan',at:tt,title:PN[i],body:C.n+' · '+fa(hm(T[i])),open:'adhan:'+i,pi:i,sub:C.n,tm:fa(hm(T[i]))})})}}
  if(ST.dq!==false){const hm=String(ST.dqt||'08:00').split(':'),H=+hm[0]||0,M=+hm[1]||0,j0=todayJ();
   for(let k=0;k<14;k++){const g=info(j0+k).g,at=new Date(g.y,g.m-1,g.d,H,M,0,0).getTime();if(at>now+5000)it.push({id:'dua'+k,kind:'dua',at:at,title:'اللهم عجل لولیک الفرج',body:'',open:'dua'})}}
 
